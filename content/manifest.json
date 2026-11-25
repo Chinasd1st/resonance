@@ -1,0 +1,226 @@
+[
+  {
+    "id": "1-1",
+    "title": "在铁路口",
+    "subtitle": "",
+    "author": "望江",
+    "author_note": "北京航空航天大学",
+    "form": "prose",
+    "strip_lines": [
+      "# 在铁路口",
+      "望江（北京航空航天大学）"
+    ]
+  },
+  {
+    "id": "1-2",
+    "title": "明天见",
+    "subtitle": "",
+    "author": "白汀",
+    "author_note": "",
+    "form": "fiction",
+    "strip_lines": [
+      "# 明天见",
+      "## 白汀"
+    ]
+  },
+  {
+    "id": "1-3",
+    "title": "半片水，半城雾",
+    "subtitle": "",
+    "author": "",
+    "author_note": "",
+    "form": "prose",
+    "strip_lines": [
+      "# 《半片水，半城雾》"
+    ]
+  },
+  {
+    "id": "1-4",
+    "title": "在世界中心呼唤名为爱的野兽",
+    "subtitle": "讨厌“红楼梦”而不是〈红楼梦〉",
+    "author": "曹钧湛",
+    "author_note": "",
+    "form": "essay",
+    "strip_lines": [
+      "《在世界中心呼唤名为爱的野兽——讨厌“红楼梦”而不是〈红楼梦〉》",
+      "曹钧湛/著"
+    ]
+  },
+  {
+    "id": "1-5",
+    "title": "大概一百五十九秒",
+    "subtitle": "",
+    "author": "",
+    "author_note": "",
+    "form": "poem",
+    "strip_lines": [
+      "# 大概一百五十九秒"
+    ]
+  },
+  {
+    "id": "1-6",
+    "title": "几乎处处",
+    "subtitle": "",
+    "author": "泫渡",
+    "author_note": "",
+    "form": "poem",
+    "strip_lines": [
+      "几乎处处",
+      "泫渡"
+    ]
+  },
+  {
+    "id": "1-7",
+    "title": "中秋夜，与谁同",
+    "subtitle": "",
+    "author": "",
+    "author_note": "",
+    "form": "prose",
+    "strip_lines": []
+  },
+  {
+    "id": "1-8",
+    "title": "岁月",
+    "subtitle": "",
+    "author": "木鱼",
+    "author_note": "桐乡市第一中学",
+    "form": "poem",
+    "strip_lines": [
+      "岁月",
+      "木鱼/著 （桐乡市第一中学）"
+    ]
+  },
+  {
+    "id": "1-9",
+    "title": "请给我，一寸天空",
+    "subtitle": "天空你是否知晓一切？……",
+    "author": "",
+    "author_note": "",
+    "form": "fiction",
+    "strip_lines": [
+      "# 请给我，一寸天空",
+      "——天空你是否知晓一切？……"
+    ]
+  },
+  {
+    "id": "1-10",
+    "title": "雪、月、山虎",
+    "subtitle": "",
+    "author": "",
+    "author_note": "",
+    "form": "fiction",
+    "strip_lines": [
+      "# 雪、月、山虎"
+    ]
+  },
+  {
+    "id": "2-1",
+    "title": "我们活在对数的时间里",
+    "subtitle": "",
+    "author": "陆九渊",
+    "author_note": "化名",
+    "form": "essay",
+    "strip_lines": [
+      "**我们活在对数的时间里**",
+      "陆九渊（化名）"
+    ]
+  },
+  {
+    "id": "2-2",
+    "title": "人体感知，相对变化",
+    "subtitle": "",
+    "author": "钱东成",
+    "author_note": "",
+    "form": "essay",
+    "strip_lines": [
+      "# 人体感知，相对变化",
+      "作者：钱东成"
+    ]
+  },
+  {
+    "id": "2-3",
+    "title": "破碎虚空，分形维度",
+    "subtitle": "分形角度下的作业量",
+    "author": "钱东成",
+    "author_note": "",
+    "form": "essay",
+    "strip_lines": [
+      "# 破碎虚空，分形维度",
+      "## ——分形角度下的作业量",
+      "作者：钱东成"
+    ]
+  },
+  {
+    "id": "2-4",
+    "title": "矛盾冲突，危机四伏",
+    "subtitle": "三次数学危机",
+    "author": "钱东成",
+    "author_note": "",
+    "form": "essay",
+    "strip_lines": [
+      "# 矛盾冲突，危机四伏",
+      "## ——三次数学危机",
+      "作者：钱东成"
+    ]
+  },
+  {
+    "id": "2-5",
+    "title": "调几算方，何以平均",
+    "subtitle": "",
+    "author": "钱东成",
+    "author_note": "",
+    "form": "essay",
+    "strip_lines": [
+      "# 调几算方，何以平均",
+      "作者：钱东成"
+    ]
+  },
+  {
+    "id": "2-6",
+    "title": "听不见的声音，怎么搅动化学世界？",
+    "subtitle": "声音拆不了化学键，但能把反应环境折腾个底朝天",
+    "author": "白汀",
+    "author_note": "",
+    "form": "essay",
+    "strip_lines": [
+      "听不见的声音，怎么搅动化学世界？",
+      "——声音拆不了化学键，但能把反应环境折腾个底朝天",
+      "作者：白汀"
+    ]
+  },
+  {
+    "id": "2-7",
+    "title": "空谷",
+    "subtitle": "",
+    "author": "",
+    "author_note": "",
+    "form": "lyrics",
+    "strip_lines": [
+      "# 空谷"
+    ]
+  },
+  {
+    "id": "2-8",
+    "title": "波纳万象，函数无穷",
+    "subtitle": "从函数看声波",
+    "author": "钱东成",
+    "author_note": "",
+    "form": "essay",
+    "strip_lines": [
+      "# 波纳万象，函数无穷",
+      "### ——从函数看声波",
+      "作者：钱东成"
+    ]
+  },
+  {
+    "id": "2-9",
+    "title": "自然语言：数学与哲学的纽带",
+    "subtitle": "",
+    "author": "",
+    "author_note": "",
+    "form": "essay",
+    "strip_lines": [
+      "# 自然语言：数学与哲学的纽带"
+    ]
+  }
+]

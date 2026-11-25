@@ -1,0 +1,70 @@
+/* GENERATED FROM DESIGN-TOKENS.md §9 — do not hand-edit values here */
+:root {
+  /* page */
+  --trim-w: 210mm; --trim-h: 297mm; --bleed: 3mm;
+  --m-top: 20mm; --m-bottom: 23mm; --m-inner: 20mm; --m-outer: 15mm;
+
+  /* layout grid (text) */
+  --bl: 15pt; --bl-half: 7.5pt;
+  --grid-col: 26.667pt; --grid-gap: 16pt;
+  --col-w: 240pt; --col-gap: 16pt;
+  --block-w: 496pt; --block-h: 720pt;
+  --opener-h: calc(var(--bl) * 18);
+
+  /* decorative grid (cover motif) */
+  --deco-pitch: 10mm; --deco-wobble: 0.35mm; --deco-stroke: 0.25mm;
+
+  /* families — plain Google Sans (Flex @ wdth 100) */
+  --ff-ui: "GS Text", "SHS", sans-serif;
+  --ff-display: "GS Display", "SHS", sans-serif;
+  --ff-sans: "GS Text", "SHS", sans-serif;
+  --ff-serif: "SHSerif", serif;
+
+  /* scale */
+  --t-mega: 700 150pt/135pt var(--ff-display);
+  --t-chapter: 700 260pt/225pt var(--ff-display);
+  --t-wordmark: 700 80pt/75pt var(--ff-display);
+  --t-title: 700 30pt/37.5pt var(--ff-display);
+  --t-title-long: 700 24pt/30pt var(--ff-display);
+  --t-subtitle: 500 11pt/22.5pt var(--ff-ui);
+  --t-tagline: 700 12pt/15pt var(--ff-display);
+  --t-h2: 700 12pt/22.5pt var(--ff-ui);
+  --t-h3: 700 9.6pt/15pt var(--ff-ui);
+  --t-body-serif: 400 9.6pt/15pt var(--ff-serif);
+  --t-body-sans: 400 9.25pt/15pt var(--ff-sans);
+  --t-poem: 400 10.5pt/22.5pt var(--ff-serif);
+  --t-byline: 500 8pt/15pt var(--ff-ui);
+  --t-tag: 700 7pt/7.5pt var(--ff-ui);
+  --t-caption: 400 7.5pt/11.25pt var(--ff-ui);
+  --t-table: 400 8pt/11.25pt var(--ff-ui);
+  --t-note: 400 7.5pt/11.25pt var(--ff-ui);
+  --t-folio: 700 8pt/7.5pt var(--ff-ui);
+  --t-runhead: 500 7pt/7.5pt var(--ff-ui);
+
+  /* color — solid only, unique hex (future CMYK remap keys) */
+  --c-paper: #FFFFFF;
+  --c-ink: #1D1D1B;
+  --c-k70: #56657F;
+  --c-k45: #9AA6B8;
+  --c-k15: #D9E2EE;
+  --c-k6: #F2F6FB;
+  --c-blue: #458CEE;
+  --c-blue-deep: #2F6FD6;
+  --c-orange: #ED7207;
+  --c-tint: #E6F1FF;
+  --c-gridline: #C2DEF7;
+  --c-music: #F08A24;
+  --c-chem: #1FA67A;
+  --c-philo: #7A5BD6;
+  --c-news: #F2B705;
+  --c-math: #1E5BC6;
+  --c-open: var(--c-blue);
+
+  /* rules */
+  --rule-hair: 0.25pt; --rule-thin: 0.5pt; --rule-mid: 1pt; --rule-bold: 1.5pt;
+  --clubbar-h: 4pt;
+
+  /* sparkle (four-point star, cover motif) */
+  --sparkle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ED7207' d='M50 0C53 37 63 47 100 50C63 53 53 63 50 100C47 63 37 53 0 50C37 47 47 37 50 0Z'/%3E%3C/svg%3E");
+  --sparkle-blue: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23458CEE' d='M50 0C53 37 63 47 100 50C63 53 53 63 50 100C47 63 37 53 0 50C37 47 47 37 50 0Z'/%3E%3C/svg%3E");
+}

@@ -1,0 +1,236 @@
+/* ============ Resonance · book.css (body + front matter) · v0.2 cover-derived ============ */
+@page {
+  size: 216mm 303mm;
+  /* 字面值：@page 里的 calc(var()) 会被 Chrome 丢弃，导致上下边距失效 */
+  margin: 23mm 0 26mm 0;
+}
+@page :right { margin-left: calc(var(--m-inner) + var(--bleed)); margin-right: calc(var(--m-outer) + var(--bleed)); }
+@page :left  { margin-left: calc(var(--m-outer) + var(--bleed)); margin-right: calc(var(--m-inner) + var(--bleed)); }
+
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0; width: var(--block-w);
+  color: var(--c-ink); background: none;
+  font: var(--t-body-sans);
+  font-kerning: normal; text-rendering: geometricPrecision;
+  line-break: strict; word-break: normal; overflow-wrap: break-word;
+  text-spacing-trim: space-first; text-autospace: normal; hyphens: auto;
+  orphans: 2; widows: 2;
+}
+p { margin: 0; }
+img { display: block; }
+.page { height: var(--block-h); position: relative; break-after: page; overflow: visible; }
+.tag { font: var(--t-tag); letter-spacing: .1em; text-transform: uppercase; }
+.spark { display: inline-block; background: var(--sparkle) center / contain no-repeat; }
+.spark.blue { background-image: var(--sparkle-blue); }
+
+/* ======================= FRONT MATTER ======================= */
+/* i · half-title (white) */
+.fm-half .mark { position: absolute; left: 0; top: calc(var(--bl) * 20); color: var(--c-blue); }
+.fm-half .mark .w { font: 700 40pt/37.5pt var(--ff-display); letter-spacing: -.02em; }
+.fm-half .mark .w sup { font: 700 16pt/15pt var(--ff-display); vertical-align: 18pt; margin-left: 3pt; letter-spacing: 0; }
+.fm-half .mark .cn { font: 700 11pt/22.5pt "SHS", sans-serif; letter-spacing: .1em; margin-top: 7.5pt; }
+.fm-half .mark .spark { width: 22pt; height: 22pt; position: absolute; left: 77pt; top: 7pt; }
+
+/* ii · tinted manifesto page */
+.fm-bars .quote { position: absolute; left: 0; top: calc(var(--bl) * 6); width: 380pt; color: var(--c-blue); }
+.fm-bars .quote .en { font: 700 44pt/52.5pt var(--ff-display); letter-spacing: -.02em; }
+.fm-bars .quote .cn { font: 700 14pt/30pt "SHS", sans-serif; margin-top: var(--bl); letter-spacing: .05em; }
+.fm-bars .quote .spark { width: 34pt; height: 34pt; margin-left: 4pt; vertical-align: -2pt; }
+.fm-bars .legend { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(6, 1fr); column-gap: var(--grid-gap); }
+.fm-bars .legend div { font: 500 8pt/15pt "SHS", sans-serif; color: var(--c-blue-deep); }
+.fm-bars .legend i { display: block; width: 10pt; height: 10pt; border-radius: 50%; margin-bottom: 7.5pt; }
+.fm-bars .legend b { display: block; font: var(--t-tag); letter-spacing: .1em; }
+
+/* iii · title page (tinted) */
+.fm-title { color: var(--c-blue); }
+.fm-title .kicker { font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue-deep); }
+.fm-title .t-en { margin-top: calc(var(--bl) * 3); font: var(--t-wordmark); letter-spacing: -.035em; position: relative; }
+.fm-title .t-en span { display: block; }
+.fm-title .t-en sup { font: 700 26pt/30pt var(--ff-display); vertical-align: 46pt; margin-left: 6pt; letter-spacing: 0; }
+.fm-title .t-en .spark { position: absolute; width: 54pt; height: 54pt; left: 145pt; top: 12pt; }
+.fm-title .t-cn { margin-top: var(--bl); font: 700 18pt/30pt "SHS", sans-serif; letter-spacing: .08em; }
+.fm-title .tagline { font: var(--t-tagline); letter-spacing: -.01em; }
+.fm-title .credit { position: absolute; left: 0; bottom: 0; width: 100%; }
+.fm-title .credit .school { font: 700 11pt/22.5pt "SHS", sans-serif; }
+.fm-title .clubs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; font: 700 11pt/22.5pt "SHS", sans-serif; }
+.fm-title .clubs li { display: flex; align-items: center; }
+.fm-title .clubs li + li::before { content: "×"; font-family: var(--ff-ui); font-weight: 500; margin: 0 6pt; }
+.fm-title .clubs i { width: 6pt; height: 6pt; border-radius: 50%; margin-right: 4pt; display: block; }
+.fm-title .joint { font: 700 11pt/22.5pt "SHS", sans-serif; }
+.fm-title .open { margin-top: var(--bl); font: 700 8pt/15pt var(--ff-ui); color: var(--c-orange); letter-spacing: .06em; }
+
+/* iv · colophon (white) */
+.fm-colophon .block { position: absolute; left: 0; bottom: 0; width: var(--col-w); font: var(--t-caption); }
+.fm-colophon .block h4 { font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue); margin: 0 0 7.5pt; }
+.fm-colophon dl { display: grid; grid-template-columns: 56pt 1fr; margin: 0; }
+.fm-colophon dt { color: var(--c-k70); }
+.fm-colophon dd { margin: 0; }
+.fm-colophon .tbd { color: var(--c-orange); }
+
+/* v–vi · TOC */
+.toc-head { height: calc(var(--bl) * 7); position: relative; color: var(--c-blue); }
+.toc-head h2 { margin: 0; position: absolute; bottom: 0; font: 700 64pt/60pt var(--ff-display); letter-spacing: -.035em; }
+.toc-head .cn { position: absolute; right: 0; bottom: 4pt; font: 700 12pt/15pt "SHS", sans-serif; letter-spacing: .4em; }
+.toc-head .spark { position: absolute; left: 300pt; top: 18pt; width: 28pt; height: 28pt; }
+.toc-chapter { margin-top: calc(var(--bl) * 2); }
+.toc-chapter .ch { display: flex; align-items: baseline; gap: 10pt; padding-bottom: var(--bl-half); border-bottom: var(--rule-mid) solid var(--c-blue); color: var(--c-blue); text-decoration: none; }
+.toc-chapter .ch .n { font: 700 24pt/30pt var(--ff-display); letter-spacing: -.02em; }
+.toc-chapter .ch .nm { font: 700 12pt/15pt "SHS", sans-serif; }
+.toc-chapter .ch .nm span { font: 500 9pt/15pt var(--ff-ui); margin-left: 8pt; letter-spacing: .06em; color: var(--c-blue-deep); }
+.toc-item { display: grid; grid-template-columns: 52pt 1fr 40pt 36pt; align-items: baseline; padding: 3.75pt 0; border-bottom: var(--rule-hair) solid var(--c-k15); color: var(--c-ink); text-decoration: none; }
+.toc-item .n { font: 700 16pt/22.5pt var(--ff-display); color: var(--c-blue); letter-spacing: -.02em; }
+.toc-item .t { font: 500 10pt/15pt "SHS", sans-serif; font-feature-settings: "palt"; }
+.toc-item .t small { display: block; font: var(--t-byline); color: var(--c-k70); }
+.toc-item .c { display: flex; gap: 3pt; align-self: center; }
+.toc-item .c i { width: 6pt; height: 6pt; border-radius: 50%; display: block; }
+.toc-item .pn { text-align: right; font: 700 10pt/15pt var(--ff-ui); font-variant-numeric: tabular-nums; color: var(--c-blue); }
+
+/* ======================= CHAPTER OPENER (tinted, full page) ======================= */
+.chapter-opener { break-before: page; color: var(--c-blue); }
+.chapter-opener .num { font: var(--t-chapter); letter-spacing: -.05em; margin-left: -10pt; margin-top: calc(var(--bl) * 1); position: relative; display: inline-block; }
+.chapter-opener .num .spark { position: absolute; width: 90pt; height: 90pt; right: -58pt; top: 6pt; }
+.chapter-opener .names { position: absolute; left: 0; right: 0; top: calc(var(--bl) * 25); }
+.chapter-opener .names .cn { font: 700 44pt/52.5pt "SHS", sans-serif; letter-spacing: .06em; }
+.chapter-opener .names .en { font: 700 18pt/22.5pt var(--ff-display); letter-spacing: -.01em; }
+.chapter-opener .list { position: absolute; left: calc((var(--grid-col) + var(--grid-gap)) * 6); right: 0; bottom: 0; font: 700 9pt/15pt "SHS", sans-serif; }
+.chapter-opener .list div { display: grid; grid-template-columns: 24pt 1fr; padding: 3.75pt 0; border-top: var(--rule-hair) solid var(--c-gridline); }
+.chapter-opener .list b { font: 700 9pt/15pt var(--ff-ui); font-variant-numeric: tabular-nums; }
+
+/* ======================= ARTICLE ======================= */
+.article { break-before: page; }
+.opener {
+  height: var(--opener-h); position: relative; color: var(--c-blue);
+  display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--grid-gap);
+  grid-template-rows: var(--bl) 1fr auto;
+}
+.opener .meta-top { grid-column: 1 / 7; grid-row: 1; display: flex; gap: 8pt; align-items: center; font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue-deep); }
+.opener .meta-top i { width: 6pt; height: 6pt; border-radius: 50%; display: block; }
+.opener .tags { grid-column: 7 / 13; grid-row: 1; display: flex; justify-content: flex-end; gap: 10pt; }
+.opener .tags b { font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue-deep); }
+.opener .mega {
+  grid-column: 1 / 6; grid-row: 2; align-self: end; position: relative;
+  font: var(--t-mega); letter-spacing: -.05em; font-variant-numeric: tabular-nums;
+  margin-left: -6pt; margin-bottom: -8pt;
+}
+.opener .head { grid-column: 6 / 13; grid-row: 2; align-self: end; padding-bottom: 2pt; }
+.opener .title { margin: 0; font: var(--t-title); letter-spacing: -.01em; font-feature-settings: "palt"; }
+.opener .title.long { font: var(--t-title-long); }
+.opener .subtitle { font: var(--t-subtitle); color: var(--c-blue-deep); margin-top: 3.75pt; font-feature-settings: "palt"; }
+.opener .byline { grid-column: 1 / 13; grid-row: 3; display: flex; justify-content: space-between; align-items: baseline; padding-top: 11pt; height: calc(var(--bl) * 2.5); }
+.opener .byline .who { font: 700 9pt/15pt var(--ff-ui); letter-spacing: .01em; }
+.opener .byline .who span { font-weight: 500; color: var(--c-blue-deep); margin-left: 6pt; }
+.opener .byline .tl { font: 700 8pt/15pt var(--ff-display); color: var(--c-blue-deep); }
+
+/* running text */
+.text { column-count: 2; column-gap: var(--col-gap); column-fill: balance; }
+/* 公式密集的篇目单栏排：独立公式不再通栏切断双栏正文 */
+.article.single .text { column-count: 1; }
+.article.serif .text { font: var(--t-body-serif); }
+.article.sans  .text { font: var(--t-body-sans); }
+.text p { text-indent: 2em; text-align: justify; }
+.text p.noindent, .text p.eq, .text p.led { text-indent: 0; }
+.text h2 { font: var(--t-h2); color: var(--c-blue); margin: calc(var(--bl) * 1.15) 0 var(--bl-half); break-after: avoid; font-feature-settings: "palt"; }
+.text h2::before { content: ""; display: inline-block; width: 9pt; height: 9pt; margin-right: 5pt; vertical-align: -.5pt; background: var(--sparkle) center / contain no-repeat; }
+.text h2:first-child, .text h3:first-child { margin-top: 0; }
+.text h3 { font: 700 10.5pt/16.5pt var(--ff-ui); color: var(--c-blue-deep); margin: calc(var(--bl) * .8) 0 3.75pt; break-after: avoid; font-feature-settings: "palt"; letter-spacing: .01em; }
+.text h3::before { content: ""; display: inline-block; width: 11pt; height: 2.4pt; background: var(--c-blue); margin-right: 6pt; vertical-align: .28em; }
+.text h3.num { font: 700 18pt/22.5pt var(--ff-display); color: var(--c-blue); letter-spacing: -.02em; margin-top: var(--bl); }
+.text h3.num::before { display: none; }
+/* 分段标题「PART 1 · 怪物与精灵之争」 */
+.text h2.part .pn { font: 700 8pt/11pt var(--ff-ui); letter-spacing: .14em; color: var(--c-orange); margin-right: 10pt; vertical-align: .22em; }
+.text h2.part .pt { font: inherit; color: inherit; }
+/* ①—⑩ 步骤行 / 有序列表：悬挂缩进，与正文同字号同字距 */
+.text p.item { text-indent: -1.2em; padding-left: 1.2em; }
+.text p.li-p { text-indent: -1.4em; padding-left: 1.4em; }
+.text p.li-c { text-indent: 2em; }
+.text .li-n { font-weight: 700; color: var(--c-blue-deep); font-variant-numeric: tabular-nums; }
+/* 推导行：「∴」「即」「分子：」在左，公式按离心式居中，两者同一行 */
+.text p.led { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; text-align: left; margin: var(--bl-half) 0; }
+.text p.led .lead { grid-column: 1; justify-self: end; margin-right: 9pt; font-weight: 500; color: var(--c-blue-deep); }
+.text p.led > .math { grid-column: 2; }
+/* 行内分式比行高更高，行距放宽一点，避免上下两行相撞 */
+.text p:has(.katex .frac-line) { line-height: 23pt; }
+.text strong, .text b { font-weight: 700; }
+.text em { font-style: normal; font-weight: 500; }
+.article.serif .text em { font-family: "SHS", sans-serif; font-size: .95em; }
+.text del { text-decoration: line-through; color: var(--c-k70); }
+.text blockquote { margin: 0 0 var(--bl); padding: 7.5pt 1em; background: var(--c-tint); color: var(--c-blue-deep); }
+.text blockquote p { text-indent: 0; }
+
+/* 公式 */
+.text p.eq { text-align: center; margin: var(--bl-half) 0; padding-top: 3pt; break-inside: avoid; }
+/* 引出公式的一段不要和公式分处两页（Chrome 对 break-after: avoid 的支持比 break-before 可靠） */
+.text p:has(+ p.eq), .text p:has(+ p.led) { break-after: avoid; }
+.text p.eq.wide { column-span: all; }
+/* 公式行：公式 + 一句短说明同行居中（「当且仅当…时取等，其中…」） */
+.text p.eq.fline { line-height: 2.1; }
+/* 2-3 补回被 pandoc 吞掉的一段后，全文比三页多出 1.6 mm：公式上下的空档收 1 pt，
+   正好把结尾两行拉回上一页，避免只剩两行的孤页 */
+[data-id="2-3"] .text p.eq { margin: 5pt 0; }
+[data-id="2-3"] .tbl { margin-bottom: 2pt; }
+/* 四联图是表格单元格里的图，按原图尺寸会撑到 42mm；限高 32mm 把结尾三行收回本页 */
+[data-id="2-3"] .text td, [data-id="2-3"] .text th { padding: 2.2pt 4pt; }
+.katex { font-size: 1.05em; }
+.katex-display { margin: 0; }
+td .katex { font-size: 1em; }
+/* 分数线：KaTeX 默认 0.04em，打印时会被吸附成整像素、显得压住字符，收细一档 */
+.katex .frac-line { border-bottom-width: .032em !important; border-top-width: 0 !important; }
+
+/* figures —— 按原稿宽度出图，不拉满栏宽（低分辨率截图放大会糊，且容易把整块图挤到下一页） */
+figure { margin: var(--bl-half) 0 var(--bl); break-inside: avoid; }
+figure img { max-width: 100%; height: auto; margin: 0 auto; }
+figure.small img { margin: 0 auto; }
+/* 单图：随图宽收缩并居中，图注仍贴图左缘 */
+figure.col { width: fit-content; max-width: 100%; margin: var(--bl-half) auto; }
+/* 单栏篇目的小图改为图文绕排：正文绕到图侧，不再整行居中出现两侧空白 */
+figure.float { float: right; clear: right; width: fit-content; max-width: 44%; margin: 3pt 0 9pt 12pt; }
+figure.float img { width: auto; height: auto; max-width: 100%; max-height: 64mm; }
+/* 比一栏还宽的图：通栏居中，避免塞进栏里被缩得过小 */
+figure.wide { column-span: all; display: flex; flex-direction: column; align-items: center; }
+figure.wide img { width: auto; }
+figure.row { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); column-gap: 8pt; align-items: end; }
+figure.row .cell img { width: 100%; height: 60pt; object-fit: contain; }
+figure.row .cell figcaption { text-align: center; }
+figure.row.wide { column-span: all; }
+figure.row.wide .cell img { height: auto; object-fit: fill; }
+figcaption { font: var(--t-caption); color: var(--c-k70); margin-top: 3.75pt; text-indent: 0; }
+figcaption b { font: 700 7.5pt/11.25pt var(--ff-ui); color: var(--c-blue); margin-right: 4pt; }
+
+/* 破折号：思源黑体 U+2014 字身 0.894 em，两个并排中间会露白口；
+   连字（ccmp）在 Chrome 的汉字 run 里不生效，改用负边距把两段墨迹接成一条线 */
+.em { white-space: nowrap; }
+.em.nj > i { font-style: normal; margin-left: -.32em; }
+
+/* tables */
+.tbl { margin: var(--bl-half) 0 var(--bl); break-inside: avoid; }
+.tbl.wide { column-span: all; }
+.text table { width: 100%; border-collapse: collapse; font: var(--t-table); border-top: var(--rule-mid) solid var(--c-blue); border-bottom: var(--rule-mid) solid var(--c-blue); }
+.text td, .text th { padding: 3.75pt 4pt; border-bottom: var(--rule-hair) solid var(--c-k15); vertical-align: middle; text-align: left; text-indent: 0; }
+.text tr:first-child td { font-weight: 700; color: var(--c-blue-deep); background: var(--c-tint); border-bottom: var(--rule-thin) solid var(--c-blue); }
+.text td p { text-indent: 0; text-align: left; }
+
+/* rare glyphs set as live text (vector), not bitmaps */
+.rare {
+  display: block; margin: 1pt auto 2pt; text-align: center;
+  font-family: "SimSun-ExtG", "SimSun-ExtB", "MingLiU-ExtB", "SimSun", serif;
+  font-size: 34pt; line-height: 1.1; font-weight: 400; color: var(--c-ink);
+}
+
+/* notes */
+.notes { margin-top: var(--bl); padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-blue); break-inside: avoid-column; }
+.notes p { font: var(--t-note); text-indent: 0; text-align: left; margin-bottom: 3.75pt; color: var(--c-k70); }
+.notes-label { font: 700 7.5pt/11.25pt var(--ff-ui) !important; letter-spacing: .14em; color: var(--c-blue) !important; margin-bottom: 5pt; }
+.notes .note-item { position: relative; padding-left: 12pt; text-align: justify; }
+.notes .note-item .n { position: absolute; left: 0; top: 0; font: 700 7.5pt/11.25pt var(--ff-ui); color: var(--c-blue); font-variant-numeric: tabular-nums; }
+.notes .note-cont { padding-left: 12pt; text-align: justify; }
+
+/* verse */
+.article.verse .text { column-count: 1; margin-left: calc((var(--grid-col) + var(--grid-gap)) * 3); width: calc(var(--col-w) + var(--grid-col) * 2 + var(--grid-gap) * 2); }
+.article.verse .text p { font: var(--t-poem); text-indent: 0; text-align: left; }
+.article.verse .text h3.num { margin-top: calc(var(--bl) * 1.5); }
+/* endnotes of a poem: set at the body margin, in body columns — not in the verse column */
+.article.verse > .notes { margin-top: calc(var(--bl) * 2); column-count: 2; column-gap: var(--col-gap); break-inside: auto; }
+.article.verse > .notes p { font: var(--t-note); text-indent: 0; text-align: left; color: var(--c-k70); margin-bottom: 5pt; }
+.article.verse > .notes .notes-label { font: 700 7.5pt/11.25pt var(--ff-ui); letter-spacing: .14em; color: var(--c-blue); text-align: left; }
