@@ -147,13 +147,29 @@ function chapterOpener(ch) {
   </section>`;
 }
 
-// 2-3 表里的五个生僻字原为截图；改写为真实字形（矢量可检索）
+// 2-3 表里的五个生僻字原为截图；改写为真实字形（矢量可检索），并按全刊统一做法
+// 做成 ruby：字在下、带调拼音在上（思源黑体小字）。原稿的括号注音（qiang）一并改成 ruby。
 const RARE_GLYPH = {
-  'image6.jpeg': '𰻝',   // biáng
-  'image7.jpeg': '龘',   // dá
-  'image8.jpeg': '𪚥',   // zhé
-  'image9.jpeg': '靐',   // bìng
-  'image10.jpeg': '𱁬',  // taito
+  'image6.jpeg': ['𰻝', 'biáng'],
+  'image7.jpeg': ['龘', 'dá'],
+  'image8.jpeg': ['𪚥', 'léi'],
+  'image9.jpeg': ['靐', 'bìng'],
+  'image10.jpeg': ['𱁬', 'tái'],
+};
+
+// 读音注解：括号注音 → ruby（注音在上、字在下）。
+// 音节与原文一致，只补声调；「XX的XX」里的拉丁拼音由 ruby 取代，故删去重复的拼写。
+const RUBY = {
+  '2-3': [
+    ['<p>羻（qiang）</p>', '<p><ruby>羻<rt>qiāng</rt></ruby></p>'],
+    ['<p>鱜（xiang）</p>', '<p><ruby>鱜<rt>xiāng</rt></ruby></p>'],
+    ['<p>鱺（li）</p>', '<p><ruby>鱺<rt>lí</rt></ruby></p>'],
+    ['biangbiang面的biang', '面'],
+    ['da腾的da', '腾'],
+    ['lei霆的lei', '霆'],
+    ['bing响的bing', '响'],
+    [' />tai</p>', ' /></p>'],
+  ],
 };
 
 // 另行替换的插图：{ 篇号: { 原文件名: { src, alt(图注) } } }
@@ -184,18 +200,73 @@ const FIG_W = {
 // 转换器只把文本框里的字（谢尔宾斯基三角形）单独提成一段，整段正文被吞掉了。
 const TEXT_FIX = {
   // 插图重绘后配色改为全刊的蓝／橙，正文里的颜色描述随之同步
-  '2-1': [[
-    '红线表示自然对数函数，紫线是它的导数',
-    '蓝线表示自然对数函数，橙线是它的导数',
-  ]],
+  '2-1': [
+    [
+      '红线表示自然对数函数，紫线是它的导数',
+      '蓝线表示自然对数函数，橙线是它的导数',
+    ],
+    // 正文里的单变量原本是普通正文字体，与相邻的 KaTeX 公式不同源；
+    // 统一改为行内公式，斜体、字距跟后面的 p＝m/(M+m) 一致
+    [
+      '称为厚度（p），新记忆数（m），已有记忆数（M）则有',
+      '称为厚度（<span class="math inline">p</span>），新记忆数（<span class="math inline">m</span>），'
+      + '已有记忆数（<span class="math inline">M</span>）则有',
+    ],
+  ],
   '2-3': [[
     '<p>谢尔宾斯基三角形</p>',
     '<p>分形（fractal），意为“破碎的图形”。如果一个图形在放大后得到的部分与图形整体相似（即自相似性），'
-    + '那么这个图形即为狭义上的分形。如右图为谢尔宾斯基三角形，蓝色边框圈出的部分与整体相似，'
+    + '那么这个图形即为狭义上的分形。[[fig:image1.jpeg]]为谢尔宾斯基三角形，蓝色边框圈出的部分与整体相似，'
     + '因此谢尔宾斯基三角形为分形。分形不仅有一种独特的美感，还有一些神奇的性质。'
-    + '维度便是我们将探讨的，分形具有的神奇特性之一</p>',
+    + '维度便是我们将探讨的，分形具有的神奇特性之一。</p>',
   ]],
 };
+
+// 正文里对插图的指代（「上图」「右图」「这幅图」）一律改成带编号的「图 X」。
+// 编号不写死：[[fig:文件名]] 交给 transform.js 按该篇实际的出图顺序解析
+// （类似 LaTeX 的 \ref），增删、调序插图后引用自动跟着变，且排成蓝色强调。
+const FIG_REF = {
+  '2-1': [['在这幅图中，', '在[[fig:image1.jpeg]]中，']],
+  '2-2': [['（上图最左、最右侧的直线）', '（[[fig:image1.png]]最左、最右侧的直线）']],
+  '2-3': [['如上图可得：', '由[[fig:image3.png]]可得：']],
+  '2-5': [['（见右图）', '（见[[fig:image1.jpeg]]）']],
+};
+
+// 2-8 原稿那张手写笔记（三角恒等变换）不再画成 SVG 文字：SVG 里没有分式、根号，
+// 只能写成「(tan α + tan β) / (1 − tan α tan β)」「(√3/2)」这种伪记号，字号一缩就成糊点。
+// 改为直接排 HTML，公式交给 KaTeX（与正文同源），序号 ①–④ 做成带引线的小标题，推导按等号对齐。
+const TRIG_CARD = String.raw`<figure class="trigcard">
+<div class="tc-head"><b>三角恒等变换</b><i>TRIG IDENTITIES</i><em>这不是英语吗？！</em></div>
+<h4 class="tc-h"><span>①</span>和差公式</h4>
+<p class="eq"><span class="math display">\begin{aligned}
+\cos(\alpha-\beta)&amp;=\cos\alpha\cos\beta+\sin\alpha\sin\beta\\
+\cos(\alpha+\beta)&amp;=\cos[\alpha-(-\beta)]\\
+&amp;=\cos\alpha\cos(-\beta)+\sin\alpha\sin(-\beta)\\
+&amp;=\cos\alpha\cos\beta-\sin\alpha\sin\beta\\
+\sin(\alpha+\beta)&amp;=\sin\alpha\cos\beta+\cos\alpha\sin\beta\\
+\sin(\alpha-\beta)&amp;=\sin\alpha\cos\beta-\cos\alpha\sin\beta
+\end{aligned}</span></p>
+<p class="tc-note">※ 余弦：正正，符号相反　　正弦：正余，符号相同</p>
+<h4 class="tc-h"><span>②</span>用诱导公式推 sin(α+β)</h4>
+<p class="eq"><span class="math display">\begin{aligned}
+\cos\left(\tfrac{\pi}{2}-(\alpha+\beta)\right)&amp;=\cos\left[\left(\tfrac{\pi}{2}-\alpha\right)-\beta\right]\\
+&amp;=\cos\left(\tfrac{\pi}{2}-\alpha\right)\cos\beta+\sin\left(\tfrac{\pi}{2}-\alpha\right)\sin\beta\\
+&amp;=\sin\alpha\cos\beta+\cos\alpha\sin\beta
+\end{aligned}</span></p>
+<h4 class="tc-h"><span>③</span>和差化积</h4>
+<p class="eq"><span class="math display">\begin{aligned}
+\tan(\alpha+\beta)&amp;=\dfrac{\tan\alpha+\tan\beta}{1-\tan\alpha\tan\beta}\\[4pt]
+\tan(\alpha-\beta)&amp;=\dfrac{\tan\alpha-\tan\beta}{1+\tan\alpha\tan\beta}
+\end{aligned}</span></p>
+<p class="tc-note">※ 由 <span class="math inline">\tan={\sin}/{\cos}</span>，上下同除 <span class="math inline">\cos\alpha\cos\beta</span> 即得</p>
+<h4 class="tc-h"><span>④</span>相位特例</h4>
+<p class="eq"><span class="math display">\begin{aligned}
+\sin\left(x+\tfrac{\pi}{3}\right)&amp;=\sin x\cos\tfrac{\pi}{3}+\cos x\sin\tfrac{\pi}{3}\\
+&amp;=\tfrac{1}{2}\sin x+\tfrac{\sqrt{3}}{2}\cos x\\
+\sin\left(x+\tfrac{\pi}{2}\right)&amp;=\sin x\cos\tfrac{\pi}{2}+\cos x\sin\tfrac{\pi}{2}\\
+&amp;=0+\cos x=\cos x
+\end{aligned}</span></p>
+</figure>`;
 
 function article(a) {
   let frag = fs.readFileSync(B(`html/${a.id}.html`), 'utf8')
@@ -209,9 +280,21 @@ function article(a) {
     const re = new RegExp(`(<img[^>]*media/${file.replace('.', '\\.')}[^>]*style=")width:[\\d.]+in(;height:[\\d.]+in)?`);
     frag = frag.replace(re, (m, p1, p2, p3) => `${p1}width:${w}in` + (h ? `;height:${h}in` : (p2 || '')));
   }
-  for (const [find, rep] of TEXT_FIX[a.id] || []) {
+  for (const [find, rep] of [...(TEXT_FIX[a.id] || []), ...(RUBY[a.id] || [])]) {
     if (!frag.includes(find)) console.warn('TEXT_FIX miss', a.id, find.slice(0, 20));
     frag = frag.split(find).join(rep);
+  }
+  // 注意：这里必须是数组（[[找, 换], …]），不能套 Object.entries ——
+  // 那会把下标 "0" 当成待替换的字符串，全书每个 0 都会被替换掉
+  for (const [find, rep] of (FIG_REF[a.id] || [])) {
+    if (!frag.includes(find)) console.warn('FIG_REF miss', a.id, find.slice(0, 20));
+    frag = frag.split(find).join(rep);
+  }
+  // 2-8 的手写笔记原图挂在段首（图后紧接着正文），换公式卡时要把整段拆开：
+  // 卡片自成一格，原来的那段正文退回普通段落
+  if (a.id === '2-8') {
+    frag = frag.replace(/<p>\s*<img[^>]*media\/2-8\/media\/image1\.png[^>]*>([\s\S]*?)<\/p>/,
+      (m, rest) => `${TRIG_CARD}<p class="noindent">${rest}</p>`);
   }
   // 重绘插图：位图换成内联 SVG，交给 transform.js 走与 <img> 相同的图片布置逻辑
   // （figure 包裹、图注、单栏绕排），尺寸沿用原 <img> 的行内 style —— 见 scripts/figures.mjs
@@ -224,13 +307,18 @@ function article(a) {
       if (!tag.includes(inFile)) return tag;
       const st = (tag.match(/style="([^"]*)"/) || [, ''])[1];
       const alt = (tag.match(/alt="([^"]*)"/) || [, ''])[1];
-      const size = st || `width:${+(f.vw / 72).toFixed(4)}in;height:${+(f.vh / 72).toFixed(4)}in`;
-      // 2-1 的函数图比一栏还宽：让它绕排，但把绕排宽度放宽到 56%（默认 44% 会把
-      // 6.2pt 的刻度缩到 4.7pt）。图高 219pt 放不进当页，会自动推到下页顶部，
-      // 当页正文继续填满，不留白
-      const nof = key === '2-1/image1.jpeg' ? ' data-fw="56"' : '';
+      // 宽度沿用原稿（FIG_W 已改过的），高度必须按 SVG 自身比例重算：
+      // 原稿 <img> 的 height 是位图的比例，直接照搬会把矢量图纵向拉扁
+      const wIn = +((st.match(/width:\s*([\d.]+)in/) || [, 0])[1]) || f.vw / 72;
+      const size = `width:${+wIn.toFixed(4)}in;height:${+(wIn * f.vh / f.vw).toFixed(4)}in`;
+      // 绕排图默认按 44% 栏宽出图。重绘的矢量图本身画得很小（正方形四等分 155 pt、
+      // 线段 148 pt），44% 会把它们再压到 105 pt，图内 6.8 pt 的 a / ½a 只剩 4.6 pt。
+      // 这里按篇指定绕排宽度上限：2-1 的宽函数图 56%，2-3 的两张几何图放到 70%
+      // （仍在两图自然尺寸之上，不再缩放）
+      const FW = { '2-1/image1.jpeg': 56, '2-3/image2.png': 70, '2-3/image3.png': 70, '2-8/image1.png': 70 };
+      const nof = FW[key] ? ` data-fw="${FW[key]}"` : '';
       return `<svg class="dfig" width="${f.vw}pt" height="${f.vh}pt" viewBox="0 0 ${f.vw} ${f.vh}"`
-        + ` preserveAspectRatio="xMidYMid meet" style="${size}" data-cap="${alt}"${nof}>${f.body}</svg>`;
+        + ` preserveAspectRatio="xMidYMid meet" style="${size}" data-cap="${alt}" data-ref="${file}"${nof}>${f.body}</svg>`;
     });
   }
   // 公式密集的篇目改为单栏：独立公式不再通栏切断双栏正文；
@@ -239,7 +327,9 @@ function article(a) {
   if (a.id === '2-3') {
     frag = frag.replace(/<img[^>]*>/g, tag => {
       const k = Object.keys(RARE_GLYPH).find(k => tag.includes(k));
-      return k ? `<span class="rare">${RARE_GLYPH[k]}</span>` : tag;
+      if (!k) return tag;
+      const [ch, py] = RARE_GLYPH[k];
+      return `<ruby><span class="rare">${ch}</span><rt>${py}</rt></ruby>`;
     });
   }
   const bar = a.clubs.map(c => `<i style="background:${clubVar(c)}"></i>`).join('');
@@ -305,7 +395,8 @@ function overlayHtml(map, frontPages) {
     if (folio) inner += `<div class="folio ${right ? 'r' : 'l'}"><i></i>${folio}</div>`;
     // running head
     if (p > FRONT && o && !isStart && o.kind === 'article') {
-      const txt = right ? `CHAPTER ${pad(o.a.ch)} §${pad(o.a.seq)}　${esc(o.a.title)}` : `RESONANCE　共鸣　${ISSUE.cn}`;
+      // 书眉：CHAPTER 02 ESSAY 05　标题
+      const txt = right ? `CHAPTER ${pad(o.a.ch)} ${FORM_EN[o.a.form] || ''} ${pad(o.a.seq)}　${esc(o.a.title)}` : `RESONANCE　共鸣　${ISSUE.cn}`;
       inner += `<div class="rh ${right ? 'r' : 'l'}">${txt}</div>`;
     }
     // thumb tab (right pages of articles)

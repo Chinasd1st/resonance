@@ -6,21 +6,23 @@ build/
 # 字体：思源/Noto 全家族 OTF 共 223 MB，不进仓库（缺失时按 README 重新下载到 fonts/）
 fonts/
 
-# Word 临时文件
-~$*.docx
-~$*.doc
-
 # 日志与环境
 *.log
 .env
 .env.local
+
+# 排版工具的临时文件：Word 锁文件、草稿脚本、试排产物
+~$*.docx
+~$*.doc
+*.tmp
+*.bak
+scripts/_*
+build/_*
 
 # 系统
 Thumbs.db
 desktop.ini
 .DS_Store
 
-# 旧版素材与参考样刊（体积大，仅备查）
-legacy/
-2025-autumn-issue-cn.pdf
+# 贝克莱油画的原始大图（成品用 assets/ 里压过的版本）
 John_Smibert_-_Bishop_George_Berkeley_-_Google_Art_Project.jpg

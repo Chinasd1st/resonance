@@ -112,6 +112,39 @@
   const COL_IN = 3.32;    // 双栏篇目的单栏宽度（175mm 版心 → 84mm 栏）
   const BLOCK_IN = 6.85;  // 版心宽 175mm
 
+  // 图的身份：重绘的 SVG 带 data-ref（原稿文件名），位图取 src 的文件名。
+  // 正文里的 \ref 用它把「图 X」的 X 算出来，不写死
+  function figId(el) {
+    return (el.dataset && el.dataset.ref) || ((el.getAttribute('src') || '').split('/').pop() || '');
+  }
+
+  // 正文里的 [[fig:image3.png]]：排成蓝色的「图 3」。
+  // 编号来自本篇实际的出图顺序（figure 生成时登记），增删插图后引用自动跟着变
+  function figrefs(text, state) {
+    const w = document.createTreeWalker(text, NodeFilter.SHOW_TEXT, {
+      acceptNode: n => /\[\[fig:/.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+    });
+    const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
+    for (const n of nodes) {
+      const frag = document.createDocumentFragment();
+      let last = 0, m;
+      const re = /\[\[fig:([^\]]+)\]\]/g;
+      while ((m = re.exec(n.nodeValue))) {
+        if (m.index > last) frag.appendChild(document.createTextNode(n.nodeValue.slice(last, m.index)));
+        const id = m[1].trim();
+        const num = state.map[id];
+        const s = document.createElement('span');
+        s.className = 'figref';
+        s.textContent = num ? '图\u2009' + num : '图\u2009?';
+        if (!num) report.warnings.push('missing fig: ' + id + ' in ' + (n.parentElement.closest('[data-id]') || {}).dataset?.id);
+        frag.appendChild(s);
+        last = m.index + m[0].length;
+      }
+      if (last < n.nodeValue.length) frag.appendChild(document.createTextNode(n.nodeValue.slice(last)));
+      n.parentNode.replaceChild(frag, n);
+    }
+  }
+
   function figures(text, state, single) {
     const wrapLimit = 110 / 25.4;   // 超过 110mm 的图更像整幅图表，铺满栏宽而不绕排
     // paragraphs that contain images
@@ -133,7 +166,9 @@
           img.removeAttribute('style');   // 通栏行由 CSS 定宽，缩略行固定高度
           img.removeAttribute('alt');
           cell.appendChild(img);
-          cell.appendChild(caption(cell, ++state.fig, cap));
+          const cn = ++state.fig, cid = figId(img);
+          if (cid) state.map[cid] = cn;
+          cell.appendChild(caption(cell, cn, cap));
           fig.appendChild(cell);
         });
       } else {
@@ -154,13 +189,18 @@
         }
         // 按原稿标注的宽度出图，不再拉满栏宽：低分辨率截图被放大两三倍后既糊又占版，
         // 还会把整块图挤到下一页、留下半页空白。max-width:100% 兜住超宽的情况。
-        img.removeAttribute('style');
+        // 重绘的 SVG 例外：它的行内 width/height 是按自身 viewBox 比例算好的，
+        // 删掉就只剩 CSS 的 auto，尺寸会退化成浏览器的默认视口（图被压成一小块）
+        const isSvg = img.classList && img.classList.contains('dfig');
+        if (!isSvg) img.removeAttribute('style');
         // 绕排图由 CSS 定宽（按原始比例缩到栏侧），其余按原稿宽度出图
-        if (!wide && !fig.classList.contains('float')) img.style.width = (w * 72).toFixed(1) + 'pt';
-        img.style.height = 'auto';
+        if (!isSvg && !wide && !fig.classList.contains('float')) img.style.width = (w * 72).toFixed(1) + 'pt';
+        if (!isSvg) img.style.height = 'auto';
         img.removeAttribute('alt');
         fig.appendChild(img);
-        caption(fig, ++state.fig, cellCap || cap);
+        const n = ++state.fig, id = figId(img);
+        if (id) state.map[id] = n;
+        caption(fig, n, cellCap || cap);
         if (cellCap) { [...p.childNodes].forEach(n => n.nodeType === 3 && n.remove()); p.querySelectorAll('img, svg.dfig').forEach(i => i.remove()); }
       }
       report.images += imgs.length;
@@ -189,7 +229,9 @@
   }
 
   const CONNECTOR = /^[∵∴即则故]\s*$/;
-  const LABELS = /^(分子|分母|式子|原式|左边|右边|由|得|所以|因此|于是)\s*[:：]\s*$/;
+  // 「∴式子：」「∵分子：」这类「符号 + 名词 + 冒号」也算标签，否则它会被当成正文，
+  // 和旁边 ∵ / 分子： 的蓝标签长得不一样
+  const LABELS = /^(?:[∵∴即则故]\s*)?(分子|分母|式子|原式|左边|右边|由|得|所以|因此|于是)\s*[:：]\s*$/;
 
   // 「∵」「∴」「即」「分子：」独占一段时，并进下一段的公式里，避免公式失去归属
   function joinConnectors(text) {
@@ -205,6 +247,41 @@
       nx.insertBefore(lead, nx.firstChild);
       nx.classList.add('led');
       p.remove();
+    });
+    // 「∵△ABH∽△HBC」这种符号与公式写在同一段里的，也拆成「符号 + 公式行」，
+    // 否则符号留在页边、公式另起一段居中，和下面 ∴ / 即 的行对不齐
+    [...text.querySelectorAll('p')].forEach(p => {
+      if (p.closest('td,th') || p.classList.contains('led')) return;
+      const first = p.firstChild;
+      if (!first || first.nodeType !== 3) return;
+      const m = first.nodeValue.match(/^\s*([∵∴即])\s*/);
+      if (!m) return;
+      const math = p.querySelector('.math');
+      if (!math) return;
+      const clone = p.cloneNode(true);
+      clone.querySelectorAll('.math').forEach(x => x.remove());
+      if (clone.textContent.replace(/^\s*[∵∴即]\s*/, '').trim()) return;   // 符号后还有别的话就不动
+      first.nodeValue = first.nodeValue.replace(/^\s*[∵∴即]\s*/, '');
+      const lead = document.createElement('span');
+      lead.className = 'lead';
+      lead.textContent = m[1];
+      p.insertBefore(lead, p.firstChild);
+      p.classList.add('led');
+    });
+    // 段首的 ∵ / ∴ 出现在纯文字句子里时（「∴将 p=0 代入极限式，得：」），
+    // 也点成同一套蓝色，让整段推理的标记看起来是一个体系
+    [...text.querySelectorAll('p')].forEach(p => {
+      if (p.closest('td,th,figure') || p.classList.contains('led') || p.querySelector('.lead, .conn')) return;
+      const first = p.firstChild;
+      if (!first || first.nodeType !== 3) return;
+      const m = first.nodeValue.match(/^[\s\u3000]*([∵∴])/);
+      if (!m) return;
+      if (!p.textContent.replace(/[∵∴]/g, '').trim()) return;   // 整段只有一个符号，留给 joinConnectors
+      const s = document.createElement('span');
+      s.className = 'conn';
+      s.textContent = m[1];
+      first.nodeValue = first.nodeValue.slice(m[0].length);
+      p.insertBefore(s, first);
     });
   }
 
@@ -390,8 +467,10 @@
     demote(text);
     text.querySelectorAll('span.math').forEach(s => {
       const tex = s.textContent;
-      // bare numbers are data, not formulas: keep them as text so they share the table's font
-      if (/^[-+]?\d+(?:\.\d+)?$/.test(tex.trim())) { s.replaceWith(document.createTextNode(tex.trim())); return; }
+      // 表格里的裸数字是数据，不是公式：留作文本，跟表内字体一致。
+      // 正文里的则必须交给 KaTeX——否则「−1、1、2」这种会掉回正文字体，
+      // 跟前后 p = -1 的字形对不上
+      if (s.closest('td,th') && /^[-+]?\d+(?:\.\d+)?$/.test(tex.trim())) { s.replaceWith(document.createTextNode(tex.trim())); return; }
       const inCell = !!s.closest('td,th');
       const display = s.classList.contains('display') && !inCell;
       // ds：公式行里的公式——行内排但按 displaystyle 取大号分式
@@ -405,6 +484,18 @@
     text.querySelectorAll('p').forEach(p => {
       const clone = p.cloneNode(true); clone.querySelectorAll('.math').forEach(m => m.remove());
       if (p.querySelector('.math.display') && !p.closest('td,th') && !p.classList.contains('led') && clone.textContent.trim().length < 40) p.classList.add('eq');
+    });
+    // 紧跟在「∴ / 即」行后面的那条无标签公式（推导的收尾），跟着公式列走，不单独居中；
+    // 连续几条公式（一列推导链）也统一左对齐，避免每条各自居中、等号来回跳
+    text.querySelectorAll('p.eq').forEach(p => {
+      const pv = p.previousElementSibling;
+      if (pv && pv.tagName === 'P' && pv.classList.contains('led')) p.classList.add('cont');
+      // 「∴式子：」「分子：」这类以冒号收尾的引出句，后面那条公式跟着它缩进
+      if (pv && pv.tagName === 'P' && !pv.classList.contains('eq')
+          && /[：:]\s*$/.test(pv.textContent.trim()) && pv.textContent.trim().length <= 14) {
+        p.classList.add('cont');
+      }
+      if (pv && pv.tagName === 'P' && (pv.classList.contains('eq') || pv.classList.contains('led'))) p.classList.add('chain');
     });
   }
 
@@ -494,8 +585,21 @@
         h.querySelectorAll('strong, b').forEach(s => s.replaceWith(...s.childNodes));
         return;
       }
-      // ①—⑩ 步骤行：按悬挂缩进的列表排，不再并入注释块
-      if (/^[①②③④⑤⑥⑦⑧⑨⑩]/.test(t)) { p.classList.add('item'); return; }
+      // ①—⑩ 步骤行：按悬挂缩进的列表排，不再并入注释块。
+      // 序号单独包一层，才能上色/加字距（否则圆圈数字和正文粘在一起）
+      if (/^[①②③④⑤⑥⑦⑧⑨⑩]/.test(t)) {
+        const f = p.firstChild;
+        if (f && f.nodeType === 3 && /^[\s\u3000]*[①②③④⑤⑥⑦⑧⑨⑩]/.test(f.nodeValue)) {
+          const m = f.nodeValue.match(/^[\s\u3000]*([①②③④⑤⑥⑦⑧⑨⑩])/);
+          const s = document.createElement('span');
+          s.className = 'num';
+          s.textContent = m[1];
+          f.nodeValue = f.nodeValue.slice(m[0].length);
+          p.insertBefore(s, f);
+        }
+        p.classList.add('item');
+        return;
+      }
     });
     // endnotes block: "注释：1－…" plus following "2－…" items -> set as notes, not as verse
     endnotes(text);
@@ -521,18 +625,36 @@
   // 规则：先缩到 0.8 倍；仍放不下就改为通栏（column-span: all）。
   function fitEq(text) {
     text.querySelectorAll('p.eq, p.led').forEach(p => {
+      // 公式卡（2-8）里的对齐块必须留在栏内：一旦转成通栏，卡片会被拆成两瓣
+      if (p.closest('figure.trigcard')) return;
       const k = p.querySelector('.katex-display > .katex') || p.querySelector('.katex');
       if (!k) return;
-      let avail = p.clientWidth - 1;
-      let w = k.getBoundingClientRect().width;
+      // 行间公式的 .katex 是块级、宽度恒等于栏宽，矩形量到的永远“刚好放得下”；
+      // 真正的内容宽度要看 scrollWidth，否则超宽公式会被页边直接裁掉
+      const width = () => Math.max(k.scrollWidth, Math.round(k.getBoundingClientRect().width));
+      const cs = getComputedStyle(p);
+      const pad = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+      // led 行里标签与公式是一个整体（都居中），宽公式要连标签一起算进去才不会顶出栏外
+      const lead = p.querySelector('.lead');
+      const gut = p.classList.contains('led') && lead
+        ? Math.ceil(lead.getBoundingClientRect().width) + 12 : 0;
+      let avail = p.clientWidth - pad - 2 * gut - 1;
+      let w = width();
+      // 缩进（cont / chain）把可用宽度挤窄了，但整幅放得下：
+      // 差得不多（缩 10% 以内）就保留对齐、稍收字号；差太多才退回整幅，别把公式压小
+      if (w > avail + 0.5 && (p.classList.contains('cont') || p.classList.contains('chain'))
+          && w <= p.clientWidth - 1 && avail / w < 0.9) {
+        p.classList.remove('cont', 'chain');
+        return;
+      }
       if (w <= avail) return;
       const s = Math.max(0.8, avail / w);
       k.style.fontSize = (1.05 * s).toFixed(3) + 'em';
-      w = k.getBoundingClientRect().width;
+      w = width();
       if (w > avail) {
         p.classList.add('wide');
-        avail = p.clientWidth - 1;
-        w = k.getBoundingClientRect().width;
+        avail = p.clientWidth - pad - 2 * gut - 1;
+        w = width();
         if (w > avail) k.style.fontSize = (1.05 * avail / w).toFixed(3) + 'em';
         report.warnings.push('wide eq: ' + (p.closest('[data-id]') ? p.closest('[data-id]').dataset.id : ''));
       }
@@ -549,8 +671,9 @@
     const text = sec.querySelector('.text');
     while (raw.firstChild) text.appendChild(raw.firstChild);
     tpl.remove();
-    const state = { fig: 0 };
+    const state = { fig: 0, map: {} };
     figures(text, state, sec.classList.contains('single'));
+    figrefs(text, state);
     structure(text, sec.dataset.form);
     cleanText(text);
     tables(text);

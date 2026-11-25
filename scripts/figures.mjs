@@ -141,7 +141,7 @@ function fig22() {
 // ============ 2-3　正方形四等分 / 线段二等分（原文：4 个 ½a、2 个 ½a）============
 function fig23square() {
   const W = 155, H = 100.7;
-  // 内容总高 58 + 3.5（括线）+ 12（标签），上下留白均分
+  // 内容高 58 + 3.5（括线）+ 12（标签），上下留白均分
   const top = (H - (58 + 3.5 + 12)) / 2;
   let s = '';
   // 左：边长 a 的正方形（灰，表示「整体」）
@@ -152,12 +152,15 @@ function fig23square() {
     s += `<rect x="${r2(91 + i * (cell + gap))}" y="${r2(top + j * (cell + gap))}" width="${r2(cell)}" height="${r2(cell)}"`
       + ` fill="none" stroke="${C.blueDeep}" stroke-width="0.6"/>`;
   }
-  // 下方括线
+  // 下方括线：左「整体 a」
   const yb = top + 58;
   s += `<path d="M6 ${r2(yb + 2.5)}v3.5h58v-3.5" fill="none" stroke="${C.k70}" stroke-width="0.45"/>`;
-  s += `<path d="M91 ${r2(yb + 2.5)}v3.5h58v-3.5" fill="none" stroke="${C.blueDeep}" stroke-width="0.45"/>`;
-  s += T(35, yb + 15, 'a', { size: 6.8, fill: C.ink });
-  s += T(120, yb + 15, '½a', { size: 6.8, fill: C.ink });
+  s += T(35, yb + 13.4, 'a', { size: 6.8, fill: C.ink });
+  // 右侧只标「单个小方格的边长 ½a」：原稿把 ½a 的括线横跨了四个格，
+  // 但四格整体仍是 a，½a 指的是一个格 —— 括线必须只覆盖左上那一格
+  const cellW = (58 - 2.4) / 2;
+  s += `<path d="M91 ${r2(yb + 2.5)}v3.5h${r2(cellW)}v-3.5" fill="none" stroke="${C.blueDeep}" stroke-width="0.45"/>`;
+  s += T(91 + cellW / 2, yb + 13.4, '½a', { size: 6.6, fill: C.ink });
   return { vw: W, vh: H, body: s };
 }
 

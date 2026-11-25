@@ -148,14 +148,24 @@ img { display: block; }
 .text h2.part .pn { font: 700 8pt/11pt var(--ff-ui); letter-spacing: .14em; color: var(--c-orange); margin-right: 10pt; vertical-align: .22em; }
 .text h2.part .pt { font: inherit; color: inherit; }
 /* ①—⑩ 步骤行 / 有序列表：悬挂缩进，与正文同字号同字距 */
-.text p.item { text-indent: -1.2em; padding-left: 1.2em; }
+.text p.item { text-indent: -1.34em; padding-left: 1.34em; }
+/* 步骤序号：全刊唯一的蓝，加半个字的空隙，不再和正文粘在一起 */
+.text p.item .num { color: var(--c-blue-deep); font-weight: 700; margin-right: .28em; }
 .text p.li-p { text-indent: -1.4em; padding-left: 1.4em; }
 .text p.li-c { text-indent: 2em; }
 .text .li-n { font-weight: 700; color: var(--c-blue-deep); font-variant-numeric: tabular-nums; }
-/* 推导行：「∴」「即」「分子：」在左，公式按离心式居中，两者同一行 */
-.text p.led { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; text-align: left; margin: var(--bl-half) 0; }
-.text p.led .lead { grid-column: 1; justify-self: end; margin-right: 9pt; font-weight: 500; color: var(--c-blue-deep); }
-.text p.led > .math { grid-column: 2; }
+/* 推导行：「∴」「即」「分子：」紧贴公式左侧，两者作为一个整体居中。
+   公式是 inline-block（宽度=自身内容），所以每条推导的中轴都是版心正中，
+   不会出现「有的居中、有的左对齐」，标签也不会被甩到栏边 */
+.text p.led { text-align: center; margin: var(--bl-half) 0; }
+.text p.led .lead {
+  display: inline-block; vertical-align: middle; margin-right: 9pt; white-space: nowrap;
+  font: 700 8pt/1.2 var(--ff-ui); color: var(--c-blue); letter-spacing: .02em;
+}
+.text p.led > .math { display: inline-block; vertical-align: middle; }
+.text p.led:not(:has(.math)) { text-align: left; }
+/* 段首的逻辑用语（∵ / ∴）：与推导块的标签同一套颜色，读起来是一串推理 */
+.text p .conn { color: var(--c-blue); font-weight: 700; margin-right: .08em; }
 /* 行内分式比行高更高，行距放宽一点，避免上下两行相撞 */
 .text p:has(.katex .frac-line) { line-height: 23pt; }
 .text strong, .text b { font-weight: 700; }
@@ -168,7 +178,9 @@ img { display: block; }
 /* 公式 */
 .text p.eq { text-align: center; margin: var(--bl-half) 0; padding-top: 3pt; break-inside: avoid; }
 /* 引出公式的一段不要和公式分处两页（Chrome 对 break-after: avoid 的支持比 break-before 可靠） */
-.text p:has(+ p.eq), .text p:has(+ p.led) { break-after: avoid; }
+/* 引出句（正文）不许与它下面那条公式分页；但公式与公式之间可以断
+   ——否则一长串 lim 推导链被粘成一块，页底会空出半页 */
+.text p:not(.eq):not(.led):has(+ p.eq), .text p:not(.eq):not(.led):has(+ p.led) { break-after: avoid; }
 .text p.eq.wide { column-span: all; }
 /* 公式行：公式 + 一句短说明同行居中（「当且仅当…时取等，其中…」） */
 .text p.eq.fline { line-height: 2.1; }
@@ -178,11 +190,26 @@ img { display: block; }
 [data-id="2-3"] .tbl { margin-bottom: 2pt; }
 /* 四联图是表格单元格里的图，按原图尺寸会撑到 42mm；限高 32mm 把结尾三行收回本页 */
 [data-id="2-3"] .text td, [data-id="2-3"] .text th { padding: 2.2pt 4pt; }
+/* 2-2 的正文补齐句末句号后多出几行，「第五章：收束」被挤到第四页、只剩五行；
+   行距收 0.8 pt（15 → 14.2），把这一节拉回第三页 */
+section.article[data-id="2-2"] .text { line-height: 14.2pt; }
+/* 2-5 的推导块：行距略收，让整段推导落在一页之内；
+   逻辑用语（∵ ∴ 即 分子： 分母： ∴式子：）与全刊共用 .lead 的样式 */
+[data-id="2-5"] .text p.led { margin: 3.5pt 0; }
+[data-id="2-5"] .text p.led:not(:has(.math)) .lead { margin-right: 0; }
 .katex { font-size: 1.05em; }
 .katex-display { margin: 0; }
 td .katex { font-size: 1em; }
-/* 分数线：KaTeX 默认 0.04em，打印时会被吸附成整像素、显得压住字符，收细一档 */
-.katex .frac-line { border-bottom-width: .032em !important; border-top-width: 0 !important; }
+/* 分数线：KaTeX 给 .frac-line 设了 min-height:1px，线是 border-bottom。
+   Chrome 打印会把任何小于 1 CSS px 的 border 吸附成整像素，实测 .01em 与 .032em
+   的成品厚度完全一样（都是 0.81pt ≈ 0.29mm），所以「收细一档」根本不起作用。
+   改用 background 渐变：渐变在 PDF 里是 shading，不吸附，实测 0.31pt，回到细线。 */
+.katex .mfrac .frac-line,
+.katex .katex-overline .overline-line,
+.katex .katex-underline .underline-line {
+  border-bottom: 0 !important;
+  background-image: linear-gradient(to top, currentColor 0 45%, transparent 45% 100%);
+}
 
 /* figures —— 按原稿宽度出图，不拉满栏宽（低分辨率截图放大会糊，且容易把整块图挤到下一页） */
 figure { margin: var(--bl-half) 0 var(--bl); break-inside: avoid; }
@@ -196,6 +223,9 @@ figure.col { width: fit-content; max-width: 100%; margin: var(--bl-half) auto; }
 /* 单栏篇目的小图改为图文绕排：正文绕到图侧，不再整行居中出现两侧空白 */
 figure.float { float: right; clear: right; width: fit-content; max-width: 44%; margin: 3pt 0 9pt 12pt; }
 figure.float :is(img, svg.dfig) { width: auto; height: auto; max-width: 100%; max-height: 64mm; }
+/* 重绘 SVG 的行内 height 是按原始宽度算的；宽度被 max-width 缩小后必须让它按比例回落，
+   否则会纵向压扁 */
+figure.float svg.dfig { height: auto !important; }
 /* 大图绕排（重绘的矢量图）：64 mm 高会把图压到原尺寸的 80%，图内刻度随之变小；
    这类图在 markup 里带 data-fw，宽度上限由 transform.js 按 data-fw 写到行内 */
 figure.float svg.dfig[data-fw] { max-height: 84mm; }
@@ -207,15 +237,71 @@ figure.row .cell :is(img, svg.dfig) { width: 100%; height: 60pt; object-fit: con
 figure.row .cell figcaption { text-align: center; }
 figure.row.wide { column-span: all; }
 figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
-/* 表格里的分形四联：四张图的原比例差异很大（谢尔宾斯基近方、科赫宽扁），
-   不给统一高度的话图注会高低不齐。图顶对齐、图注贴底 */
+/* 表格里的分形四联：四张图的原比例差异很大（谢尔宾斯基近方、科赫宽扁）。
+   用 grid 把单元格切成「74pt 图区 + 图注行」：图在各自的图区里垂直居中
+   （不再顶着单元格上沿），图注落在同一条基线上 */
 tr:has(svg.dfig) td figure {
-  height: 92pt; margin: 0; display: flex; flex-direction: column;
-  justify-content: flex-end; align-items: center;
+  height: 92pt; margin: 0; display: grid;
+  grid-template-rows: 74pt auto; justify-items: center; align-content: center;
 }
-tr:has(svg.dfig) td figure :is(img, svg.dfig) { margin-bottom: auto; flex: 0 0 auto; }
+tr:has(svg.dfig) td figure :is(img, svg.dfig) { align-self: center; margin: 0; max-height: 74pt; max-width: 100%; height: auto !important; }
+tr:has(svg.dfig) td figure figcaption { margin-top: 2pt; }
 figcaption { font: var(--t-caption); color: var(--c-k70); margin-top: 3.75pt; text-indent: 0; }
 figcaption b { font: 700 7.5pt/11.25pt var(--ff-ui); color: var(--c-blue); margin-right: 4pt; }
+
+/* 正文里的图号引用（[[fig:…]] → 「图 3」）：与图注编号同色，蓝色强调；
+   数字与汉字之间留一点气口，避免「图 3中」粘在一起 */
+.figref {
+  font-family: var(--ff-ui); font-weight: 700; color: var(--c-blue);
+  margin: 0 .12em; white-space: nowrap;
+}
+
+/* 2-8 三角恒等变换：手写笔记重排为公式卡（HTML + KaTeX，不再是 SVG 里的伪分式）。
+   序号 ①–④ 做小标题、右侧接一条引线；推导用 aligned 按等号对齐，缩进交给 KaTeX */
+.text figure.trigcard {
+  margin: 0 0 var(--bl); padding: 7pt 9pt 8pt;
+  background: #F5F8FE; border-top: 1.1pt solid var(--c-blue-deep);
+  font: 400 6.8pt/1.45 var(--ff-sans); text-indent: 0;
+}
+.text figure.trigcard .tc-head {
+  display: flex; align-items: baseline; gap: 5pt;
+  padding-bottom: 3pt; margin-bottom: 4.5pt;
+  border-bottom: .5pt solid var(--c-gridline);
+}
+.text figure.trigcard .tc-head b { font: 700 7.8pt/1 var(--ff-sans); color: var(--c-blue-deep); }
+.text figure.trigcard .tc-head i {
+  font: 500 3.9pt/1 var(--ff-ui); font-style: normal;
+  letter-spacing: .16em; color: var(--c-k45);
+}
+.text figure.trigcard .tc-head em {
+  margin-left: auto; font: 700 6.6pt/1 var(--ff-sans);
+  font-style: normal; color: var(--c-blue);
+}
+/* transform.js 会把 h4 统一改名为 h3，所以按类名 .tc-h 覆盖正文小标题的样式
+   （否则会继承 h3 的 10.5pt 字号和标题前的蓝色短杠） */
+.text figure.trigcard .tc-h {
+  display: flex; align-items: center; gap: 3.5pt; margin: 6.5pt 0 2pt;
+  font: 700 6.4pt/1.2 var(--ff-sans); color: var(--c-blue-deep);
+  text-indent: 0; letter-spacing: 0; break-after: auto;
+}
+.text figure.trigcard .tc-h::before { content: none; }
+.text figure.trigcard .tc-h:first-of-type { margin-top: 0; }
+.text figure.trigcard .tc-h span { font-size: 7.8pt; line-height: 1; color: var(--c-blue); }
+.text figure.trigcard .tc-h::after {
+  content: ""; flex: 1; height: .5pt; margin-left: 5pt; background: var(--c-gridline);
+}
+.text figure.trigcard p.eq {
+  margin: 0; padding: 1pt 0 1.5pt; text-align: left; text-indent: 0;
+  line-height: 1.5; break-inside: avoid;
+}
+.text figure.trigcard p.eq .katex-display,
+.text figure.trigcard p.eq .katex-display > .katex { margin: 0; text-align: left; }
+.text figure.trigcard p:has(.katex .frac-line) { line-height: 1.5; }
+.text figure.trigcard p.tc-note {
+  margin: 2pt 0 0 13pt; text-indent: 0;
+  font: 400 5.7pt/1.4 var(--ff-sans); color: var(--c-orange);
+}
+.text figure.trigcard p.tc-note .katex { font-size: 1em; }
 
 /* 破折号：思源黑体 U+2014 字身 0.894 em，两个并排中间会露白口；
    连字（ccmp）在 Chrome 的汉字 run 里不生效，改用负边距把两段墨迹接成一条线 */
@@ -232,10 +318,20 @@ figcaption b { font: 700 7.5pt/11.25pt var(--ff-ui); color: var(--c-blue); margi
 
 /* rare glyphs set as live text (vector), not bitmaps */
 .rare {
-  display: block; margin: 1pt auto 2pt; text-align: center;
+  display: inline-block; margin: 1pt auto 2pt; text-align: center;
   font-family: "SimSun-ExtG", "SimSun-ExtB", "MingLiU-ExtB", "SimSun", serif;
   font-size: 34pt; line-height: 1.1; font-weight: 400; color: var(--c-ink);
 }
+
+/* 读音注释：字在下、拼音在上（ruby）。拼音一律思源黑体，比正文小、字距略开，
+   使声调符号不与相邻字母粘连 */
+ruby { ruby-position: over; ruby-align: center; }
+ruby rt { font: 500 .62em/1 var(--ff-ui); color: var(--c-blue-deep); letter-spacing: .04em; }
+/* 生僻字是 34pt 的大字，rt 若按 .62em 会长到 21pt，故单独定死 7.2pt */
+ruby:has(.rare) rt { font-size: 7.2pt; letter-spacing: .02em; }
+ruby:has(.rare) .rare { margin: 0; }
+/* 注音字/字格在表格里居中 */
+.text td p:has(ruby) { text-align: center; }
 
 /* notes */
 .notes { margin-top: var(--bl); padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-blue); break-inside: avoid-column; }
