@@ -80,10 +80,12 @@ img { display: block; }
 .toc-chapter .ch .nm { font: 700 12pt/15pt "SHS", sans-serif; }
 .toc-chapter .ch .nm span { font: 500 9pt/15pt var(--ff-ui); margin-left: 8pt; letter-spacing: .06em; color: var(--c-blue-deep); }
 .toc-item { display: grid; grid-template-columns: 52pt 1fr 40pt 36pt; align-items: baseline; padding: 3.75pt 0; border-bottom: var(--rule-hair) solid var(--c-k15); color: var(--c-ink); text-decoration: none; }
-.toc-item .n { font: 700 16pt/22.5pt var(--ff-display); color: var(--c-blue); letter-spacing: -.02em; font-feature-settings: "tnum" 1, "pnum" 0; }
+.toc-item .n { font: 700 16pt/22.5pt var(--ff-display); color: var(--c-blue); letter-spacing: -.02em; font-feature-settings: "tnum" 1, "pnum" 0; position: relative; top: .5pt; }
 .toc-item .t { font: 500 10pt/15pt "SHS", sans-serif; font-feature-settings: "palt"; }
 .toc-item .t small { display: block; font: var(--t-byline); color: var(--c-k70); }
-.toc-item .c { display: flex; gap: 3pt; align-self: start; height: 15pt; align-items: center; margin-top: 8.5pt; }
+/* 圆点以「基线」定位：底边贴标题首行基线，中心恒在基线上方 3pt。
+   不能用 align-self:start + margin-top —— 行盒高度随「有无作者名」变化，圆点会跟着错位 */
+.toc-item .c { display: flex; gap: 3pt; align-self: baseline; align-items: center; position: relative; top: -0.7pt; }
 .toc-item .c i { width: 6pt; height: 6pt; border-radius: 50%; display: block; }
 .toc-item .pn { text-align: right; font: 700 10pt/15pt var(--ff-ui); font-feature-settings: "tnum" 1, "pnum" 0; color: var(--c-blue); }
 
