@@ -12,6 +12,8 @@ const args = process.argv.slice(2);
 const onlyArg = args.includes('--only') ? args[args.indexOf('--only') + 1].split(',') : null;
 
 const ISSUE = { cn: '2026 冬', en: 'WINTER 2026', no: 'VOL. 02' };   // TODO 期号待确认
+// 前置页数（罗马页码 i–v：扉页 / 宣言 / 内封 / 版权 / 目录单页）。正文页码 = PDF 页序 − FRONT_PAGES
+const FRONT_PAGES = 5;
 const CHAPTERS = {
   1: { cn: '文学', en: 'LITERATURE' },
   2: { cn: '交叉', en: 'INTERSECTIONS' },
@@ -127,8 +129,6 @@ function frontMatter() {
     <div class="toc-head"><h2>CONTENTS</h2><div class="cn">目录</div><i class="spark"></i></div>
     <div class="toc-rule"></div>
     ${tocCh(1)}
-  </div>
-  <div class="page fm fm-toc" id="fm-6">
     ${tocCh(2)}
   </div>`;
 }
@@ -261,7 +261,7 @@ function bookHtml() {
 // ---------- overlay (page furniture, full-bleed canvas) ----------
 const ROMAN = ['', 'i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii'];
 function overlayHtml(map) {
-  const FRONT = 6;
+  const FRONT = FRONT_PAGES;
   const starts = [];
   for (const ch of new Set(rendered.map(a => a.ch))) starts.push({ p: map.dests[`ch-${ch}`], kind: 'chapter', ch });
   for (const a of rendered) starts.push({ p: map.dests[`a-${a.id}`], kind: 'article', a });
@@ -328,11 +328,11 @@ console.log('transform', JSON.stringify(report));
 const pdfOpts = { preferCSSPageSize: true, printBackground: true, outline: true, tagged: true };
 await page.pdf({ ...pdfOpts, path: B('body.pass1.pdf') });
 let map = JSON.parse(py('scripts/pagemap.py', B('body.pass1.pdf')));
-await page.evaluate(m => {
+await page.evaluate(({ m, front }) => {
   document.querySelectorAll('.pn[data-target]').forEach(s => {
-    const p = m.dests[s.dataset.target]; s.textContent = p ? String(p - 6).padStart(2, '0') : '—';
+    const p = m.dests[s.dataset.target]; s.textContent = p ? String(p - front).padStart(2, '0') : '—';
   });
-}, map);
+}, { m: map, front: FRONT_PAGES });
 await page.pdf({ ...pdfOpts, path: B('body.pdf') });
 map = JSON.parse(py('scripts/pagemap.py', B('body.pdf')));
 fs.writeFileSync(B('pagemap.json'), JSON.stringify(map, null, 1));
