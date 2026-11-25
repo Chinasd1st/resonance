@@ -1,23 +1,24 @@
-# 《共鸣 RESONANCE》Design Tokens · v0.1
+# 《共鸣 RESONANCE》Design Tokens · v1.0（按现有排校）
 
 > 浙江省桐乡市高级中学 音乐社 × 化学社 × 哲学社 × 新闻社 × 数学社 联袂出品 · 开放校外征稿
-> 范围：扉页 + 正文（封面 / 封底暂缓）
-> 渲染链：DOCX → Pandoc → HTML 模板 → Playwright + Headless Chrome → PDF（RGB）→ 色彩重映射 → PDF/X（CMYK）
+> 范围：扉页 + 正文（封面 / 封底不在本仓库构建）
+> 渲染链：DOCX → Pandoc → HTML → Playwright + Headless Chrome → PDF（RGB）→ Ghostscript + ICC → DeviceCMYK
 
-本文件是全书唯一的视觉事实来源。`src/tokens.css` 必须由本文件第 9 节逐字生成，模板里不允许出现本文件以外的尺寸、字号和颜色值。
+**本文件记录的是一切已经在 `dist/` 里印出来的版式事实。** v0.1 里那套"红信号色 / GS Cond / 纯灰中性色"的方案已经作废，现行为"蓝色信号色 / 蓝灰中性 / 两族字体"。
+
+维护规则：`src/tokens.css` 由第 9 节逐字生成；`src/book.css` 的取值必须能在本文件里找到出处。发现文档与成品不符时，**以 `book.css` 的实际渲染为准，回头改本文件**，不要在 CSS 里留没有出处的数值。
 
 ---
 
 ## 0. 设计原则
 
-参照瑞士国际主义风格（International Typographic Style），但不做成"极简白板"：
-
-1. **网格先行**：所有元素都落在 12 栏模块网格与 15 pt 基线网格上。
-2. **字体即图形**：用 Google Sans 的超大数字、窄体粗体、字重对比制造视觉张力，不靠装饰图片。
-3. **非对称**：标题区左对齐、右侧留白，页码和栏外标题放在外切口。
-4. **一个信号色 + 社团色码**：全书只有一个品牌红；五个社团各有一个识别色，只用于色条、编号、标签等小面积元素。
-5. **克制里要有节奏**：每篇的开篇页做足（大编号、粗线、社团色块），正文页安静。
-6. **文学与非文学分开**：文学用思源宋体，非文学用思源黑体 + Google Sans。
+1. **网格先行**：所有元素落在 12 栏模块网格与 15 pt 基线网格上；栏宽 240 pt 是按"宋体 9.6 pt 每行 25 字"反推的。
+2. **字体即图形**：靠超大编号（260 pt / 150 pt）与字重对比制造张力，不靠装饰图。
+3. **一个信号色**：全书只有一个强调色 —— 蓝 `#458CEE`，用于大编号、章名、标题、公式引导词、篇首标签；`#2F6FD6`（蓝深）只做次级文字。
+4. **星芒是唯一装饰符**：四角星（`--sparkle`）出现在扉页、章扉页、h2 前、目录刊头，橙 `#ED7207` 或蓝两版，不引入其他图形。
+5. **中性色带蓝灰相**：k70/k45/k15 都不是纯灰，而是向蓝偏的灰，保证与信号色同一色温。
+6. **文学与非文学分族**：文学用思源宋体，非文学用思源黑体 + Google Sans；标题、编号、图注、表格一律 Google Sans。
+7. **克制里有节奏**：篇首做足（大编号 + 标题 + 标签行），正文安静（无底色、无双线、无栏线）。
 
 ---
 
@@ -25,34 +26,34 @@
 
 | Token | 值 | 说明 |
 |---|---|---|
-| `page.trim` | 210 × 297 mm | A4 成品尺寸 |
-| `page.bleed` | 3 mm | 四边出血；印刷版 MediaBox = 216 × 303 mm |
-| `page.safe` | 5 mm | 裁切线内 5 mm 为安全区，文字和页码不得越过 |
-| `page.slug` | 0 | 不设辅助信息区；裁切标记只在 CMYK 校样版加 |
+| `page.trim` | 210 × 297 mm | A4 成品 |
+| `page.bleed` | 3 mm | 四边 |
+| `page.media` | 216 × 303 mm | 印刷版 MediaBox |
 | `binding` | 胶装，左翻 | 奇数页 = 右页 (recto) |
 
-**两套输出的页面框**
-
-| 构建版本 | MediaBox | TrimBox | BleedBox |
+| 产物 | MediaBox | TrimBox | BleedBox |
 |---|---|---|---|
-| `screen-rgb` | 210 × 297 | = Media | = Media |
-| `print-rgb` / `print-cmyk` | 216 × 303 | 内缩 3 mm | = Media |
+| `resonance-screen.pdf` | 210 × 297 | = Media | = Media |
+| `resonance-print-rgb.pdf` | 216 × 303 | 内缩 3 mm | = Media |
+| `resonance-print-cmyk.pdf` | 216 × 303 | 内缩 3 mm | = Media |
 
-Chrome 直接按 216 × 303 mm 出页；TrimBox 和 BleedBox 在后处理阶段写入。
+Chrome 直接按 216 × 303 出页；TrimBox / BleedBox 由 `scripts/merge.py`（pypdf）与 `scripts/build-cmyk.mjs` 写入。
 
 ---
 
 ## 2. 版心与网格
 
-### 2.1 边距（左右页镜像）
+### 2.1 边距（左右页镜像，单位 mm / pt）
 
-| Token | mm | pt |
-|---|---|---|
-| `margin.top` | 20 | 56.69 |
-| `margin.bottom` | 23 | 65.20 |
-| `margin.inner`（订口） | 20 | 56.69 |
-| `margin.outer`（切口） | 15 | 42.52 |
-| 版心 | 175 × 254 | **496 × 720** |
+| Token | mm | pt | 备注 |
+|---|---|---|---|
+| `margin.top` | 20 | 56.69 | `@page` 里写 23 mm（= 20 + 出血 3） |
+| `margin.bottom` | 23 | 65.20 | `@page` 里写 26 mm（= 23 + 出血 3） |
+| `margin.inner`（订口） | 20 | 56.69 | `@page :right/:left` 用 `calc(var + bleed)` |
+| `margin.outer`（切口） | 15 | 42.52 | 同上 |
+| 版心 | 175 × 254 | **496 × 720** | 216 − 23 − 18 = 175 mm；303 − 23 − 26 = 254 mm |
+
+> `@page` 里的 `calc(var(--…))` 会被 Chrome 丢弃，导致上下边距失效，所以上下边距写字面值；左右边距可以安全使用 `calc()`。
 
 ### 2.2 栏网格
 
@@ -60,13 +61,14 @@ Chrome 直接按 216 × 303 mm 出页；TrimBox 和 BleedBox 在后处理阶段�
 |---|---|
 | `grid.columns` | 12 |
 | `grid.col` | 26.667 pt |
-| `grid.gutter` | 16 pt（≈ 5.64 mm） |
-| `text.columns` | **2**（正文 = 6 + 6 模块） |
+| `grid.gutter` | 16 pt |
+| `text.columns` | 2（正文 = 6 + 6 模块） |
 | `text.col-width` | **240 pt**（84.67 mm） |
 | `text.col-gap` | 16 pt |
-| `text.col-rule` | 无（瑞士风格靠留白分栏） |
+| `text.col-rule` | 无（靠留白分栏） |
 
-正文栏宽 240 pt 是按字数反推的：宋体 9.6 pt 正好每行 25 字，所以文学正文的字能严格对齐网格。
+单栏篇目（公式密集的 2-5、2-8，或图比一栏宽的 2-1）：`column-count: 1`，栏宽仍 240 pt 会太窄，实际用版心全宽。
+诗/歌词：单栏，左起第 4 栏，宽 = 3 栏 + 2 沟。
 
 ### 2.3 基线网格
 
@@ -74,128 +76,132 @@ Chrome 直接按 216 × 303 mm 出页；TrimBox 和 BleedBox 在后处理阶段�
 |---|---|
 | `baseline` | **15 pt**（5.2917 mm） |
 | `baseline.half` | 7.5 pt |
-| 每栏行数 | 48 行（48 × 15 = 720 pt = 版心高） |
+| 每栏行数 | 48（48 × 15 = 720 pt） |
 
-规则：所有行距、段前段后、图片高度、标题区高度都取 `baseline.half` 的整数倍。图片高度向上取整到 15 pt 的倍数，余量放在图注下方。
+行距、段前段后、图片下的余量、标题区高度都取 7.5 pt 的整数倍。
 
-### 2.4 篇首页分区（Swiss Opener）
+### 2.4 篇首分区（实际渲染）
 
 ```
-┌──────────────── 12 cols ────────────────┐
-│ [社团色条 4pt × 2 cols]   CH 01 / 03     │ ← 第 1 行
+┌─ 12 cols ───────────────────────────────┐
+│ CH 01 — 01 / 10                [社团][文体] │ ← 第 1 行（1 基线高）
 │                                          │
-│  03                    (大编号, 1–5 栏)  │ ← 第 2–9 行（8 行 = 120 pt）
-│                                          │
-│  标题 Title (1–9 栏)                     │ ← 第 10–15 行
-│  —— 副标题                               │
-│  ─────────────── 1.5pt 黑线 ──────────── │ ← 第 16 行
-│  作者 / 单位        社团标签   形式标签  │ ← 第 17 行
-│ ┌──── col A ────┐  ┌──── col B ────┐    │ ← 第 19–48 行：双栏正文
+│  01                    ┌ 标题 ────────┐  │ ← 第 2–17 行
+│  (1–5 栏, 底部对齐)     │ ——副标题      │  │
+│                        └──────────────┘  │   标题区 6–12 栏
+│  作者 单位                                │ ← 第 18 行 + 2.5 基线
+└──────────────────────────────────────────┘
 ```
 
-- 标题区固定占 **18 行（270 pt）**，正文从第 19 行起排。
-- 短诗（`form: poem` 且不超过 30 行）：单页排完，正文改为单栏，左对齐到第 4 栏。
+- 篇首固定 **18 基线 = 270 pt**（`--opener-h`），正文从第 19 行起排。
+- 大编号：`--t-mega`（150 pt/135 pt），占 1–5 栏，底边与标题基线对齐（`margin-left:-6pt; margin-bottom:-8pt`）。
+- 标题：`--t-title`（30 pt）；标题超过 12 字自动换 `--t-title-long`（24 pt）。
+- 署名行：左「作者 + 单位（500 字重、蓝深）」，右社团标签 + 文体标签（7 pt、0.1 em）。
+- **注**：markup 里保留了 `.clubbar`（社团色条）与 `.rule`（分割线）两个占位节点，但 `book.css` 里没有对应样式，成品上**没有**色条和分割线 —— 见 §11 待确认第 7 条。
 
 ---
 
 ## 3. 字体
 
-### 3.1 字体文件（`fonts/`）
+### 3.1 字族
 
-> ⚠️ 状态：`scripts/fonts.py` 还没有执行成功，`fonts/` 目录目前是空的。开始写模板之前必须先跑一遍。
+| CSS 族名 | 文件 | 用途 |
+|---|---|---|
+| `GS Text` 500/700 | `fonts/GSF-Text-*.ttf` | 西文/数字正文、页眉页脚、图注、表格 |
+| `GS Display` 700 | `fonts/GSF-Display-Bold.ttf` | 大编号、字标、章名英文、篇名西文 |
+| `SHS` 400/500/700 | `fonts/SourceHanSansSC-*.otf` | 非文学正文、中文标题 |
+| `SHSerif` 400 | `fonts/NotoSerifCJKsc-*.otf` | 文学正文 |
+| `KaTeX_*` | `node_modules/katex/dist/fonts` | 公式 |
 
-| 族名（CSS） | 文件 | 来源 | 用途 |
-|---|---|---|---|
-| `GS Text` 400/500/700 | `GSF-Text-{Regular,Medium,Bold}.ttf` | Google Sans Flex 静态实例，opsz 12，wdth 100 | 西文 / 数字正文、页眉页脚、图注 |
-| `GS Display` 300/500/700 | `GSF-Display-{Light,Medium,Bold}.ttf` | opsz 72，wdth 100 | 标题中的西文、扉页 |
-| `GS Cond` 500/700/900 | `GSF-Cond-{Medium,Bold,Black}.ttf` | opsz 72，wdth 最窄 | 大编号、RESONANCE 字标、章节号 |
-| `SHS` 300/400/500/700/900 | `SourceHanSansSC-*.otf` | 思源黑体 | 非文学正文、所有中文标题 |
-| `SHSerif` 300/400/500/600/700/900 | `NotoSerifCJKsc-*.otf` | 思源宋体（Noto Serif CJK 与思源宋体字形相同） | 文学正文 |
-| `KaTeX_*` | `node_modules/katex/dist/fonts` | KaTeX | 公式 |
-
-可变字体要先做成静态实例再用。Chrome 能在 PDF 里嵌入可变字体，但部分 RIP 对可变字体的 PDF/X 支持不稳定，所以不直接用。
+v0.1 计划过的第三族 `GS Cond`（窄体）**没有进入实现**：大编号与章名改用 `GS Display` 的 700 字重。`fonts/` 共 223 MB，不入 git（`.gitignore`），由 `scripts/fonts.py` 生成。
 
 ### 3.2 字族栈
 
 ```
---ff-ui:      "GS Text", "SHS", sans-serif;          /* 全书核心设计语言 */
+--ff-ui:      "GS Text", "SHS", sans-serif;
 --ff-display: "GS Display", "SHS", sans-serif;
---ff-cond:    "GS Cond", "GS Display", sans-serif;
---ff-sans:    "GS Text", "SHS", sans-serif;          /* 非文学正文：西文、数字走 Google Sans */
---ff-serif:   "SHSerif", serif;                      /* 文学正文：中西文统一用宋体 */
+--ff-sans:    "GS Text", "SHS", sans-serif;
+--ff-serif:   "SHSerif", serif;
 ```
 
-Google Sans 排在思源黑体前面，西文和数字会自动用 Google Sans，汉字回落到思源黑体。
+Google Sans 排在思源前面，西文与数字自动取 Google Sans，汉字回落到思源。
 
-### 3.3 文体 → 字体映射（由 `manifest.json` 的 `form` 字段驱动）
+### 3.3 文体 → 字体
 
-| form | 文体 | 正文字体 | 典型篇目 |
-|---|---|---|---|
-| `prose` | 散文 | `--ff-serif` | 1-1、1-3、1-7 |
-| `fiction` | 小说 | `--ff-serif` | 1-2、1-9、1-10 |
-| `poem` | 诗 | `--ff-serif` | 1-5、1-6、1-8 |
-| `lyrics` | 歌词 | `--ff-serif` | 2-7 |
-| `essay` | 科普 / 评论 | `--ff-sans` | 2-1 ～ 2-9 |
-
-**例外**：1-4《在世界中心呼唤名为爱的野兽》在 manifest 里标的是 `essay`，但它是文学评论，放在第一章（文学）。默认按 `--ff-serif` 排，用 `manifest.override.font = "serif"` 处理。**待你确认。**
-
-不论正文用什么字体，标题、编号、页眉页脚、图注、表格一律用 `--ff-ui` 或 `--ff-display`。这样 Google Sans 贯穿全书，是统一的设计语言。
+由 `content/manifest.json` 的 `form` 驱动：`prose` / `fiction` / `poem` / `lyrics` → `--ff-serif`；`essay` → `--ff-sans`。
+例外：1-4《在世界中心呼唤名为爱的野兽》是文学评论，在 `build.mjs` 的 `OVERRIDE` 里强制 serif。
 
 ---
 
-## 4. 字号阶梯
+## 4. 字号阶梯（单位 pt，行高均为 7.5 的倍数）
 
-单位 pt。行高都是 7.5 pt 的倍数。
+### 显示级
 
-| Token | 字体 | 字号 / 行高 | 字重 | 字距 | 用途 |
-|---|---|---|---|---|---|
-| `t.mega` | GS Cond | 168 / 150 | 900 | -0.02em | 篇首大编号 `03` |
-| `t.chapter` | GS Cond | 240 / 210 | 900 | -0.03em | 章扉页编号 |
-| `t.wordmark` | GS Cond | 72 / 75 | 900 | 0.02em | RESONANCE 字标（扉页） |
-| `t.title` | SHS + GS Display | 30 / 37.5 | 700 | -0.01em，`palt` | 篇名 |
-| `t.title-long` | 同上 | 24 / 30 | 700 | `palt` | 篇名超过 12 字时用（如 1-4、2-6） |
-| `t.subtitle` | SHS | 12 / 22.5 | 400 | 0 | 副标题，前面加"——" |
-| `t.lead` | SHS / SHSerif | 11 / 22.5 | 400 | 0 | 导语（可选） |
-| `t.h2` | SHS | 12 / 22.5 | 700 | 0 | 正文内的章节（"第一章"、"Part 1"） |
-| `t.h3` | SHS | 9.6 / 15 | 700 | 0 | 小标题 |
-| `t.body-serif` | SHSerif | **9.6 / 15** | 400 | 0 | 文学正文，每行 25 字 |
-| `t.body-sans` | GS Text + SHS | **9.25 / 15** | 400 | 0 | 非文学正文 |
-| `t.poem` | SHSerif | 10.5 / 22.5 | 400 | 0 | 诗行（行距加大） |
-| `t.byline` | GS Text + SHS | 8 / 15 | 500 | 0.02em | 作者、单位 |
-| `t.tag` | GS Text | 7 / 7.5 | 700 | 0.12em，大写 | 社团标签 `MATH`、`MUSIC` |
-| `t.caption` | GS Text + SHS | 7.5 / 11.25 | 400 | 0 | 图注、表注 |
-| `t.table` | GS Text + SHS | 8 / 11.25 | 400 | 0 | 表格 |
-| `t.note` | GS Text + SHS | 7.5 / 11.25 | 400 | 0 | 篇末注释（①②③） |
-| `t.folio` | GS Text | 8 / 7.5 | 700 | 0.04em，等宽数字 `tnum` | 页码 |
-| `t.runhead` | GS Text + SHS | 7 / 7.5 | 500 | 0.08em | 栏外标题 |
-| `t.math` | KaTeX | 1.05em | — | — | 行内公式按正文字号的 1.05 倍 |
+| Token | 字号 / 行高 | 字重 | 字距 | 用途 |
+|---|---|---|---|---|
+| `t.chapter` | 260 / 225 | 700 GS Display | −0.05 em | 章扉页章号 |
+| `t.mega` | 150 / 135 | 700 GS Display | −0.05 em | 篇首大编号 |
+| `t.wordmark` | 80 / 75 | 700 GS Display | −0.035 em | 正扉页字标 |
+| `t.quote` | 44 / 52.5 | 700 GS Display | −0.02 em | 第 ii 页宣言英文 |
+| `t.chapter-cn` | 44 / 52.5 | 700 思源黑 | 0.06 em | 章名中文 |
+| `t.halfmark` | 40 / 37.5 | 700 GS Display | −0.02 em | 第 i 页字标 |
+| `t.title` | 30 / 37.5 | 700 GS Display | −0.01 em + `palt` | 篇名 |
+| `t.title-long` | 24 / 30 | 700 GS Display | `palt` | 篇名 > 12 字 |
+| `t.h3num` | 18 / 22.5 | 700 GS Display | −0.02 em | 正文内数字小节（2-6 的 1./2./3.） |
+| `t.chapter-en` | 18 / 22.5 | 700 GS Display | −0.01 em | 章名英文 |
+| `t.tagline` | 12 / 15 | 700 GS Display | −0.01 em | 「resonate w/ you!」 |
+
+### 文本级
+
+| Token | 字号 / 行高 | 字重 | 用途 |
+|---|---|---|---|
+| `t.h2` | 12 / 22.5 | 700 思源黑 | 小节标题（前有 9 pt 星芒） |
+| `t.subtitle` | 11 / 22.5 | 500 思源黑 | 副标题（前缀「——」） |
+| `t.h3` | 10.5 / 16.5 | 700 思源黑 | 次级小标题（前有 11 × 2.4 pt 蓝条） |
+| `t.poem` | 10.5 / 22.5 | 400 宋 | 诗行 |
+| `t.body-serif` | **9.6 / 15** | 400 宋 | 文学正文（每行 25 字） |
+| `t.body-sans` | **9.25 / 15** | 400 黑 + GS | 非文学正文 |
+| `t.list` | 9 / 15 | 700 思源黑 | 章扉页本章篇目 |
+| `t.table` | 8 / 11.25 | 400 | 表格 |
+| `t.byline` | 8 / 15 | 500 | 作者、单位、目录作者行 |
+| `t.caption` | 7.5 / 11.25 | 400 | 图注、表注 |
+| `t.note` | 7.5 / 11.25 | 400 | 篇末注释 |
+| `t.folio` | 8 / 7.5 | 700 | 页码（等宽数字） |
+| `t.tag` | 7 / 7.5 | 700，0.1 em 大写 | 社团 / 文体标签、栏外标题以外的标签 |
+| `t.runhead` | 7 / 7.5 | 500，0.08 em | 栏外标题 |
+
+### 组件级（不单设 token）
+
+| 用途 | 值 |
+|---|---|
+| 生僻字 | 34 / 1.1，SimSun-ExtG 主栈 |
+| 正扉页上标 `sup` | 26 / 30，`vertical-align: 46pt` |
+| 第 i 页上标 `sup` | 16 / 15，`vertical-align: 18pt` |
+| 正扉页中文刊名 | 18 / 30，0.08 em |
+| 目录刊头 h2 | 56 / 54，−0.035 em |
 
 ---
 
 ## 5. 中文排版规则
 
-| Token | 值 |
+| 项 | 值 |
 |---|---|
-| `p.indent` | `2em`（散文、小说、科普文都缩进） |
-| `p.indent.poem` | 0 |
-| `p.space` | 0（段间不留空，靠缩进区分段落） |
-| `text-align` | `justify`（两端对齐） |
-| `line-break` | `strict`（严格执行中文禁则） |
-| `text-spacing-trim` | `space-first`（行首标点挤压） |
-| `text-autospace` | `normal`（中西文之间自动加间距；Chrome 140+ 支持） |
-| `hyphens` | `auto`（只对西文单词生效） |
-| `font-kerning` | `normal` |
-| 标点挤压 `palt` | 只在标题、标签上开，正文不开 |
+| `p.indent` | 2 em（散文、小说、科普都缩进） |
+| `p.space` | 0；段落靠缩进区分 |
+| `text-align` | `justify` |
+| `line-break` | `strict` |
+| `text-spacing-trim` | `space-first` |
+| `text-autospace` | `normal` |
+| `hyphens` | `auto`（只影响西文） |
+| `palt` | 只开在标题、篇名、副标题、h2/h3 |
 | `orphans` / `widows` | 2 / 2 |
-| `h2`、`h3` | `break-after: avoid` |
+| h2 / h3 / 公式引导段 | `break-after: avoid`（引出公式的那段与公式不分页） |
 
-**预处理清洗**（DOCX → HTML 阶段）：
+**破折号**（思源黑体 U+2014 字身仅 0.894 em，两个并排会露白口）：
+`transform.js` 里把连续 `——` 拆成 `<span class="em">—<i>—</i></span>`；若字体没有 `ccmp` 破折号连字（实测无），加 `nj` 类，用 `margin-left:-.32em` 把两段墨迹接成一条线。这是当前唯一合法的写法，不要在正文里直接打两个 `—`。
 
-- 删除行首的全角空格（`\u3000`）、`&nbsp;` 和手打的缩进空格，缩进统一交给 CSS。1-1 和 1-4 有这种情况。
-- 删除中西文之间手打的半角空格，否则会和 `text-autospace` 叠加，空隙变成双倍。
-- 引号统一用 `“ ”` 和 `‘ ’`。修正 1-9 里写反的“林汀用手点了一下江之弋的前额，”这类引号。
-- 破折号统一成 `——`（U+2014 × 2），省略号统一成 `……`。
-- 1-4 里的 `--` 改成 `——`。1-4 的“t陶喆”看起来是笔误，**不自动改，记进 `content/errata.md` 请编辑确认**。
+**预处理清洗**（`transform.js`）：
+删行首全角空格 / `&nbsp;` / 手打缩进；删中西文间手打半角空格（避免与 `text-autospace` 叠成双倍）；引号统一 `“ ”`；省略号统一 `……`；公式后紧跟「当/若/且/则/即/故/其中」时自动补逗号。
 
 ---
 
@@ -203,134 +209,131 @@ Google Sans 排在思源黑体前面，西文和数字会自动用 Google Sans�
 
 ### 6.1 原则
 
-- **CSS 只用实色**：禁止 `opacity`、`rgba()`、`mix-blend-mode`、渐变。否则 PDF 里会生成透明组和混合色，没法精确换算成 CMYK。
-- **每个色值的 RGB hex 必须唯一**。CMYK 构建时会按 hex 精确匹配，把矢量和文字颜色换成指定的 CMYK 值（见 6.4），所以 hex 不能撞。
-- 正文和所有小于 12 pt 的字只用 `ink`（K100 单色黑），**不能用四色黑**，否则套印偏差会让小字发虚。
-- 总墨量 ≤ 300%（对应 ISO Coated v2 300% / FOGRA39）。
+- 只允许实色：CSS 里没有 `opacity` / `rgba()` / 渐变 / 混合模式（否则 PDF 出现透明组，无法稳定转 CMYK）。
+- 每个 hex 唯一，便于按 hex 做映射。
+- 中性色带蓝相（k70/k45/k15 都是蓝灰），与信号色同色温。
 
-### 6.2 中性色
+### 6.2 调色板
 
-| Token | CSS（RGB） | CMYK | 用途 |
+| Token | RGB | 近似 CMYK* | 用途 |
 |---|---|---|---|
-| `c.paper` | `#FFFFFF` | 0 / 0 / 0 / 0 | 纸张 |
-| `c.ink` | `#1D1D1B` | 0 / 0 / 0 / 100 | 正文、标题、粗线 |
-| `c.rich` | `#000001` | 50 / 40 / 40 / 100 | 只用于 ≥ 60 pt 的大编号、大面积黑块 |
-| `c.k70` | `#575756` | 0 / 0 / 0 / 70 | 副标题、栏外标题 |
-| `c.k45` | `#9C9B9B` | 0 / 0 / 0 / 45 | 图注、页码上方的细线 |
-| `c.k15` | `#DADADA` | 0 / 0 / 0 / 15 | 表格分隔线、公式块底色 |
-| `c.k6` | `#F1F1F1` | 0 / 0 / 0 / 6 | 引用块、编者按底色 |
+| `c.paper` | `#FFFFFF` | 0/0/0/0 | 纸白 |
+| `c.ink` | `#1D1D1B` | 0/0/7/89 | 正文、标题、粗线 |
+| `c.k70` | `#56657F` | 32/20/0/50 | 副信息、图注、栏外标题 |
+| `c.k45` | `#9AA6B8` | 16/10/0/28 | 页码细线、弱化线 |
+| `c.k15` | `#D9E2EE` | 9/5/0/7 | 表格行线 |
+| `c.blue` | `#458CEE` | 71/41/0/7 | **信号色**：大编号、标题、h2、页码 |
+| `c.blue-deep` | `#2F6FD6` | 78/48/0/16 | 副标题、引导词、表头字 |
+| `c.orange` | `#ED7207` | 0/52/97/7 | 星芒、开放征稿、PART 标签 |
+| `c.tint` | `#E6F1FF` | 10/5/0/0 | 引用块、表头底色 |
+| `c.gridline` | `#C2DEF7` | 21/10/0/3 | 章目录细线 |
+| `c.music` | `#F08A24` | 0/43/85/6 | 音乐社 |
+| `c.chem` | `#1FA67A` | 81/0/27/35 | 化学社 |
+| `c.philo` | `#7A5BD6` | 43/57/0/16 | 哲学社 |
+| `c.news` | `#F2B705` | 0/24/98/5 | 新闻社 |
+| `c.math` | `#1E5BC6` | 85/54/0/22 | 数学社 |
+| `c.open` | = `c.blue` | 同上 | 校外征稿 |
 
-### 6.3 品牌色与社团色码
+\* 近似值 = 由 RGB 做朴素换算得到的参考，**不是**交付值。实际交付由 Ghostscript 用 ICC 统一换算（见 6.3）。
 
-| Token | 社团 / 用途 | CSS（RGB） | CMYK |
-|---|---|---|---|
-| `c.signal` | 品牌红：字标、征稿栏目、强调 | `#E30613` | 0 / 100 / 100 / 0 |
-| `c.music` | 音乐社 MUSIC | `#EE7F00` | 0 / 60 / 100 / 0 |
-| `c.chem` | 化学社 CHEMISTRY | `#009A82` | 85 / 10 / 60 / 0 |
-| `c.philo` | 哲学社 PHILOSOPHY | `#6E4C9B` | 65 / 80 / 0 / 0 |
-| `c.news` | 新闻社 JOURNALISM | `#FFDD00` | 0 / 10 / 100 / 0 |
-| `c.math` | 数学社 MATH | `#0069B4` | 100 / 55 / 0 / 0 |
+### 6.3 CMYK 构建的真实做法
 
-> RGB 值是 FOGRA39 下的近似显示色。实际交付时，屏幕版直接用表中 hex；CMYK 版强制用表中 CMYK 数值，不走 ICC 换算。
+1. Chrome 只输出 DeviceRGB。
+2. `scripts/build-cmyk.mjs` 调 Ghostscript：`-sColorConversionStrategy=CMYK -sProcessColorModel=DeviceCMYK -sOutputICCProfile=<icc>`，整本按 ICC 一次性换算。
+3. pypdf 给每页挂 `/OutputIntents`（`/S /GTS_PDFX`、`/N 4`、`/DestOutputProfile`）。
+4. 必须 `-dNOSAFER`：SAFER 模式下 Skia 生成的 PDF 最后一页会报 `/undefined in --runpdf--`。
 
-**社团归属**（取自 docx 文件名括号里的标记）：
-
-| 标记 | 社团色 | 篇目 |
-|---|---|---|
-| `征稿` | `c.signal` | 1-1 ～ 1-10、2-4、2-5、2-9 中没有其他标记的 |
-| `数` | `c.math` | 2-1、2-2、2-3 |
-| `化音` | `c.chem` + `c.music`（双色条） | 2-6 |
-| `歌词` | `c.music` | 2-7 |
-| `数音` | `c.math` + `c.music` | 2-8 |
-| `数哲` | `c.math` + `c.philo` | 2-9 |
-
-2-4、2-5 的标记只有"征稿"，但作者都是钱东成，内容也是数学。是否归到 `c.math`？**待你确认。**
-
-跨社团文章的色条按标记顺序分成两段，每段 1 栏宽、4 pt 高。
-
-### 6.4 CMYK 构建的颜色处理
-
-1. Chrome 输出的 PDF 只有 RGB（DeviceRGB 的 `rg` / `RG` 操作符）。
-2. `scripts/cmyk_remap.py`（用 pikepdf）遍历所有内容流，把与 6.2、6.3 表中 hex 精确匹配的 `r g b rg` 换成对应的 `c m y k k`。这样 K100 文字仍然是单色黑。
-3. 剩下的 RGB（主要是插图）由 Ghostscript 用 `icc/ISOcoated_v2_300_eci.icc` 换算成 CMYK，DeviceCMYK 原样保留。
-4. 黑色文字设为叠印（overprint）。
+**尚未实现**：v0.1 承诺的"按 hex 精确映射到指定 CMYK、小字强制 K100"没有落地。现状是 ICC 整本换算，`#1D1D1B` 会变成带 7% 黄的近黑，9.25 pt 正文因此是四色黑 —— 见 §11 待确认第 6 条。
 
 ---
 
-## 7. 版式组件
+## 7. 版式组件（实际值）
 
-### 7.1 页眉页脚（running elements）
+### 7.1 页眉页脚（overlay 页，与正文层分离）
 
 | 元素 | 位置 | 样式 |
 |---|---|---|
-| 页码 | 切口一侧，基线距成品下边 14 mm | `t.folio`，`c.ink`；页码上方是 1 栏宽、0.5 pt 的 `c.k45` 细线 |
-| 栏外标题（左页） | 切口一侧，基线距成品上边 12 mm | `RESONANCE · 2026 冬`，`t.runhead`，`c.k70` |
-| 栏外标题（右页） | 同上 | `篇号 / 篇名`，`t.runhead` |
-| 社团色标 | 右页切口，从版心顶部开始 | 4 × 30 pt 的社团色块，出血到页边，方便翻书时快速定位 |
+| 页码 | 切口侧，基线距成品下边 14 mm | `t.folio`，`c.ink`；上方 26.667 pt × 0.5 pt `c.k45` 细线，间距 5 pt |
+| 栏外标题（右页） | 切口侧，距成品上边 12 mm | `CHAPTER 01 §03　篇名`，`t.runhead`，`c.k70` |
+| 栏外标题（左页） | 同上 | `RESONANCE　共鸣　2026 冬` |
+| 社团色标 | 右页切口，出血到页边 | 宽 3 mm + 4 pt、高 30 pt；按社团序 `top: 23mm + n × 34pt` |
+| 章色标 | 章首页右页切口 | 高 60 pt，`c.blue`，`top: 23mm` |
 
-篇首页、扉页、章扉页不显示栏外标题；页码照常显示。
+页码规则：前置页用罗马数字，且**第 i–iii 页不印页码**（第 iv 页起 `iv`、`v`…）；正文从 `1` 起。overlay 里"前置页数"由第一章章首页的实际页序推算，目录占一页还是两页都不会算错。
 
-### 7.2 篇首（article opener）
+### 7.2 章扉页（整页蓝字）
 
-- 社团色条：2 栏宽、4 pt 高，放在版心第 1 行顶部。
-- 大编号：两位数的篇内序号，`t.mega`，`c.rich`，占第 1–5 栏。
-- 篇名：`t.title` 或 `t.title-long`，最多 3 行，左对齐，占第 1–9 栏。
-- 1.5 pt 的 `c.ink` 粗线横跨全版心。
-- 署名行：`作者（单位）` 左对齐；右边是社团标签和文体标签（`t.tag`）。没有作者的篇目只显示标签。
-- 正文从第 19 行起排，双栏。
+- 章号 `t.chapter` 顶格左上（`margin-left:-10pt; margin-top:1bl`），右侧 90 pt 星芒（`right:-58pt; top:6pt`）。
+- 章名块绝对定位在第 25 基线：中文 `t.chapter-cn`，英文 `t.chapter-en`。
+- 本章篇目在页面底部、第 7 栏起，`t.list`；每行 `24pt + 1fr` 网格，上边框 0.25 pt `c.gridline`，行内边距 3.75 pt。
 
-### 7.3 章扉页（chapter opener）
-
-全书分两章，章名暂定：**01 文学 LITERATURE**、**02 交叉 INTERSECTIONS**。**章名待你确认。**
-
-- 整页：左上角是 `t.chapter` 章号（`c.signal`，出血到页边）。
-- 章名：中文 `SHS 900 48/60` + 英文 `GS Display 300 24/30`，放在第 7–12 栏、第 33 行。
-- 章目录：本章篇目列表，`t.byline`，放在第 7–12 栏的底部。
-
-### 7.4 正文元素
+### 7.3 正文元素
 
 | 元素 | 规则 |
 |---|---|
-| `h2` | 段前 15 pt、段后 7.5 pt；左边有 2 pt 宽的社团色竖线 |
-| `h3` | 段前 7.5 pt；没有缩进 |
-| 行内公式 | KaTeX，`t.math` |
-| 独立公式 | 居中，上下各 7.5 pt；超出栏宽就缩小（最小 0.8 倍）；还放不下就跨栏 |
-| 图片（≤ 栏宽） | 宽度 = 栏宽，高度按基线取整 |
-| 图片（宽图，宽高比 > 2:1 或原图宽度 > 5 in） | 跨双栏 `column-span: all` |
-| 并排小图（2-3 的分形示意、生僻字） | 3–5 张一行的 flex 网格，统一高度 |
-| 图注 | `t.caption`，`c.k70`；图片下方 3.75 pt；前缀 `图 1`（GS Text 700） |
-| 表格 | 只用横线：顶线 1 pt `c.ink`、表头下 0.5 pt、行间 0.25 pt `c.k15`、底线 1 pt；数字列右对齐、等宽数字 |
-| 宽表（≥ 5 列，如 2-2、2-3） | 跨双栏 |
-| 引用 / 题记 | `c.k6` 底色；缩进 1em；1-9 开头的题记用这个 |
-| 篇末注释 | 0.5 pt 分隔线 + `t.note`；编号用 ①②③ |
-| 篇末符号 | 正文最后一行后面加 `■`（`c.signal`，0.6em） |
-| 诗、歌词 | 单栏，左对齐到第 4 栏；节与节之间空 15 pt；不做两端对齐 |
+| `h2` | `t.h2`，`c.blue`，前 9 pt 星芒（右距 5 pt），段前 1.15 bl、段后 0.5 bl |
+| `h2.part` | 前缀 `PART 1`：`t.tag` 尺寸、`c.orange`、0.14 em、右距 10 pt |
+| `h3` | `t.h3`，`c.blue-deep`，前 11 × 2.4 pt 蓝条（右距 6 pt），段前 0.8 bl、段后 3.75 pt |
+| `h3.num` | `t.h3num`，`c.blue`，无前缀符号 |
+| 行内公式 | KaTeX，`1.05em`；分数线压到 `0.032em`（默认 0.04 em 打印会吸成整像素） |
+| 独立公式 | 居中，上下各 0.5 bl、`padding-top:3pt`、`break-inside:avoid`；超栏宽 `column-span:all` |
+| 公式同行说明 | `.fline` 行高 2.1；含 `\frac` 的段落行高放到 23 pt，避免与上下行相撞 |
+| 推导行 `.led` | `1fr auto 1fr` 网格：引导词右对齐（右距 9 pt）＋公式居中 |
+| ①②③ 步骤 | 悬挂缩进 1.2 em；编号 700 `c.blue-deep`，等宽数字 |
+| 引用 / 题记 | `c.tint` 底、内边距 7.5 pt / 1 em、`c.blue-deep` 字 |
+| 生僻字 | `.rare` 34 pt，SimSun-ExtG 主栈，矢量文字不转图 |
 
-### 7.5 分页规则
+### 7.4 图片
 
-| 规则 | 值 |
+| 变体 | 规则 |
 |---|---|
-| 每篇从哪里开始 | 新页开始；文学篇不强制右页，非文学篇也不强制（目的是控制总页数） |
-| 篇幅不足半页的短诗（1-5、1-8 等） | 可以两篇合排一页，用 7.2 的精简篇首（不放大编号） |
-| 图片 | `break-inside: avoid` |
-| 跨栏元素 | 放在页面顶部或底部，不要卡在一栏中间 |
+| 默认 `figure` | 上下 0.5 bl / 1 bl；`break-inside:avoid`；图按原稿宽度出图，不拉满栏宽 |
+| `.col` | 单图按图宽收缩并居中，图注仍贴图左缘 |
+| `.float` | 单栏篇目的小图右浮，宽 ≤ 44%，图注在图下 |
+| `.wide` | 比一栏宽的图通栏居中（`column-span:all`） |
+| `.row` | 3–5 张等高并排（图高 60 pt，`object-fit:contain`） |
+| 图注 | `t.caption`，`c.k70`，距图 3.75 pt；图号 7.5 pt 700 `c.blue`，右距 4 pt |
+
+现状：2-3 的分形示意图、2-5 的洛必达肖像、2-6 的网络截图均为低分辨率位图（72–150 ppi），是全书唯一明显的画质短板；正文里的数据图（2-1、2-2、2-8）仍是 Matplotlib / Desmos 默认风格，与本刊视觉语言不符。
+
+### 7.5 表格
+
+| 部位 | 规则 |
+|---|---|
+| 顶线 / 底线 | 1 pt `c.blue` |
+| 表头行 | `c.tint` 底、`c.blue-deep` 700、下 0.5 pt `c.blue` |
+| 行线 | 0.25 pt `c.k15` |
+| 单元格 | 内边距 3.75 / 4 pt，垂直居中，左对齐（数字列未开等宽数字，靠右对齐需手工加类） |
+| 跨栏 | `.tbl.wide`（≥ 5 列时手工加类） |
+
+### 7.6 篇末注释 / 诗
+
+- 注释：上方 0.5 pt `c.blue` 线，标签为「注释」或「注」（由 `transform.js` 按原文判定），7.5 pt 700 `c.blue`、0.14 em；条目悬挂 12 pt，编号绝对定位、等宽数字；正文 `c.k70`。
+- 诗：单栏，左起第 4 栏，宽 3 栏 + 2 沟；`t.poem`，不缩进、不两端对齐；节间空 1.5 bl；诗末注释回正文双栏排。
+
+### 7.7 目录（v–vi）
+
+- 刊头：高 3.6 bl，「CONTENTS」56 / 54（必须容得下 54 pt 行盒，压小会向上溢出到上一页），右侧「目录」12 / 15、0.4 em，星芒 26 pt 落在刊头右上空白。
+- 章头：序号 21 / 26 + 章名 12 / 15 + 英文 9 / 15；下边框 1 pt `c.blue`，下边距 4 pt，段前 1.2 bl。
+- 条目：4 列网格 `52pt / 1fr / 40pt / 36pt`，四列各自垂直居中，上下内边距 8.5 pt，行间 0.25 pt `c.k15`。
+- 序号 16 pt/1，`c.blue`，等宽数字；标题 10 / 15；作者行 `t.byline`；圆点 6 pt；页码 10 / 15 700、右对齐、等宽数字。
+- 两页自然续排：02 章**不强制另起页**，断点落在条目之间（`break-inside:avoid`），章头不落单（`break-after:avoid`）。当前断点：v 页排到 02 的第 3 条，vi 页排 02 的第 4–9 条。
 
 ---
 
-## 8. 扉页（Front Matter）
+## 8. 前置页（Front Matter）
 
-页码用罗马数字（i, ii, iii …），正文从阿拉伯数字 1 开始。
+共 **6 页**（目录占两页），罗马数字；第 i–iii 页不印页码。
 
 | 页 | 内容 | 版式 |
 |---|---|---|
-| i 书名页（Half-title） | `RESONANCE` 字标 + `共鸣` | 字标 `t.wordmark` 放在第 7 栏起、第 20 行基线；其余留白 |
-| ii | 空白，或五社团的色条阵列 | 5 条社团色带，各 1 栏宽、240 pt 高，等距排列，出血到下边 |
-| iii 正扉页（Title page） | 《共鸣（RESONANCE）》、期号、出品方 | 刊名 `SHS 900 60/75` + 字标；`浙江省桐乡市高级中学` + 五个社团名竖排列表（每个前面带对应色点）+ `联袂出品`；`开放校外征稿` 用 `c.signal` |
-| iv 版权页（Colophon） | 主编、编辑、设计、字体、印刷信息 | `t.caption`，放在左页底部第 1–6 栏 |
-| v 卷首语（Editor's note） | 可选 | 单栏，`t.lead` |
-| vi–vii 目录 | 两章及篇目 | 每条：两位编号（GS Cond 700 24 pt）、篇名（SHS 500 10 pt）、作者（`t.byline`）、页码（右对齐，`tnum`）；章名前加社团或品牌色块 |
+| i | 半题页 | 字标 `t.halfmark` + 22 pt 星芒（`left:77pt; top:7pt`）+「共鸣」11 / 22.5；起点第 20 基线 |
+| ii | 宣言页 | 英文宣言 `t.quote`（两行）+「每一个声音，都值得一次回响。」14 / 30；底部 6 列社团图例（10 pt 圆点 + 标签） |
+| iii | 正扉页 | 顶部 `STUDENT JOURNAL / 期号` 标签；字标 `t.wordmark` + 26 pt 上标；星芒 54 pt 压在「O」里；中文刊名 18 / 30；`tagline`；底部出品方、五社团列表、`联袂出品` |
+| iv | 版权页 | `t.caption`，贴底左栏（240 pt 宽）；`dl` 两列 56 pt + 1fr；待定项 `c.orange` |
+| v–vi | 目录 | 见 7.7 |
 
-**版权页还缺的信息**（不会自动生成，需要你提供）：期号或出版日期、主编和各社团负责人、设计者署名、印数、联系方式或征稿邮箱。
+v0.1 规划的「v 卷首语」没有实现，目录占用 v–vi。
 
 ---
 
@@ -342,7 +345,7 @@ Google Sans 排在思源黑体前面，西文和数字会自动用 Google Sans�
   --trim-w: 210mm; --trim-h: 297mm; --bleed: 3mm;
   --m-top: 20mm; --m-bottom: 23mm; --m-inner: 20mm; --m-outer: 15mm;
 
-  /* grid */
+  /* layout grid (text) */
   --bl: 15pt; --bl-half: 7.5pt;
   --grid-col: 26.667pt; --grid-gap: 16pt;
   --col-w: 240pt; --col-gap: 16pt;
@@ -352,19 +355,27 @@ Google Sans 排在思源黑体前面，西文和数字会自动用 Google Sans�
   /* families */
   --ff-ui: "GS Text", "SHS", sans-serif;
   --ff-display: "GS Display", "SHS", sans-serif;
-  --ff-cond: "GS Cond", "GS Display", sans-serif;
   --ff-sans: "GS Text", "SHS", sans-serif;
   --ff-serif: "SHSerif", serif;
 
-  /* scale (size / line-height) */
-  --t-mega: 900 168pt/150pt var(--ff-cond);
-  --t-chapter: 900 240pt/210pt var(--ff-cond);
-  --t-wordmark: 900 72pt/75pt var(--ff-cond);
+  /* scale — display */
+  --t-mega: 700 150pt/135pt var(--ff-display);
+  --t-chapter: 700 260pt/225pt var(--ff-display);
+  --t-wordmark: 700 80pt/75pt var(--ff-display);
+  --t-halfmark: 700 40pt/37.5pt var(--ff-display);
+  --t-quote: 700 44pt/52.5pt var(--ff-display);
+  --t-chapter-cn: 700 44pt/52.5pt "SHS", sans-serif;
+  --t-chapter-en: 700 18pt/22.5pt var(--ff-display);
   --t-title: 700 30pt/37.5pt var(--ff-display);
   --t-title-long: 700 24pt/30pt var(--ff-display);
-  --t-subtitle: 400 12pt/22.5pt var(--ff-ui);
+  --t-subtitle: 500 11pt/22.5pt var(--ff-ui);
+  --t-tagline: 700 12pt/15pt var(--ff-display);
   --t-h2: 700 12pt/22.5pt var(--ff-ui);
-  --t-h3: 700 9.6pt/15pt var(--ff-ui);
+  --t-h3: 700 10.5pt/16.5pt var(--ff-ui);
+  --t-h3num: 700 18pt/22.5pt var(--ff-display);
+  --t-list: 700 9pt/15pt "SHS", sans-serif;
+
+  /* scale — text */
   --t-body-serif: 400 9.6pt/15pt var(--ff-serif);
   --t-body-sans: 400 9.25pt/15pt var(--ff-sans);
   --t-poem: 400 10.5pt/22.5pt var(--ff-serif);
@@ -376,57 +387,67 @@ Google Sans 排在思源黑体前面，西文和数字会自动用 Google Sans�
   --t-folio: 700 8pt/7.5pt var(--ff-ui);
   --t-runhead: 500 7pt/7.5pt var(--ff-ui);
 
-  /* color — solid only, hex must stay unique (CMYK remap keys) */
+  /* color */
   --c-paper: #FFFFFF;
-  --c-ink: #1D1D1B;     /* K100 */
-  --c-rich: #000001;    /* 50/40/40/100, ≥60pt only */
-  --c-k70: #575756;
-  --c-k45: #9C9B9B;
-  --c-k15: #DADADA;
-  --c-k6: #F1F1F1;
-  --c-signal: #E30613;  /* 0/100/100/0 */
-  --c-music: #EE7F00;   /* 0/60/100/0 */
-  --c-chem: #009A82;    /* 85/10/60/0 */
-  --c-philo: #6E4C9B;   /* 65/80/0/0 */
-  --c-news: #FFDD00;    /* 0/10/100/0 */
-  --c-math: #0069B4;    /* 100/55/0/0 */
+  --c-ink: #1D1D1B;
+  --c-k70: #56657F;
+  --c-k45: #9AA6B8;
+  --c-k15: #D9E2EE;
+  --c-blue: #458CEE;
+  --c-blue-deep: #2F6FD6;
+  --c-orange: #ED7207;
+  --c-tint: #E6F1FF;
+  --c-gridline: #C2DEF7;
+  --c-music: #F08A24;
+  --c-chem: #1FA67A;
+  --c-philo: #7A5BD6;
+  --c-news: #F2B705;
+  --c-math: #1E5BC6;
+  --c-open: var(--c-blue);
 
   /* rules */
-  --rule-hair: 0.25pt; --rule-thin: 0.5pt; --rule-mid: 1pt; --rule-bold: 1.5pt;
-  --clubbar-h: 4pt;
+  --rule-hair: 0.25pt; --rule-thin: 0.5pt; --rule-mid: 1pt;
+
+  /* sparkle — 四角星 data-URI（fill 用 %23 转义，值必须与 tokens.css 一致） */
+  --sparkle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ED7207' d='M50 0C53 37 63 47 100 50C63 53 53 63 50 100C47 63 37 53 0 50C37 47 47 37 50 0Z'/%3E%3C/svg%3E");
+  --sparkle-blue: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23458CEE' d='M50 0C53 37 63 47 100 50C63 53 53 63 50 100C47 63 37 53 0 50C37 47 47 37 50 0Z'/%3E%3C/svg%3E");
 }
 ```
 
-**CMYK 映射表**：`scripts/cmyk_map.json` 由第 6 节生成，格式是 `{ "#1D1D1B": [0,0,0,1], ... }`。
+v1.0 相比 v0.1 删除的死 token：`--c-signal`、`--c-k6`、`--c-rich`、`--ff-cond`、`--clubbar-h`、`--deco-pitch/wobble/stroke`、`--rule-bold`（全书最粗只有 1 pt）。
 
 ---
 
-## 10. 输出规格
+## 10. 输出与构建
 
-| 产物 | 文件 | 标准 | 色彩 | 说明 |
-|---|---|---|---|---|
-| 屏幕预览 | `dist/resonance-screen.pdf` | — | sRGB | 无出血 |
-| RGB 印刷版 | `dist/resonance-print-rgb_PDFX4.pdf` | PDF/X-4 | RGB + 输出意图 ISO Coated v2 | 带出血、TrimBox |
-| CMYK 印刷版 | `dist/resonance-print-cmyk_PDFX.pdf` | PDF/X-1a 级内容（gs `-dPDFX`） | DeviceCMYK | 不含透明，字体全部嵌入 |
+| 产物 | 文件 | 说明 |
+|---|---|---|
+| 屏幕版 | `dist/resonance-screen.pdf` | 只到 TrimBox，无出血 |
+| RGB 印刷版 | `dist/resonance-print-rgb.pdf` | 216 × 303 带出血，含 TrimBox |
+| 水印 demo | `dist/resonance-demo.pdf` | 矢量水印（SAMPLE / 未经授权 切勿转载），倾斜 30°，逐页叠加 |
+| CMYK 付印版 | `dist/resonance-print-cmyk.pdf` | gs 转 DeviceCMYK + OutputIntent |
 
-**预检**（`scripts/preflight.py`，任何一项不通过都会让构建失败）：
+命令：`npm run build` / `npm run demo` / `npm run cmyk` / `npm run all`（`--only 2-3` 可单篇重建）。
 
-- 字体全部嵌入
-- 没有 RGB 残留（只检查 CMYK 版）
-- 总墨量 ≤ 300%
-- 小于 12 pt 的文字只用 K 通道
-- TrimBox 和 BleedBox 正确
-- 图片有效分辨率 ≥ 300 ppi（低于 200 ppi 报错，200–300 ppi 只警告）
+当前全书 **57 页**（前置 6 + 正文 51）。
 
-**已知风险**：2-3 的分形示意图和生僻字图片都很小（4–15 KB）。按栏宽排的话，有效分辨率大概只有 72–150 ppi。需要编辑提供原图，或者改成矢量重绘。
+**已知问题**（本版未解决）：
+
+1. 没有 preflight：v0.1 规划的 `scripts/preflight.py` 未实现，字体嵌入、总墨量、最小字号、图片 ppi 都没有自动校验。
+2. 小字 CMYK 不是单色黑（见 6.3）。
+3. 正文仍有 Type3 字体（Chromium 对部分 CJK 的处理），印前需在 Acrobat / PitStop 里转曲或重嵌。
+4. `icc/gs_default_cmyk.icc` 是占位 profile，正式付印必须换成印厂的 FOGRA39。
 
 ---
 
-## 11. 待确认事项
+## 11. 待确认与待办
 
-1. 1-4 是否按文学篇用宋体排？
-2. 2-4、2-5 是否归到数学社？
-3. 章名是否用"01 文学 LITERATURE / 02 交叉 INTERSECTIONS"？
-4. 期号叫"2026 冬"还是别的？
-5. 版权页的人员名单和出版信息。
-6. 新闻社在现有 19 篇里没有对应文章，社团色 `c.news` 目前只出现在扉页的社团列表和色条阵列里。
+1. 期号：「2026 冬 / VOL. 02」为占位，版权页标了〔待确认〕。
+2. 章名：「01 文学 LITERATURE / 02 交叉 INTERSECTIONS」待确认。
+3. 1-4 按文学篇用宋体排，是否维持。
+4. 2-4、2-5 的作者都是钱东成、内容属数学，是否归 `c.math`（现按征稿红蓝处理为 open）。
+5. 版权页人员名单与出版信息。
+6. **CMYK 逐色映射**：是否补 `scripts/cmyk_map.json` + 内容流改写，把正文黑压成 K100。
+7. **未启用的占位样式**：markup 里的 `.clubbar`（篇首社团色条）、`.rule`（篇首分割线）、`.fm-title .open`（正扉页「开放校外征稿」）都没有对应内容，CSS 里却留着规则。要么补内容/补样式，要么从两边一起删。
+8. **图片重绘**：2-1（Desmos 截图）、2-2（Matplotlib 折线）、2-8（级数部分和图）、2-3 的两幅几何示意图，应按本文件第 2/6 节的网格与调色板重画为矢量图。
+9. 新闻社无对应篇目，`c.news` 目前只出现在扉页社团列表。

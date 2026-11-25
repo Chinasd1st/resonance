@@ -28,14 +28,14 @@ img { display: block; }
 /* ======================= FRONT MATTER ======================= */
 /* i · half-title (white) */
 .fm-half .mark { position: absolute; left: 0; top: calc(var(--bl) * 20); color: var(--c-blue); }
-.fm-half .mark .w { font: 700 40pt/37.5pt var(--ff-display); letter-spacing: -.02em; }
+.fm-half .mark .w { font: var(--t-halfmark); letter-spacing: -.02em; }
 .fm-half .mark .w sup { font: 700 16pt/15pt var(--ff-display); vertical-align: 18pt; margin-left: 3pt; letter-spacing: 0; }
 .fm-half .mark .cn { font: 700 11pt/22.5pt "SHS", sans-serif; letter-spacing: .1em; margin-top: 7.5pt; }
 .fm-half .mark .spark { width: 22pt; height: 22pt; position: absolute; left: 77pt; top: 7pt; }
 
 /* ii · tinted manifesto page */
 .fm-bars .quote { position: absolute; left: 0; top: calc(var(--bl) * 6); width: 380pt; color: var(--c-blue); }
-.fm-bars .quote .en { font: 700 44pt/52.5pt var(--ff-display); letter-spacing: -.02em; }
+.fm-bars .quote .en { font: var(--t-quote); letter-spacing: -.02em; }
 .fm-bars .quote .cn { font: 700 14pt/30pt "SHS", sans-serif; margin-top: var(--bl); letter-spacing: .05em; }
 .fm-bars .quote .spark { width: 34pt; height: 34pt; margin-left: 4pt; vertical-align: -2pt; }
 .fm-bars .legend { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(6, 1fr); column-gap: var(--grid-gap); }
@@ -84,7 +84,7 @@ img { display: block; }
 /* 四列全部垂直居中：序号、标题块（含作者名）、圆点、页码各自在整行内居中 */
 .toc-item .n { font: 700 16pt/1 var(--ff-display); color: var(--c-blue); letter-spacing: -.02em; font-feature-settings: "tnum" 1, "pnum" 0; }
 .toc-item .t { font: 500 10pt/15pt "SHS", sans-serif; font-feature-settings: "palt"; }
-.toc-item .t small { display: block; font: 500 8pt/15pt var(--ff-ui); color: var(--c-k70); }
+.toc-item .t small { display: block; font: var(--t-byline); color: var(--c-k70); }
 /* 圆点与页码随 align-items:center 一起在行内居中，不再做基线偏移 */
 .toc-item .c { display: flex; gap: 3pt; align-items: center; }
 .toc-item .c i { width: 6pt; height: 6pt; border-radius: 50%; display: block; }
@@ -97,9 +97,9 @@ img { display: block; }
 .chapter-opener .num { font: var(--t-chapter); letter-spacing: -.05em; margin-left: -10pt; margin-top: calc(var(--bl) * 1); position: relative; display: inline-block; }
 .chapter-opener .num .spark { position: absolute; width: 90pt; height: 90pt; right: -58pt; top: 6pt; }
 .chapter-opener .names { position: absolute; left: 0; right: 0; top: calc(var(--bl) * 25); }
-.chapter-opener .names .cn { font: 700 44pt/52.5pt "SHS", sans-serif; letter-spacing: .06em; }
-.chapter-opener .names .en { font: 700 18pt/22.5pt var(--ff-display); letter-spacing: -.01em; }
-.chapter-opener .list { position: absolute; left: calc((var(--grid-col) + var(--grid-gap)) * 6); right: 0; bottom: 0; font: 700 9pt/15pt "SHS", sans-serif; }
+.chapter-opener .names .cn { font: var(--t-chapter-cn); letter-spacing: .06em; }
+.chapter-opener .names .en { font: var(--t-chapter-en); letter-spacing: -.01em; }
+.chapter-opener .list { position: absolute; left: calc((var(--grid-col) + var(--grid-gap)) * 6); right: 0; bottom: 0; font: var(--t-list); }
 .chapter-opener .list div { display: grid; grid-template-columns: 24pt 1fr; padding: 3.75pt 0; border-top: var(--rule-hair) solid var(--c-gridline); }
 .chapter-opener .list b { font: 700 9pt/15pt var(--ff-ui); font-variant-numeric: tabular-nums; }
 
@@ -140,9 +140,9 @@ img { display: block; }
 .text h2 { font: var(--t-h2); color: var(--c-blue); margin: calc(var(--bl) * 1.15) 0 var(--bl-half); break-after: avoid; font-feature-settings: "palt"; }
 .text h2::before { content: ""; display: inline-block; width: 9pt; height: 9pt; margin-right: 5pt; vertical-align: -.5pt; background: var(--sparkle) center / contain no-repeat; }
 .text h2:first-child, .text h3:first-child { margin-top: 0; }
-.text h3 { font: 700 10.5pt/16.5pt var(--ff-ui); color: var(--c-blue-deep); margin: calc(var(--bl) * .8) 0 3.75pt; break-after: avoid; font-feature-settings: "palt"; letter-spacing: .01em; }
+.text h3 { font: var(--t-h3); color: var(--c-blue-deep); margin: calc(var(--bl) * .8) 0 3.75pt; break-after: avoid; font-feature-settings: "palt"; letter-spacing: .01em; }
 .text h3::before { content: ""; display: inline-block; width: 11pt; height: 2.4pt; background: var(--c-blue); margin-right: 6pt; vertical-align: .28em; }
-.text h3.num { font: 700 18pt/22.5pt var(--ff-display); color: var(--c-blue); letter-spacing: -.02em; margin-top: var(--bl); }
+.text h3.num { font: var(--t-h3num); color: var(--c-blue); letter-spacing: -.02em; margin-top: var(--bl); }
 .text h3.num::before { display: none; }
 /* 分段标题「PART 1 · 怪物与精灵之争」 */
 .text h2.part .pn { font: 700 8pt/11pt var(--ff-ui); letter-spacing: .14em; color: var(--c-orange); margin-right: 10pt; vertical-align: .22em; }
