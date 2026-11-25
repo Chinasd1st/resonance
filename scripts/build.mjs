@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright-core';
+import { FIGURES } from './figures.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const B = p => path.join(ROOT, 'build', p);
@@ -182,6 +183,11 @@ const FIG_W = {
 // pandoc 转换丢段的地方在这里补回来：docx 里那段正文前面挂着一个「图注文本框」，
 // 转换器只把文本框里的字（谢尔宾斯基三角形）单独提成一段，整段正文被吞掉了。
 const TEXT_FIX = {
+  // 插图重绘后配色改为全刊的蓝／橙，正文里的颜色描述随之同步
+  '2-1': [[
+    '红线表示自然对数函数，紫线是它的导数',
+    '蓝线表示自然对数函数，橙线是它的导数',
+  ]],
   '2-3': [[
     '<p>谢尔宾斯基三角形</p>',
     '<p>分形（fractal），意为“破碎的图形”。如果一个图形在放大后得到的部分与图形整体相似（即自相似性），'
@@ -206,6 +212,26 @@ function article(a) {
   for (const [find, rep] of TEXT_FIX[a.id] || []) {
     if (!frag.includes(find)) console.warn('TEXT_FIX miss', a.id, find.slice(0, 20));
     frag = frag.split(find).join(rep);
+  }
+  // 重绘插图：位图换成内联 SVG，交给 transform.js 走与 <img> 相同的图片布置逻辑
+  // （figure 包裹、图注、单栏绕排），尺寸沿用原 <img> 的行内 style —— 见 scripts/figures.mjs
+  for (const [key, fn] of Object.entries(FIGURES)) {
+    const [id, file] = key.split('/');
+    if (id !== a.id) continue;
+    const f = fn();
+    const inFile = `media/${id}/media/${file}`;
+    frag = frag.replace(/<img[^>]*>/g, tag => {
+      if (!tag.includes(inFile)) return tag;
+      const st = (tag.match(/style="([^"]*)"/) || [, ''])[1];
+      const alt = (tag.match(/alt="([^"]*)"/) || [, ''])[1];
+      const size = st || `width:${+(f.vw / 72).toFixed(4)}in;height:${+(f.vh / 72).toFixed(4)}in`;
+      // 2-1 的函数图比一栏还宽：让它绕排，但把绕排宽度放宽到 56%（默认 44% 会把
+      // 6.2pt 的刻度缩到 4.7pt）。图高 219pt 放不进当页，会自动推到下页顶部，
+      // 当页正文继续填满，不留白
+      const nof = key === '2-1/image1.jpeg' ? ' data-fw="56"' : '';
+      return `<svg class="dfig" width="${f.vw}pt" height="${f.vh}pt" viewBox="0 0 ${f.vw} ${f.vh}"`
+        + ` preserveAspectRatio="xMidYMid meet" style="${size}" data-cap="${alt}"${nof}>${f.body}</svg>`;
+    });
   }
   // 公式密集的篇目改为单栏：独立公式不再通栏切断双栏正文；
   // 2-1 的插图比一栏还宽、塞进双栏会留出大块空白，也按单栏排

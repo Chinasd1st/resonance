@@ -90,7 +90,7 @@
     return m ? parseFloat(m[1]) / inches(img) : 1;
   }
   function captionOf(img) {
-    let a = (img.getAttribute('alt') || '').trim();
+    let a = (img.getAttribute('alt') || img.getAttribute('data-cap') || '').trim();
     a = a.replace(/^.*\.(jpe?g|png|gif|bmp)/i, '').trim();
     if (!a || /^截图|^image\d*$|^图片\d*$|^\d+$/i.test(a)) return '';
     if (/^[a-z]+$/i.test(a)) return '';   // romanised file names like "biang"
@@ -116,9 +116,9 @@
     const wrapLimit = 110 / 25.4;   // 超过 110mm 的图更像整幅图表，铺满栏宽而不绕排
     // paragraphs that contain images
     [...text.querySelectorAll('p')].forEach(p => {
-      const imgs = [...p.querySelectorAll('img')];
+      const imgs = [...p.querySelectorAll('img, svg.dfig')];
       if (!imgs.length) return;
-      const rest = p.cloneNode(true); rest.querySelectorAll('img').forEach(i => i.remove());
+      const rest = p.cloneNode(true); rest.querySelectorAll('img, svg.dfig').forEach(i => i.remove());
       const hasText = rest.textContent.trim().length > 0;
       const fig = document.createElement('figure');
       if (imgs.length >= 2) {
@@ -148,7 +148,10 @@
         // 单栏篇目里的小图改为图文绕排，不再居中占掉整行、留下两侧空白；
         // 竖幅（肖像）仍居中——竖图绕排会把行宽挤得很窄，被推到页顶时还会留出空洞
         // 表格里的图不参与绕排（百分比宽度在单元格里会缩到几毫米）
-        if (!wide && single && !p.closest('td,th') && w <= wrapLimit && aspect(img) <= 1.02) fig.classList.add('float');
+        if (!wide && single && !p.closest('td,th') && w <= wrapLimit && aspect(img) <= 1.02) {
+          fig.classList.add('float');
+          if (img.dataset.fw) fig.style.maxWidth = img.dataset.fw + '%';
+        }
         // 按原稿标注的宽度出图，不再拉满栏宽：低分辨率截图被放大两三倍后既糊又占版，
         // 还会把整块图挤到下一页、留下半页空白。max-width:100% 兜住超宽的情况。
         img.removeAttribute('style');
@@ -158,7 +161,7 @@
         img.removeAttribute('alt');
         fig.appendChild(img);
         caption(fig, ++state.fig, cellCap || cap);
-        if (cellCap) { [...p.childNodes].forEach(n => n.nodeType === 3 && n.remove()); p.querySelectorAll('img').forEach(i => i.remove()); }
+        if (cellCap) { [...p.childNodes].forEach(n => n.nodeType === 3 && n.remove()); p.querySelectorAll('img, svg.dfig').forEach(i => i.remove()); }
       }
       report.images += imgs.length;
       if (hasText) { p.before(fig); } else { p.replaceWith(fig); }

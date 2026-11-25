@@ -186,21 +186,34 @@ td .katex { font-size: 1em; }
 
 /* figures —— 按原稿宽度出图，不拉满栏宽（低分辨率截图放大会糊，且容易把整块图挤到下一页） */
 figure { margin: var(--bl-half) 0 var(--bl); break-inside: avoid; }
-figure img { max-width: 100%; height: auto; margin: 0 auto; }
-figure.small img { margin: 0 auto; }
+figure :is(img, svg.dfig) { max-width: 100%; height: auto; margin: 0 auto; }
+/* 重绘插图（scripts/figures.mjs 生成的内联 SVG）：尺寸由行内 style 决定，
+   宽度超出容器时按比例收缩，图内文字与线条保持矢量 */
+svg.dfig { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+figure.small :is(img, svg.dfig) { margin: 0 auto; }
 /* 单图：随图宽收缩并居中，图注仍贴图左缘 */
 figure.col { width: fit-content; max-width: 100%; margin: var(--bl-half) auto; }
 /* 单栏篇目的小图改为图文绕排：正文绕到图侧，不再整行居中出现两侧空白 */
 figure.float { float: right; clear: right; width: fit-content; max-width: 44%; margin: 3pt 0 9pt 12pt; }
-figure.float img { width: auto; height: auto; max-width: 100%; max-height: 64mm; }
+figure.float :is(img, svg.dfig) { width: auto; height: auto; max-width: 100%; max-height: 64mm; }
+/* 大图绕排（重绘的矢量图）：64 mm 高会把图压到原尺寸的 80%，图内刻度随之变小；
+   这类图在 markup 里带 data-fw，宽度上限由 transform.js 按 data-fw 写到行内 */
+figure.float svg.dfig[data-fw] { max-height: 84mm; }
 /* 比一栏还宽的图：通栏居中，避免塞进栏里被缩得过小 */
 figure.wide { column-span: all; display: flex; flex-direction: column; align-items: center; }
-figure.wide img { width: auto; }
+figure.wide :is(img, svg.dfig) { width: auto; }
 figure.row { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); column-gap: 8pt; align-items: end; }
-figure.row .cell img { width: 100%; height: 60pt; object-fit: contain; }
+figure.row .cell :is(img, svg.dfig) { width: 100%; height: 60pt; object-fit: contain; }
 figure.row .cell figcaption { text-align: center; }
 figure.row.wide { column-span: all; }
-figure.row.wide .cell img { height: auto; object-fit: fill; }
+figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
+/* 表格里的分形四联：四张图的原比例差异很大（谢尔宾斯基近方、科赫宽扁），
+   不给统一高度的话图注会高低不齐。图顶对齐、图注贴底 */
+tr:has(svg.dfig) td figure {
+  height: 92pt; margin: 0; display: flex; flex-direction: column;
+  justify-content: flex-end; align-items: center;
+}
+tr:has(svg.dfig) td figure :is(img, svg.dfig) { margin-bottom: auto; flex: 0 0 auto; }
 figcaption { font: var(--t-caption); color: var(--c-k70); margin-top: 3.75pt; text-indent: 0; }
 figcaption b { font: 700 7.5pt/11.25pt var(--ff-ui); color: var(--c-blue); margin-right: 4pt; }
 
