@@ -12,8 +12,7 @@ const args = process.argv.slice(2);
 const onlyArg = args.includes('--only') ? args[args.indexOf('--only') + 1].split(',') : null;
 
 const ISSUE = { cn: '2026 冬', en: 'WINTER 2026', no: 'VOL. 02' };   // TODO 期号待确认
-// 前置页数（罗马页码 i–v：扉页 / 宣言 / 内封 / 版权 / 目录单页）。正文页码 = PDF 页序 − FRONT_PAGES
-const FRONT_PAGES = 5;
+// 前置页数（罗马页码）不再写死：由第一章章首页的实际页序推出，见下方 const front = map.dests['ch-1'] - 1
 const CHAPTERS = {
   1: { cn: '文学', en: 'LITERATURE' },
   2: { cn: '交叉', en: 'INTERSECTIONS' },
@@ -260,8 +259,8 @@ function bookHtml() {
 
 // ---------- overlay (page furniture, full-bleed canvas) ----------
 const ROMAN = ['', 'i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii'];
-function overlayHtml(map) {
-  const FRONT = FRONT_PAGES;
+function overlayHtml(map, frontPages) {
+  const FRONT = frontPages;
   const starts = [];
   for (const ch of new Set(rendered.map(a => a.ch))) starts.push({ p: map.dests[`ch-${ch}`], kind: 'chapter', ch });
   for (const a of rendered) starts.push({ p: map.dests[`a-${a.id}`], kind: 'article', a });
@@ -328,17 +327,19 @@ console.log('transform', JSON.stringify(report));
 const pdfOpts = { preferCSSPageSize: true, printBackground: true, outline: true, tagged: true };
 await page.pdf({ ...pdfOpts, path: B('body.pass1.pdf') });
 let map = JSON.parse(py('scripts/pagemap.py', B('body.pass1.pdf')));
+// 前置页数由实际排版推出（第一章章首页之前的所有页），目录若自然续到第二页也不会算错页码
+const front = map.dests['ch-1'] - 1;
 await page.evaluate(({ m, front }) => {
   document.querySelectorAll('.pn[data-target]').forEach(s => {
     const p = m.dests[s.dataset.target]; s.textContent = p ? String(p - front).padStart(2, '0') : '—';
   });
-}, { m: map, front: FRONT_PAGES });
+}, { m: map, front });
 await page.pdf({ ...pdfOpts, path: B('body.pdf') });
 map = JSON.parse(py('scripts/pagemap.py', B('body.pdf')));
 fs.writeFileSync(B('pagemap.json'), JSON.stringify(map, null, 1));
-console.log('pages', map.pages, JSON.stringify(map.dests));
+console.log('pages', map.pages, 'front', front, JSON.stringify(map.dests));
 
-fs.writeFileSync(B('overlay.html'), overlayHtml(map));
+fs.writeFileSync(B('overlay.html'), overlayHtml(map, map.dests['ch-1'] - 1));
 const op = await browser.newPage();
 await op.goto('file:///' + B('overlay.html').replace(/\\/g, '/'));
 await op.evaluate(() => document.fonts.ready);
