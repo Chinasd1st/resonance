@@ -42,6 +42,13 @@
   // Word 的有序列表常把后续整篇正文吞进同一个 <li>：拆平列表，序号做成悬挂缩进，
   // 否则「2．」会独占一行、标题和表格被裹进列表项里。
   function unwrapLists(root) {
+    // 「1. 韦伯——费希纳对数定律」这类短标题：编号单独成列、标题按黑体小标题排，
+    // 而不是和正文一样只把数字染蓝。判定只看「去编号后是否一整句短语」，
+    // 不带句读、不含公式、且能一行放下，避免把普通列表项误判成标题
+    const isHeading = p => {
+      const t = p.textContent.replace(/^\s*\d{1,2}\s*[.．]\s*/, '').trim();
+      return t.length > 0 && t.length <= 32 && !/[，。；：、,;:]$/.test(t) && !p.querySelector('.math');
+    };
     root.querySelectorAll('ol,ul').forEach(list => {
       const start = parseInt(list.getAttribute('start') || '1', 10) || 1;
       const host = list.parentNode;
@@ -52,11 +59,12 @@
             p.classList.add('li-p');
             const m = document.createElement('span');
             m.className = 'li-n';
-            m.textContent = (start + i) + '．';
+            m.textContent = (start + i) + '.';
             p.insertBefore(m, p.firstChild);
             // Word 的自动编号后面常跟一个「：」，与手工写的前缀重复
             const nx = m.nextSibling;
             if (nx && nx.nodeType === 3) nx.nodeValue = nx.nodeValue.replace(/^[\s\u3000]*[:：]\s*/, '');
+            if (isHeading(p)) p.classList.add('fn-h');
           } else {
             p.classList.add('li-c');
           }
@@ -66,7 +74,7 @@
       });
       list.remove();
     });
-    // 「[1]：标题」统一成「1．标题」
+    // 「[1]：标题」统一成「1. 标题」
     root.querySelectorAll('p').forEach(p => {
       const f = p.firstChild;
       if (!f || f.nodeType !== 3) return;
@@ -75,9 +83,10 @@
       f.nodeValue = f.nodeValue.slice(m[0].length);
       const s = document.createElement('span');
       s.className = 'li-n';
-      s.textContent = m[1] + '．';
+      s.textContent = m[1] + '.';
       p.insertBefore(s, f);
       p.classList.add('li-p');
+      if (isHeading(p)) p.classList.add('fn-h');
     });
   }
 
@@ -180,10 +189,13 @@
         // 比一栏还宽的图放不进栏里，硬塞会被缩到栏宽而下缘留出空白 → 让它通栏居中
         const wide = w > (single ? BLOCK_IN : COL_IN);
         fig.className = wide ? 'wide' : (w < 1.6 ? 'small' : 'col');
-        // 单栏篇目里的小图改为图文绕排，不再居中占掉整行、留下两侧空白；
-        // 竖幅（肖像）仍居中——竖图绕排会把行宽挤得很窄，被推到页顶时还会留出空洞
+        // 单栏篇目里的小图改为图文绕排，不再居中占掉整行、留下两侧空白。
+        // 默认只绕横幅（aspect ≤ 1.02）：竖图绕排会把行宽挤窄，被推到页顶时还会留出空洞；
+        // 单张竖幅确实值得绕时，在原稿侧用 data-float 点名（如 2-5 的洛必达肖像）。
         // 表格里的图不参与绕排（百分比宽度在单元格里会缩到几毫米）
-        if (!wide && single && !p.closest('td,th') && w <= wrapLimit && aspect(img) <= 1.02) {
+        const forceFloat = img.dataset.float === '1';
+        if (!wide && single && !p.closest('td,th')
+            && (forceFloat || (w <= wrapLimit && aspect(img) <= 1.02))) {
           fig.classList.add('float');
           if (img.dataset.fw) fig.style.maxWidth = img.dataset.fw + '%';
         }

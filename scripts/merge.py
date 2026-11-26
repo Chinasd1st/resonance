@@ -23,8 +23,24 @@ def build(screen):
                     '/Subject': 'RESONANCE student journal', '/Creator': 'Resonance build (Playwright + Chrome)'})
     return w
 
+locked = []
 for screen, name in [(True, 'resonance-screen.pdf'), (False, 'resonance-print-rgb.pdf')]:
     p = os.path.join(out, name)
-    with open(p, 'wb') as f:
+    tmp = p + '.tmp'
+    with open(tmp, 'wb') as f:
         build(screen).write(f)
+    try:
+        os.replace(tmp, p)          # 原子替换：先写临时文件，避免写到一半被打断留下坏档
+    except PermissionError:
+        # Windows 上目标被 Acrobat / 预览面板占用时无法替换：另存一份 .new.pdf 供改名，
+        # 并以非零状态退出——否则 demo / cmyk 会悄悄拿旧稿派生，等于发出一份过期文件
+        alt = p[:-4] + '.new.pdf'
+        os.replace(tmp, alt)
+        print('LOCKED', p, '-> 已写出', alt)
+        locked.append(alt)
+        continue
     print('wrote', p, os.path.getsize(p))
+
+if locked:
+    print('请关闭占用该文件的阅读器后重跑；新稿已在：', ', '.join(locked))
+    sys.exit(2)

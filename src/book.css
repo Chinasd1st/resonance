@@ -153,7 +153,24 @@ img { display: block; }
 .text p.item .num { color: var(--c-blue-deep); font-weight: 700; margin-right: .28em; }
 .text p.li-p { text-indent: -1.4em; padding-left: 1.4em; }
 .text p.li-c { text-indent: 2em; }
-.text .li-n { font-weight: 700; color: var(--c-blue-deep); font-variant-numeric: tabular-nums; }
+.text .li-n { font-weight: 700; color: var(--c-blue-deep); font-variant-numeric: tabular-nums; margin-right: .28em; }
+/* 「1. 韦伯——费希纳对数定律」这类条目小标题（函数名、法则名）：
+   编号是蓝色等宽数字、占一列；标题黑体 700，比正文高半级，墨色不抢 h3 的蓝。
+   上方 8pt 与引出句断开，下方只留 2pt 贴住紧随其后的公式；标题折行时与标题首字对齐 */
+.text p.fn-h {
+  margin: 8pt 0 1pt; padding-left: 1.6em; text-indent: -1.6em;
+  font: 700 9.8pt/13pt var(--ff-ui); color: var(--c-ink);
+  letter-spacing: .01em; break-after: avoid;
+}
+/* 2-2 里「定义式」与「常数式」是同一组（S 与 k），贴紧些：
+   既符合「同一法则的两条式子不该像两段话那样隔开」，也让这一组能和标题同页 */
+[data-id="2-2"] .text p.fn-h + p.eq { margin-top: 6pt; padding-top: 0; }
+[data-id="2-2"] .text p.eq + p.eq { margin-top: 2pt; padding-top: 0; }
+.text p.fn-h .li-n {
+  display: inline-block; width: 1.28em; margin-right: .32em;
+  color: var(--c-blue-deep); font-size: 9.8pt; letter-spacing: 0;
+  text-indent: 0;   /* inline-block 会新开块容器，继承来的负缩进会把「1.」推出框外 */
+}
 /* 推导行：「∴」「即」「分子：」紧贴公式左侧，两者作为一个整体居中。
    公式是 inline-block（宽度=自身内容），所以每条推导的中轴都是版心正中，
    不会出现「有的居中、有的左对齐」，标签也不会被甩到栏边 */
@@ -332,6 +349,17 @@ ruby:has(.rare) rt { font-size: 7.2pt; letter-spacing: .02em; }
 ruby:has(.rare) .rare { margin: 0; }
 /* 注音字/字格在表格里居中 */
 .text td p:has(ruby) { text-align: center; }
+/* 生僻字格：拼音在上、字形居中、Unicode 码位另起一行居中。
+   码位是查字用的注记，不是内容，故用灰蓝小字、等宽数字，不与上方蓝色拼音争注意力 */
+.text td p.glyph-cell {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  gap: 3pt; text-align: center;
+}
+.text td p.glyph-cell .glyph-note {
+  font: 400 6.8pt/1 var(--ff-ui); color: var(--c-k70);
+  font-variant-numeric: tabular-nums; letter-spacing: .02em; white-space: nowrap;
+  margin-bottom: 2pt;   /* 括号下沿离表格线太近，抬一点，别像压线 */
+}
 
 /* notes */
 .notes { margin-top: var(--bl); padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-blue); break-inside: avoid-column; }

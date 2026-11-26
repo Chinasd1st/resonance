@@ -5,6 +5,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright-core';
 import { FIGURES } from './figures.mjs';
+import { applyRareGlyphs } from './rare-glyphs.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const B = p => path.join(ROOT, 'build', p);
@@ -147,30 +148,8 @@ function chapterOpener(ch) {
   </section>`;
 }
 
-// 2-3 表里的五个生僻字原为截图；改写为真实字形（矢量可检索），并按全刊统一做法
-// 做成 ruby：字在下、带调拼音在上（思源黑体小字）。原稿的括号注音（qiang）一并改成 ruby。
-const RARE_GLYPH = {
-  'image6.jpeg': ['𰻝', 'biáng'],
-  'image7.jpeg': ['龘', 'dá'],
-  'image8.jpeg': ['𪚥', 'léi'],
-  'image9.jpeg': ['靐', 'bìng'],
-  'image10.jpeg': ['𱁬', 'tái'],
-};
-
-// 读音注解：括号注音 → ruby（注音在上、字在下）。
-// 音节与原文一致，只补声调；「XX的XX」里的拉丁拼音由 ruby 取代，故删去重复的拼写。
-const RUBY = {
-  '2-3': [
-    ['<p>羻（qiang）</p>', '<p><ruby>羻<rt>qiāng</rt></ruby></p>'],
-    ['<p>鱜（xiang）</p>', '<p><ruby>鱜<rt>xiāng</rt></ruby></p>'],
-    ['<p>鱺（li）</p>', '<p><ruby>鱺<rt>lí</rt></ruby></p>'],
-    ['biangbiang面的biang', '面'],
-    ['da腾的da', '腾'],
-    ['lei霆的lei', '霆'],
-    ['bing响的bing', '响'],
-    [' />tai</p>', ' /></p>'],
-  ],
-};
+// 2-3 表里的五个生僻字、正文的三处括号注音，都在 scripts/rare-glyphs.mjs 里处理
+// （字形表、拼音、举例括注与排法同处一个模块，见该文件的 applyRareGlyphs）
 
 // 另行替换的插图：{ 篇号: { 原文件名: { src, alt(图注) } } }
 // 原图是带「百度百科」水印的截图，换成 Google Art Project 的斯米尔伯特原作
@@ -229,8 +208,17 @@ const FIG_REF = {
   '2-1': [['在这幅图中，', '在[[fig:image1.jpeg]]中，']],
   '2-2': [['（上图最左、最右侧的直线）', '（[[fig:image1.png]]最左、最右侧的直线）']],
   '2-3': [['如上图可得：', '由[[fig:image3.png]]可得：']],
-  '2-5': [['（见右图）', '（见[[fig:image1.jpeg]]）']],
+  '2-5': [
+    ['（见右图）', '（见[[fig:image1.jpeg]]）'],
+    // 肖像在版面上居中、正文另起，说「右边」既不对也不是坐标；改指图号
+    ['认识右边这个人吗？', '认识[[fig:image2.png]]里的这个人吗？'],
+  ],
 };
+
+// 竖幅肖像默认不绕排（绕排会把行宽挤窄，Chrome 把浮动图推到页顶时还会留空洞），
+// 但单栏篇目里 60 mm 宽的肖像绕排后仍有 100 mm 行宽，值得省下近 80 mm 版面。
+// 需要绕排的图在这里点名，transform.js 看到 data-float 就跳过「只绕横幅」的默认判断。
+const FIG_FLOAT = ['2-5/image2.png'];
 
 // 2-8 原稿那张手写笔记（三角恒等变换）不再画成 SVG 文字：SVG 里没有分式、根号，
 // 只能写成「(tan α + tan β) / (1 − tan α tan β)」「(√3/2)」这种伪记号，字号一缩就成糊点。
@@ -280,7 +268,14 @@ function article(a) {
     const re = new RegExp(`(<img[^>]*media/${file.replace('.', '\\.')}[^>]*style=")width:[\\d.]+in(;height:[\\d.]+in)?`);
     frag = frag.replace(re, (m, p1, p2, p3) => `${p1}width:${w}in` + (h ? `;height:${h}in` : (p2 || '')));
   }
-  for (const [find, rep] of [...(TEXT_FIX[a.id] || []), ...(RUBY[a.id] || [])]) {
+  for (const key of FIG_FLOAT) {
+    const [id, file] = key.split('/');
+    if (id !== a.id) continue;
+    const re = new RegExp(`<img(?=[^>]*media/${file.replace('.', '\\.')})([^>]*)>`);
+    if (!re.test(frag)) console.warn('FIG_FLOAT miss', key);
+    frag = frag.replace(re, (m, attrs) => `<img${attrs} data-float="1">`);
+  }
+  for (const [find, rep] of (TEXT_FIX[a.id] || [])) {
     if (!frag.includes(find)) console.warn('TEXT_FIX miss', a.id, find.slice(0, 20));
     frag = frag.split(find).join(rep);
   }
@@ -324,14 +319,7 @@ function article(a) {
   // 公式密集的篇目改为单栏：独立公式不再通栏切断双栏正文；
   // 2-1 的插图比一栏还宽、塞进双栏会留出大块空白，也按单栏排
   const single = !a.verse && ((frag.match(/class="math display"/g) || []).length >= 8 || a.id === '2-1');
-  if (a.id === '2-3') {
-    frag = frag.replace(/<img[^>]*>/g, tag => {
-      const k = Object.keys(RARE_GLYPH).find(k => tag.includes(k));
-      if (!k) return tag;
-      const [ch, py] = RARE_GLYPH[k];
-      return `<ruby><span class="rare">${ch}</span><rt>${py}</rt></ruby>`;
-    });
-  }
+  if (a.id === '2-3') frag = applyRareGlyphs(frag);
   const bar = a.clubs.map(c => `<i style="background:${clubVar(c)}"></i>`).join('');
   const tags = [...a.clubs.map(c => `<b style="color:${clubVar(c === 'news' ? 'open' : c)}">${CLUBS[c].en}</b>`), `<b>${FORM_EN[a.form] || ''}</b>`].join('');
   const total = articles.filter(x => x.ch === a.ch).length;

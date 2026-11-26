@@ -31,7 +31,7 @@ DOCX ──pandoc──▶ HTML 片段 ──node scripts/build.mjs──▶ boo
 | `scripts/build-cmyk.mjs` | Ghostscript 转 DeviceCMYK + 挂 ICC |
 | `DESIGN-TOKENS.md` | 版式规范：本仓库的取值都必须能在这里找到出处 |
 | `legacy/` | 旧版封面、版式源文件（PSD / AI / INDD），仅备查 |
-| `2025-autumn-issue-cn.pdf` | 上一期成品，作为版式参照 |
+| `ref/` | 上一期成品（`2025-autumn-issue-cn.pdf`）与字体反查记录 `font-audit.py`、`README.md` |
 
 ## 构建
 
