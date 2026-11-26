@@ -5,6 +5,8 @@
 
 封面 / 封底的成品文件不在本仓库构建。
 
+> 让模型接手这个仓库时，先读 [`AGENTS.md`](AGENTS.md)：目录职责、构建链路、踩过的坑与验收口径都在那里。
+
 ## 渲染链
 
 ```
@@ -35,12 +37,15 @@ DOCX ──pandoc──▶ HTML 片段 ──node scripts/build.mjs──▶ boo
 
 ## 构建
 
-需要 Node 18+、Python 3.10+、pandoc、Google Chrome、Ghostscript。
+需要 Node 18+、Python 3.10+（命令名必须是 `python`，且在 PATH 上）、pandoc、Google Chrome、Ghostscript 10。各版本与本机路径见 [`AGENTS.md`](AGENTS.md) §2。
 
 ```bash
-npm install                 # 只装 katex / playwright-core / pypdf 等
-node scripts/convert.ps1    # DOCX → build/html（Windows；其他平台按脚本里的 pandoc 参数重写）
-npm run all                 # 出四份 PDF 到 dist/
+npm install                                      # katex / playwright-core（不下载 Chromium）
+python -m pip install pypdf pypdfium2 fonttools brotli
+python scripts/fonts.py                          # 生成 fonts/，唯一需要手工备料的一步
+powershell -File scripts/envcheck.ps1            # 核对工具链 / 字体 / ICC
+node scripts/convert.ps1                         # DOCX → build/html（Windows；其他平台按脚本里的 pandoc 参数重写）
+npm run all                                      # 出四份 PDF 到 dist/
 ```
 
 `npm run all` 等价于 `build` → `demo` → `cmyk`，产物：
@@ -55,7 +60,9 @@ npm run all                 # 出四份 PDF 到 dist/
 
 ## 字体
 
-思源宋体 / 思源黑体 / Google Sans 合计 223 MB，不进仓库。缺字体时按 `scripts/fonts.py` 里的清单下载到 `fonts/`，再用 `scripts/fonts.ps1` 注册。
+`fonts/` 共 229 MB，不进仓库，克隆后是空目录。`scripts/fonts.py` 负责备料：从系统字体目录复制思源宋 6 个、思源黑 5 个，再把 **Google Sans Flex 可变字体**按 `(wght, wdth, opsz)` 实例化成 9 个静态 `GSF-*`（该可变字体不随仓库分发，也不在 Google Fonts 公开目录，需自备）。`scripts/fonts.ps1` 在此基础上顺手抓 ICC。
+
+字体缺失**不会**让构建失败——Chrome 静默回退到系统字体，页数照旧、字形全错。备好后跑 `powershell -File scripts/envcheck.ps1`，工具链、20 个字体文件、ICC、构建缓存一次看全。
 
 ## 许可
 
