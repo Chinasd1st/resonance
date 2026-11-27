@@ -313,7 +313,11 @@ const ART = {
   '1-1': { cls: 'art-night', full: true },
   '1-2': { cls: 'art-fog' },
   '1-3': { cls: 'art-mist', full: true },
+  '1-4': { cls: 'art-const' },
+  '1-5': { cls: 'art-acid' },
   '1-6': { cls: 'art-swiss', full: true },
+  '1-7': { cls: 'art-bauhaus' },
+  '1-8': { cls: 'art-dusk' },
 };
 // 油墨色（RGB），与 tokens.css 同值：c.ink / c.blue / c.orange / c.news / c.tint
 const RGB = { ink: [0x1D, 0x1D, 0x1B], blue: [0x45, 0x8C, 0xEE], orange: [0xED, 0x72, 0x07], news: [0xF2, 0xB7, 0x05], tint: [0xE6, 0xF1, 0xFF] };
@@ -344,6 +348,32 @@ function artOpener(a, kicker, tags, who) {
       <div class="k">${kicker}　${tags}</div>
       <div class="credit">图　${esc(ph.short)}</div>
     </header>`;
+  if (a.id === '1-4') return `
+    <header class="opener aop">
+      <div class="k"><span>${kicker}</span><span class="tags">${tags}</span></div>
+      <div class="cn-num">04</div>
+      <div class="cn-block">
+        <div class="cn-tag">CONSTRUCTIVISM // 1791 × 2002</div>
+        <h1 class="title"><span>在世界中心</span><span>呼唤名为爱的野兽</span></h1>
+        <div class="sub">——讨厌“红楼梦”而不是〈红楼梦〉</div>
+      </div>
+      <div class="cn-meta">
+        <span class="who">${who}</span>
+        <span class="slogan">BREAK THE RULE · 反抗与重构</span>
+      </div>
+    </header>`;
+  if (a.id === '1-5') return `
+    <header class="opener aop">
+      <div class="k"><span class="pill">${kicker}</span><span class="meta-code">00:02:39 // SHAFT LOG</span><span class="tags">${tags}</span></div>
+      <div class="ac-hero">
+        <div class="ac-num">159<small>″</small></div>
+        <div class="ac-head">
+          <h1 class="title">大概一百五十九秒</h1>
+          <div class="ac-sub">APPROX. 159 SECONDS · FLOOR 01 → 26 → -1</div>
+        </div>
+      </div>
+      <div class="ac-bar"><span>CABIN // EMPTY</span><span>GREEN EYE · ROTHKO · 43 SEC</span><span>OPEN CALL POETRY</span></div>
+    </header>`;
   if (a.id === '1-6') return `
     <header class="opener aop">
       <div class="sw-top"><span>${kicker} // ${FORM_EN[a.form] || ''}</span><span>RESONANCE · VOL. 02</span></div>
@@ -369,6 +399,29 @@ function artOpener(a, kicker, tags, who) {
         <span><b>PHOTO:</b> ${esc(ph.short)}</span>
       </div>
     </header>`;
+  if (a.id === '1-7') return `
+    <header class="opener aop">
+      <div class="k"><span>${kicker}</span><span class="tags">${tags}</span></div>
+      <div class="bh-grid">
+        <div class="bh-num">07</div>
+        <div class="bh-head">
+          <div class="bh-en">MID-AUTUMN · EIGHTH MONTH FIFTEENTH</div>
+          <h1 class="title">中秋夜，与谁同</h1>
+        </div>
+      </div>
+      <div class="bh-rule"><i></i><b></b></div>
+    </header>`;
+  if (a.id === '1-8') return `
+    <header class="opener aop">
+      <div class="k"><span>${kicker}</span><span class="tags">${tags}</span></div>
+      <div class="dk-head">
+        <div class="dk-num">08</div>
+        <div class="dk-titles">
+          <h1 class="title">岁月</h1>
+          <div class="dk-en">DUSK &amp; MOONLIGHT // ${who}</div>
+        </div>
+      </div>
+    </header>`;
   return '';
 }
 
@@ -389,19 +442,55 @@ function artFrag(a, frag) {
       `<div class="record"><div class="rh"><b>交班记录</b><span>五路康复环线　第二天</span></div><p>“今日观察：${s}”</p></div>`);
     frag = frag.replace('<p>“他们看上去，都很高兴。”</p>', '<p class="addendum">“他们看上去，都很高兴。”</p>');
   }
+  if (a.id === '1-5') {
+    frag = frag.replace('<p>9-1</p>', '<p class="fl">9-1</p>');
+    frag = frag.replace('<p>-1</p>', '<p class="fl">-1</p>');
+  }
   if (a.id === '1-6') {
     // 标头单独放在 .text 之前（通过 coda/preText 结构，避免被 transform.js 的 stripHead 误当成原稿标题删掉）
     return frag;
   }
+  if (a.id === '1-7') {
+    frag = frag.replace('<p>——八月十五</p>', '<p class="bh-sign">——八月十五</p>');
+  }
+  if (a.id === '1-8') {
+    const marker = '<p>也挽留不住月光</p>';
+    const idx = frag.indexOf(marker);
+    if (idx < 0) console.warn('ART miss 1-8 night turn');
+    else {
+      const head = frag.slice(0, idx);
+      let tail = frag.slice(idx).replace(/<p>/g, '<p class="night-line">');
+      tail = tail.replace('<p class="night-line">也挽留不住月光</p>', '<p class="night-line night-turn">也挽留不住月光</p>');
+      tail = tail.replace('<p class="night-line">夕阳下山 明月又亮</p>', '<p class="night-line night-end">夕阳下山 明月又亮</p>');
+      tail = tail.replace('<p class="night-line">年年岁月 何苦情长</p>', '<p class="night-line night-end">年年岁月 何苦情长</p>');
+      frag = head + tail;
+    }
+  }
   return frag;
 }
 
-// 1-3 末段改竖排，作为整篇的收尾（从正文里取出，排在双栏之后）
+// 1-3 末段改竖排、1-4 末句升格为构成主义宣言块、1-8 补极简夜页收束记（从正文里取出或挂在 .text 之后）
 function artCoda(a, frag) {
-  if (a.id !== '1-3') return { frag, coda: '' };
-  const m = frag.match(/<p>(故乡，水的故乡[\s\S]*?)<\/p>\s*$/);
-  if (!m) { console.warn('ART miss 1-3 coda'); return { frag, coda: '' }; }
-  return { frag: frag.slice(0, m.index), coda: `<div class="coda"><p>${m[1]}</p></div>` };
+  if (a.id === '1-3') {
+    const m = frag.match(/<p>(故乡，水的故乡[\s\S]*?)<\/p>\s*$/);
+    if (!m) { console.warn('ART miss 1-3 coda'); return { frag, coda: '' }; }
+    return { frag: frag.slice(0, m.index), coda: `<div class="coda"><p>${m[1]}</p></div>` };
+  }
+  if (a.id === '1-4') {
+    const reWrap = /<div[^>]*>\s*<p>[\s\u00a0]*《讨厌红楼梦》其实是欣赏《红楼梦》，讨厌的是“红楼梦”，而不是《红楼梦》。<\/p>\s*<\/div>\s*$/;
+    const reBare = /<p>[\s\u00a0]*《讨厌红楼梦》其实是欣赏《红楼梦》，讨厌的是“红楼梦”，而不是《红楼梦》。<\/p>\s*$/;
+    const m = frag.match(reWrap) || frag.match(reBare);
+    if (!m) { console.warn('ART miss 1-4 coda'); return { frag, coda: '' }; }
+    const coda = `<div class="const-coda">
+      <div class="cc-bar"><b>CODA // 04</b><span>ㄅㄆㄇㄈㄉㄊㄋㄌ</span></div>
+      <p class="cc-quote">《讨厌红楼梦》其实是欣赏《红楼梦》，<br>讨厌的是<em>“红楼梦”</em>，而不是《红楼梦》。</p>
+    </div>`;
+    return { frag: frag.slice(0, m.index), coda };
+  }
+  if (a.id === '1-8') {
+    return { frag, coda: `<div class="dk-foot">08 // YEARS · 木鱼 · 桐乡市第一中学</div>` };
+  }
+  return { frag, coda: '' };
 }
 
 // overlay 层：每篇跨页各页的底图与矢量装饰；返回 { 页码: { html, dark, noRh } }，并写出要渲染的底图 spec
@@ -420,7 +509,7 @@ function artSheets(map, pos) {
   for (const id of Object.keys(ART)) {
     if (!map.dests[`a-${id}`]) continue;
     const pages = pagesOf(id);
-    const photo = path.join(ROOT, ART_PHOTO[id].src);
+    const photo = ART_PHOTO[id] ? path.join(ROOT, ART_PHOTO[id].src) : null;
     if (id === '1-1') {
       const [p0, ...rest] = pages;
       const n = img('1-1-photo', { seed: 21, photos: [{ photo, focus: [0.6, 0.5], rect: full, mode: 'inks', exposure: 1.5, contrast: 1.2, lpi: 38, absorb: 0.3, density: 1,
@@ -451,6 +540,74 @@ function artSheets(map, pos) {
       // 正文页：同一张暖白纸（只有纸纹，150 dpi 足够）
       rest.forEach((p, i) => { out[p] = { html: imgTag(img(`1-3-paper-${i + 1}`, { seed: 30 + i, dpi: 150, quality: 82 }), full) }; });
     }
+    if (id === '1-4') {
+      const [p0, p1] = pages;
+      // 构成主义（p14）：几何图形严格限于 y=0..168mm 开篇海报区，不侵入 y>172mm 正文区
+      const svgL = `<svg class="art-svg" viewBox="0 0 216 303" aria-hidden="true">
+        <rect x="0" y="0" width="8" height="167.5" fill="#161616"/>
+        <polygon points="8,30 116,30 102,44 8,44" fill="#D62828"/>
+        <polygon points="8,128 70,115 76,125 8,144" fill="#161616"/>
+        <circle cx="178" cy="50" r="16" fill="none" stroke="#161616" stroke-width="0.9"/>
+        <circle cx="185" cy="46" r="5.5" fill="#D62828"/>
+        <rect x="8" y="166" width="124" height="1.2" fill="#161616"/>
+        <rect x="132" y="165.5" width="84" height="2" fill="#D62828"/>
+      </svg>`;
+      out[p0] = { html: `<div class="const-bg"></div>${svgL}`, noRh: true };
+      if (p1) {
+        const svgR = `<svg class="art-svg" viewBox="0 0 216 303" aria-hidden="true">
+          <rect x="0" y="18" width="28" height="2.2" fill="#D62828"/>
+          <polygon points="0,242 216,228 216,303 0,303" fill="#161616"/>
+          <polygon points="124,254 216,242 216,264 112,264" fill="#D62828"/>
+          <circle cx="48" cy="272" r="14" fill="#F5F1EA"/>
+          <circle cx="48" cy="272" r="5" fill="#D62828"/>
+          <line x1="23" y1="223" x2="198" y2="223" stroke="#161616" stroke-width="0.45"/>
+        </svg>`;
+        out[p1] = { html: `<div class="const-bg"></div>${svgR}`, accent: '#D62828' };
+      }
+    }
+    if (id === '1-5') {
+      const [p0, p1] = pages;
+      // 酸性设计（p16）：工业电梯井矢量仅落在左外缘 x=12..48mm（正文在 x>=57.5mm）
+      const svgL = `<svg class="art-svg" viewBox="0 0 216 303" aria-hidden="true">
+        <rect x="18" y="106" width="22" height="44" fill="#1A211C"/>
+        <rect x="18" y="153" width="22" height="58" fill="#151B18"/>
+        <line x1="28" y1="92" x2="28" y2="262" stroke="#2B332C" stroke-width="0.45"/>
+        <line x1="23" y1="112" x2="33" y2="112" stroke="#C8FF1A" stroke-width="0.6"/>
+        <line x1="25" y1="146" x2="31" y2="146" stroke="#C8FF1A" stroke-width="0.4"/>
+        <line x1="23" y1="196" x2="33" y2="196" stroke="#C8FF1A" stroke-width="0.6"/>
+        <line x1="25" y1="232" x2="31" y2="232" stroke="#C8FF1A" stroke-width="0.4"/>
+        <circle cx="28" cy="252" r="7" fill="none" stroke="#C8FF1A" stroke-width="0.35"/>
+        <line x1="18" y1="252" x2="38" y2="252" stroke="#C8FF1A" stroke-width="0.35"/>
+        <line x1="28" y1="242" x2="28" y2="262" stroke="#C8FF1A" stroke-width="0.35"/>
+        <g transform="translate(184 56)" stroke="#C8FF1A" stroke-width="0.35">
+          <line x1="-10" y1="0" x2="10" y2="0"/><line x1="0" y1="-10" x2="0" y2="10"/>
+          <line x1="-7" y1="-7" x2="7" y2="7"/><line x1="-7" y1="7" x2="7" y2="-7"/>
+        </g>
+      </svg>`;
+      out[p0] = { html: `<div class="acid-bg"></div>${svgL}`, dark: true, noRh: true };
+      if (p1) {
+        // p17：右外缘 x=188..206mm 与底部空白 y=232..276mm
+        const svgR = `<svg class="art-svg" viewBox="0 0 216 303" aria-hidden="true">
+          <line x1="194" y1="34" x2="194" y2="220" stroke="#2B332C" stroke-width="0.45" stroke-dasharray="2.5 2"/>
+          <circle cx="194" cy="48" r="2" fill="#C8FF1A"/>
+          <circle cx="194" cy="92" r="2" fill="#C8FF1A"/>
+          <circle cx="194" cy="136" r="2" fill="#C8FF1A"/>
+          <circle cx="194" cy="178" r="2" fill="#C8FF1A"/>
+          <circle cx="194" cy="216" r="3" fill="none" stroke="#C8FF1A" stroke-width="0.5"/>
+          <circle cx="164" cy="248" r="18" fill="none" stroke="#2B332C" stroke-width="0.45"/>
+          <circle cx="164" cy="248" r="11" fill="none" stroke="#C8FF1A" stroke-width="0.4"/>
+          <circle cx="164" cy="248" r="2.2" fill="#C8FF1A"/>
+          <g fill="#2B332C">
+            <rect x="62" y="256" width="1.2" height="10"/><rect x="66" y="256" width="2.8" height="10"/>
+            <rect x="71" y="256" width="1" height="10"/><rect x="74" y="256" width="3.6" height="10"/>
+            <rect x="80" y="256" width="1.5" height="10"/><rect x="84" y="256" width="2.2" height="10"/>
+            <rect x="89" y="256" width="1" height="10"/><rect x="93" y="256" width="4" height="10"/>
+          </g>
+          <rect x="62" y="251" width="68" height="1.2" fill="#C8FF1A"/>
+        </svg>`;
+        out[p1] = { html: `<div class="acid-bg"></div>${svgR}`, dark: true, accent: '#C8FF1A' };
+      }
+    }
     if (id === '1-6') {
       const [p0, ...rest] = pages;
       const n = img('1-6-photo', {
@@ -465,6 +622,41 @@ function artSheets(map, pos) {
       rest.forEach(p => {
         out[p] = { html: `<div class="swiss-bg"></div>`, noRh: true, swiss: true };
       });
+    }
+    if (id === '1-7') {
+      const [p0] = pages;
+      // 包豪斯几何（p20 左页）：顶部明月黄圆+钴蓝弧，底部小舟符号（位于 y=248..278mm 正文留白区）
+      const svgBh = `<svg class="art-svg" viewBox="0 0 216 303" aria-hidden="true">
+        <circle cx="176" cy="54" r="18" fill="#F2B705"/>
+        <path d="M148 72 A18 18 0 0 1 184 72 Z" fill="#1E5BC6" opacity="0.92"/>
+        <line x1="18" y1="86" x2="193" y2="86" stroke="#1D1D1B" stroke-width="0.35"/>
+        <line x1="154" y1="24" x2="154" y2="86" stroke="#1D1D1B" stroke-width="0.3"/>
+        <path d="M126 266 A15 15 0 0 0 156 266 Z" fill="#1E5BC6"/>
+        <polygon points="141,248 141,264 154,264" fill="#F2B705"/>
+        <line x1="112" y1="268" x2="193" y2="268" stroke="#1D1D1B" stroke-width="0.4"/>
+      </svg>`;
+      out[p0] = { html: `<div class="bh-bg"></div>${svgBh}`, noRh: true };
+    }
+    if (id === '1-8') {
+      const [p0, p1] = pages;
+      // 昼夜双联画（p21 右页日落 + p22 左页月夜）
+      const svgDay = `<svg class="art-svg" viewBox="0 0 216 303" aria-hidden="true">
+        <path d="M0 176 A44 44 0 0 1 44 220 L0 220 Z" fill="#ED7207"/>
+        <rect x="0" y="220" width="54" height="18" fill="#C85A17"/>
+        <polygon points="0,238 56,238 42,272 0,272" fill="#262423"/>
+        <rect x="0" y="272" width="216" height="0.6" fill="#262423"/>
+        <line x1="23" y1="90" x2="54" y2="90" stroke="#ED7207" stroke-width="0.8"/>
+      </svg>`;
+      out[p0] = { html: `<div class="dk-bg-day"></div>${svgDay}`, noRh: true, accent: '#ED7207' };
+      if (p1) {
+        const svgNight = `<svg class="art-svg" viewBox="0 0 216 303" aria-hidden="true">
+          <circle cx="168" cy="196" r="32" fill="none" stroke="#33415C" stroke-width="0.28"/>
+          <circle cx="168" cy="196" r="26" fill="none" stroke="#33415C" stroke-width="0.28"/>
+          <circle cx="168" cy="196" r="20" fill="#E6F1FF"/>
+          <line x1="18" y1="272" x2="198" y2="272" stroke="#458CEE" stroke-width="0.45"/>
+        </svg>`;
+        out[p1] = { html: `<div class="dk-bg-night"></div>${svgNight}`, dark: true };
+      }
     }
   }
   return { out, specs };
@@ -668,7 +860,8 @@ function overlayHtml(map, frontPages, arts = {}) {
     // thumb tab (right pages of articles)
     if (p > FRONT && o && o.kind === 'article' && right) {
       const idx = CLUB_ORDER.indexOf(o.a.clubs[0]);
-      inner += `<div class="tab" style="top:calc(23mm + ${idx} * 34pt);background:${art && art.swiss ? '#111111' : clubVar(o.a.clubs[0])}"></div>`;
+      const tabBg = (art && art.accent) || (art && art.swiss ? '#111111' : clubVar(o.a.clubs[0]));
+      inner += `<div class="tab" style="top:calc(23mm + ${idx} * 34pt);background:${tabBg}"></div>`;
     }
     // page ii 的社团色条改由 .fm-bars .legend 在正文层绘制，overlay 不再重复
     pages += `<div class="sheet">${inner}</div>`;

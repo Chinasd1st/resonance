@@ -140,3 +140,189 @@
 }
 .art-swiss.verse > .notes p { color: #4A4A48; }
 .art-swiss.verse > .notes .note-item .n { color: #111111; font-family: "GS W", sans-serif; }
+
+/* ---------- 全出血矢量层辅助 ---------- */
+.art-svg { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; display: block; pointer-events: none; }
+
+/* ---------- 1-4 在世界中心呼唤名为爱的野兽 · 俄国构成主义（红/黑几何 + GS Cond + 收尾宣言） ---------- */
+.const-bg { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; background: #F5F1EA; }
+.article.art-const .opener.aop { height: calc(var(--bl) * 28); color: #161616; }
+.art-const .aop .k { color: #161616; font-family: "GS W", "SHS", sans-serif; }
+.art-const .aop .k .tags b { color: #161616 !important; font-family: "GS W", sans-serif; }
+.art-const .aop .k .tags b:first-child { color: #D62828 !important; }
+.art-const .aop .cn-num {
+  position: absolute; left: -2pt; top: 122pt;
+  font: 900 132pt/112pt "GS Cond", sans-serif; color: #161616; letter-spacing: -.03em;
+}
+.art-const .aop .cn-block {
+  position: absolute; right: 0; top: 146pt; width: 310pt;
+  display: flex; flex-direction: column; align-items: flex-end; text-align: right;
+}
+.art-const .aop .cn-tag {
+  background: #D62828; color: #FFFFFF; padding: 2pt 7pt; margin-bottom: 10pt;
+  font: 700 6.5pt/10pt "GS W", "SHS", sans-serif; letter-spacing: .16em;
+}
+.art-const .aop .title {
+  margin: 0; font: 900 30pt/35pt "SHS", sans-serif; color: #161616;
+  letter-spacing: .02em; font-feature-settings: "palt";
+}
+.art-const .aop .title span { display: block; }
+.art-const .aop .sub {
+  margin-top: 12pt; background: #161616; color: #F5F1EA; padding: 3pt 8pt;
+  font: 500 9.5pt/16pt "SHS", sans-serif; letter-spacing: .06em;
+}
+.art-const .aop .cn-meta {
+  position: absolute; left: 0; right: 0; bottom: 20pt;
+  padding-bottom: 4pt;
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.art-const .aop .cn-meta .who { font: 700 9pt/14pt "SHS", sans-serif; color: #161616; letter-spacing: .04em; }
+.art-const .aop .cn-meta .slogan { font: 700 7pt/12pt "GS W", "SHS", sans-serif; color: #D62828; letter-spacing: .16em; }
+.art-const .text p { color: #161616; }
+.art-const .const-coda {
+  margin-top: 28pt; padding: 14pt 16pt 16pt;
+  border-top: 2pt solid #161616; border-left: 4pt solid #D62828;
+  background: #ECE6DC; break-inside: avoid;
+}
+.art-const .const-coda .cc-bar {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 10pt;
+}
+.art-const .const-coda .cc-bar b {
+  background: #D62828; color: #FFFFFF; padding: 1.5pt 6pt;
+  font: 700 6.8pt/10pt "GS W", sans-serif; letter-spacing: .16em;
+}
+.art-const .const-coda .cc-bar span {
+  font: 700 9pt/12pt "SHS", sans-serif; letter-spacing: .24em; color: #161616;
+}
+.art-const .const-coda .cc-quote {
+  margin: 0; font: 700 17pt/28pt "SHSerif", serif; color: #161616;
+  text-indent: 0; text-align: left; font-feature-settings: "palt";
+}
+.art-const .const-coda .cc-quote em { font-style: normal; color: #D62828; }
+
+/* ---------- 1-5 大概一百五十九秒 · 酸性设计（深铁黑 + 酸绿工业终端 + 电梯楼层牌） ---------- */
+.acid-bg { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; background: #0E1012; }
+.article.art-acid .opener.aop { height: calc(var(--bl) * 14); color: #F2F4F3; }
+.art-acid .aop .k {
+  align-items: center; padding-bottom: 5pt; border-bottom: .5pt solid #2B332C;
+  font-family: "GS W", "SHS", sans-serif; color: #8B949E;
+}
+.art-acid .aop .k .pill {
+  background: #C8FF1A; color: #0E1012; padding: 1.5pt 5pt;
+  font: 700 6.5pt/9pt "GS W", sans-serif; letter-spacing: .12em;
+}
+.art-acid .aop .k .meta-code { font: 500 6.8pt/10pt "GS W", sans-serif; letter-spacing: .14em; color: #C8FF1A; }
+.art-acid .aop .k .tags b { color: #ECEFEE !important; font-family: "GS W", sans-serif; }
+.art-acid .aop .ac-hero {
+  position: absolute; left: 0; right: 0; top: 34pt;
+  display: flex; align-items: flex-end; gap: 18pt;
+}
+.art-acid .aop .ac-num {
+  font: 900 86pt/78pt "GS Cond", sans-serif; color: #C8FF1A; letter-spacing: -.02em;
+}
+.art-acid .aop .ac-num small { font-size: 46pt; margin-left: 2pt; }
+.art-acid .aop .ac-head { padding-bottom: 6pt; }
+.art-acid .aop .title {
+  margin: 0; font: 900 28pt/34pt "SHS", sans-serif; color: #FFFFFF;
+  letter-spacing: .04em; font-feature-settings: "palt";
+}
+.art-acid .aop .ac-sub {
+  margin-top: 6pt; font: 500 6.8pt/10pt "GS W", sans-serif;
+  letter-spacing: .16em; color: #8B949E;
+}
+.art-acid .aop .ac-bar {
+  position: absolute; left: 0; right: 0; bottom: 18pt;
+  padding: 5pt 0; border-top: .5pt solid #C8FF1A; border-bottom: .5pt solid #2B332C;
+  display: flex; justify-content: space-between;
+  font: 700 6.5pt/10pt "GS W", sans-serif; letter-spacing: .14em; color: #C8FF1A;
+}
+.art-acid .aop .ac-bar span:nth-child(2) { color: #8B949E; font-weight: 500; }
+.art-acid.verse .text { margin-left: 112pt; width: 340pt; }
+.art-acid.verse .text p {
+  font: 400 10pt/20pt "SHSerif", serif; color: #ECEFEE;
+  text-indent: 0; text-align: left;
+}
+.art-acid.verse .text h3.num,
+.art-acid.verse .text p.fl {
+  display: inline-block; padding: 1pt 7pt; margin: 16pt 0 5pt;
+  background: #C8FF1A; color: #0E1012;
+  font: 900 13pt/15pt "GS Cond", "GS W", sans-serif; letter-spacing: .06em;
+  break-after: avoid;
+}
+.art-acid.verse .text h3.num:first-child { margin-top: 2pt; }
+.art-acid.verse .text h3.num::before { display: none; }
+
+/* ---------- 1-7 中秋夜，与谁同 · 包豪斯几何现代主义（钴蓝 + 明月黄 + 小舟落款） ---------- */
+.bh-bg { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; background: #F7F6F2; }
+.article.art-bauhaus .opener.aop { height: calc(var(--bl) * 14); color: #1D1D1B; }
+.art-bauhaus .aop .k { color: #1E5BC6; font-family: "GS W", "SHS", sans-serif; }
+.art-bauhaus .aop .k .tags b { color: #1D1D1B !important; font-family: "GS W", sans-serif; }
+.art-bauhaus .aop .k .tags b:first-child { color: #1E5BC6 !important; }
+.art-bauhaus .aop .bh-grid {
+  position: absolute; left: 0; right: 0; top: 38pt;
+  display: flex; align-items: flex-end; gap: 16pt;
+}
+.art-bauhaus .aop .bh-num {
+  font: 700 96pt/86pt "GS Display", sans-serif; color: #1E5BC6;
+  letter-spacing: -.04em; margin-left: -4pt;
+}
+.art-bauhaus .aop .bh-head { padding-bottom: 8pt; }
+.art-bauhaus .aop .bh-en {
+  font: 700 6.2pt/10pt "GS W", sans-serif; letter-spacing: .14em;
+  color: #1E5BC6; margin-bottom: 5pt;
+}
+.art-bauhaus .aop .title {
+  margin: 0; font: 700 28pt/34pt "SHSerif", serif; color: #1D1D1B;
+  letter-spacing: .05em; font-feature-settings: "palt";
+}
+.art-bauhaus .aop .bh-rule {
+  position: absolute; left: 0; right: 0; bottom: 16pt; display: flex; align-items: center;
+}
+.art-bauhaus .aop .bh-rule i { display: block; width: 40%; height: 1.5pt; background: #1E5BC6; }
+.art-bauhaus .aop .bh-rule b { display: block; width: 60%; height: .5pt; background: #1D1D1B; }
+.art-bauhaus .text p { color: #1D1D1B; }
+.art-bauhaus .text p.bh-sign {
+  text-indent: 0; text-align: right; margin-top: 10pt;
+  font: 600 9.6pt/15pt "SHSerif", serif; color: #1E5BC6;
+}
+.art-bauhaus .text p.bh-sign::before {
+  content: ""; display: inline-block; width: 5pt; height: 5pt; border-radius: 50%;
+  background: #F2B705; margin-right: 6pt; vertical-align: 1pt;
+}
+
+/* ---------- 1-8 岁月 · 包豪斯昼夜双联画（p21 落日暖纸 -> p22 深夜月升） ---------- */
+.dk-bg-day { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; background: #F4EFEA; }
+.dk-bg-night { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; background: #141820; }
+.article.art-dusk .opener.aop { height: calc(var(--bl) * 13); color: #1D1D1B; }
+.art-dusk .aop .k { color: #6E655E; font-family: "GS W", "SHS", sans-serif; }
+.art-dusk .aop .k .tags b { color: #1D1D1B !important; font-family: "GS W", sans-serif; }
+.art-dusk .aop .k .tags b:first-child { color: #ED7207 !important; }
+.art-dusk .aop .dk-head {
+  position: absolute; left: 148pt; right: 0; top: 44pt;
+  display: flex; align-items: flex-end; gap: 16pt;
+  padding-bottom: 12pt; border-bottom: 1pt solid #1D1D1B;
+}
+.art-dusk .aop .dk-num { font: 900 84pt/76pt "GS Cond", sans-serif; color: #ED7207; letter-spacing: -.02em; }
+.art-dusk .aop .dk-titles { padding-bottom: 4pt; }
+.art-dusk .aop .title {
+  margin: 0; font: 900 44pt/50pt "SHSerif", serif; color: #1D1D1B;
+  letter-spacing: .24em; font-feature-settings: "palt";
+}
+.art-dusk .aop .dk-en {
+  margin-top: 6pt; font: 500 7.5pt/12pt "GS W", "SHS", sans-serif;
+  letter-spacing: .12em; color: #6E655E;
+}
+.art-dusk .aop .dk-en span { margin-left: 6pt; opacity: .82; }
+.art-dusk.verse .text { margin-left: 148pt; width: 280pt; }
+.art-dusk.verse .text p {
+  font: 400 10.5pt/22.5pt "SHSerif", serif; color: #1D1D1B;
+  text-indent: 0; text-align: left;
+}
+.art-dusk.verse .text p.night-turn { break-before: page; padding-top: 90pt; }
+.art-dusk.verse .text p.night-line { color: #EDF2F7; }
+.art-dusk.verse .text p.night-end { color: #B9D3F5; font-weight: 600; }
+.art-dusk .dk-foot {
+  margin-left: 148pt; width: 280pt; margin-top: 30pt; padding-top: 8pt;
+  border-top: .5pt solid #3A465C;
+  font: 500 7.2pt/12pt "GS W", "SHS", sans-serif; letter-spacing: .14em; color: #8A99B3;
+}
