@@ -130,6 +130,23 @@ export function artSheets(map, pos) {
         out[p] = { html: imgTag(n, full) + railR };
       });
     }
+    if (id === '1-7') {
+      const [p0] = pages;
+      const n0 = img('1-7-p1', {
+        kind: 'halftone', paper: RGB.paperWarm, seed: 71, dpi: 300,
+        plates: [
+          { rgb: RGB.news, angle: 15, lpi: 38, shift: [2, -1], absorb: 0.7, density: 0.9,
+            shapes: [{ kind: 'radial', cx: 168, cy: 52, r0: 16, r1: 42, peak: 0.85 }] },
+          { rgb: RGB.blueDeep, angle: 45, lpi: 42, shift: [0, 0], absorb: 0.7, density: 0.88,
+            shapes: [
+              { kind: 'slats', x0: 116, y0: 0, x1: 216, y1: 108, angle: -24, pitch: 11, duty: 0.34, fade_l: 36, fade_b: 28, peak: 0.42 },
+              { kind: 'radial', cx: 168, cy: 52, r0: 38, r1: 58, peak: 0.38, op: 'add' },
+              { kind: 'radial', cx: 168, cy: 52, r0: 22, r1: 36, peak: 0.85, op: 'mul_inv' },
+            ] },
+        ],
+      });
+      out[p0] = { html: imgTag(n0, full) };
+    }
     if (id === '1-6') {
       const [p0, ...rest] = pages;
       // 满版：全页 216 × 303 mm 统一渲染银盐黑底与 35mm 颗粒，花卉羽化嵌入下三分之二，

@@ -1,0 +1,27 @@
+/* 1-7 中秋夜，与谁同：暖白纸上的满月黄与窗棂钢笔蓝半调单页。 */
+.article.art-moon .opener.aop { height: calc(var(--bl) * 16); }          /* 240pt：为单页 11 段散文留出稳定余量 */
+.art-moon .aop { color: var(--c-ink); }
+.art-moon .aop .k { color: var(--c-blue-deep); }
+.art-moon .aop .k .tags b { color: var(--c-blue-deep) !important; }
+.art-moon .aop .num {
+  position: absolute; left: -3pt; top: calc(var(--bl) * 2);
+  /* 大编号与「中秋夜，与谁同」宋体粗题形成静谧尺差 */
+  font: 700 72pt/68pt var(--ff-display); letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums; color: var(--c-blue-deep);
+}
+.art-moon .aop .title {
+  position: absolute; left: 0; top: calc(var(--bl) * 8); width: 64%;
+  font: 700 28pt/36pt "SHSerif", serif; letter-spacing: .04em; color: var(--c-ink);
+}
+.art-moon .aop .foot {
+  position: absolute; left: 0; right: 0; bottom: var(--bl);
+  padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-blue-deep);
+  display: flex; justify-content: space-between; align-items: baseline;
+  font: var(--t-tag); letter-spacing: .12em; color: var(--c-blue-deep);
+}
+.art-moon .aop .foot .en { color: var(--c-k70); }
+
+.art-moon .text p.sign {
+  text-indent: 0; text-align: right; margin-top: var(--bl-half);
+  font: 600 9.6pt/15pt "SHSerif", serif; color: var(--c-blue-deep);
+}

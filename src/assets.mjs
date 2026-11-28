@@ -21,6 +21,7 @@ export const BOOK_CSS = [
   'art/1-4-beast.css',
   'art/1-5-shaft.css',
   'art/1-6-swiss.css',
+  'art/1-7-moon.css',
 ];
 
 export const OVERLAY_CSS = [
@@ -35,6 +36,7 @@ export const OVERLAY_CSS = [
   'art/1-4-beast.css',
   'art/1-5-shaft.css',
   'art/1-6-swiss.css',
+  'art/1-7-moon.css',
 ];
 
 /** 运行时排版的执行顺序：state 最先，main 最后 */
