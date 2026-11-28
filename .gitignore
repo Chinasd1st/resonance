@@ -29,3 +29,7 @@ John_Smibert_-_Bishop_George_Berkeley_-_Google_Art_Project.jpg
 
 # 桌面习惯留下的空白草稿（0 字节，不要入库）
 新建 文本文档.txt
+
+# Python 缓存：art/*.py 互相 import 时生成，不入库
+__pycache__/
+*.pyc
