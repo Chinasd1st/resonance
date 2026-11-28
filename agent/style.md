@@ -55,6 +55,15 @@
 - 重绘插图一律走 `scripts/figures/`（viewBox 单位 = pt，1:1），不要贴位图。
 - 图宽沿用原稿英寸值，改宽必须成对改高（`FIG_W`）。
 
+### 授权标识（CC）
+
+- 图标用 **Creative Commons 官方 presskit SVG**，放在 `assets/cc/`（`cc / by / nc / sa`），由 `scripts/content/cc.mjs` 在构建时**内联**进 HTML。不要写 `<img src="assets/cc/by.svg">`：全书走 `file://` 打印，外链 SVG 的异步解码会偶发丢图，且内联才能用 CSS 上色。
+- 图标自带圆形轮廓，**不要再垫一个圆底**（会出现圆套圆）；颜色只改 `fill`，跟 `--c-blue` 走。
+- 最小尺寸 16 pt（≈5.6 mm）。小于 12 pt 时 BY 的人形与 NC 的斜杠会糊成色块——这属于不可读，不是「小一点更精致」。
+- 标识可以替代图形，**不能替代文字**：许可名 + 版本 + 链接必须保留（CC 官方的 attribution 要求），所以 `BY-NC-SA 4.0` 与 `creativecommons.org/licenses/...` 始终与图标同现。
+- 整本刊物的许可与单幅图的许可分写：刊物条款管文字与版式，图片按原始许可（BY-SA / BY / CC0）单独声明，两者不能混成一句话。
+- 加一个新标识（如 CC0 的 `zero.svg`）→ 存进 `assets/cc/`，在 `cc.mjs` 的 `LABEL` 里登记，再在调用处按顺序传入。
+
 ## 7. 文件组织
 
 - 加一条版式规则 → 放进 `src/css/` 对应的分区（`base / frontmatter / article / math / figures / tables / notes`），不要新建文件；篇目专属的跨页样式才放 `src/css/art/<篇号>.css`。
