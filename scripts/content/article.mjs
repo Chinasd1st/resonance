@@ -51,7 +51,6 @@ function artOpener(a, kicker, tags, who) {
       <div class="k"><span>${kicker}</span><span class="tags">${tags}</span></div>
       <div class="num">${pad(a.seq)}</div>
       <h1 class="title">${esc(a.title)}</h1>
-      <div class="foot"><span class="en">MID-AUTUMN · EIGHTH MONTH FIFTEENTH</span><span>月光如水 · 与谁同</span></div>
     </header>`;
   if (a.id === '1-8') return `
     <header class="opener aop">
