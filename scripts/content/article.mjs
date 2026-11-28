@@ -63,11 +63,11 @@ function artOpener(a, kicker, tags, who) {
     </header>`;
   if (a.id === '1-6') return `
     <header class="opener aop">
-      <div class="sw-top"><span>${kicker} // ${FORM_EN[a.form] || ''}</span><span>RESONANCE · VOL. 02</span></div>
+      <div class="sw-top"><span>${kicker} // ${FORM_EN[a.form] || ''}</span><span>RESONANCE</span></div>
       <div class="sw-poster">
         <div class="sw-band top">
           <div class="sw-cell">ALMOST EVERYWHERE<br>MEASURE ZERO<br>LEBESGUE<br>POETRY 06<br>OPEN CALL<span class="gap"></span>// 06</div>
-          <div class="sw-cell c">RESONANCE 02</div>
+          <div class="sw-cell c">RESONANCE</div>
           <div class="sw-cell r">CH 01 LITERATURE<br>XUAN DU<br>10:00 — 06:00<br>SWISS GRID<br>MONOCHROME<span class="gap"></span>26</div>
         </div>
         <div class="sw-band mid">

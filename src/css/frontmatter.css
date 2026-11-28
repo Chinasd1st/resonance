@@ -41,7 +41,6 @@
 .fm-colophon dl { display: grid; grid-template-columns: 56pt 1fr; margin: 0; }
 .fm-colophon dt { color: var(--c-k70); }
 .fm-colophon dd { margin: 0; }
-.fm-colophon .tbd { color: var(--c-orange); }
 
 /* 图片来源与著录共用同一张 dl：组标题跨两栏，篇号仍是 56 pt 标签列，
    所以「刊名 / 主编 / 1-1 / 01」四种标签在同一条竖线上。

@@ -40,7 +40,7 @@ export function frontMatter(articles) {
     <div class="wm" aria-label="RESONANCE">${TITLE_GRID.map(([ch, c, r]) => `<i class="${ch === 'O' ? 'o' : ''}" style="left:calc(${c} * var(--wm-step));top:calc(${r} * var(--wm-row))">${ch}</i>`).join('')}</div>
     <div class="cn">共鸣</div>
     <div class="tl">${COPY.tagline}</div>
-    <div class="issue"><b>${ISSUE.en.split(' ')[1]}</b><i></i><span>${ISSUE.no.replace('VOL. ', 'VOL&#8194;')}</span><span>› ${ISSUE.en.split(' ')[0]}</span></div>
+    <div class="issue"><b>${ISSUE.en.split(' ')[1]}</b><i></i><span>${ISSUE.en.split(' ')[0]}</span></div>
     <div class="vr">浙江省桐乡市高级中学　${CLUB_LIST.map(c => CLUBS[c].cn).join(' · ')}　联袂出品</div>
     <div class="vl">STUDENT JOURNAL　·　${COPY.manifesto.cn}</div>
     <ul class="clubs">${clubsList}</ul>
@@ -52,7 +52,6 @@ export function frontMatter(articles) {
            许可不再写成「CC BY-SA 4.0」文字，改为官方图标 + 版本号（cc.mjs 的 ccLine）。 -->
       <dl>
         <dt>刊名</dt><dd>共鸣（RESONANCE）</dd>
-        <dt>期号</dt><dd>${ISSUE.cn} <span class="tbd">〔待确认〕</span></dd>
         <dt>出品</dt><dd>浙江省桐乡市高级中学<br>音乐社 × 化学社 × 哲学社 × 新闻社 × 数学社</dd>
         <dt>主编</dt><dd>许恺颉</dd>
         <dt>指导老师</dt><dd>陆佳瑜</dd>

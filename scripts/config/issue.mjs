@@ -1,7 +1,8 @@
-// 刊物的身份与词表：期号、章名、社团、体裁。
+// 刊物的身份与词表：刊名与季节、章名、社团、体裁。
 // 每期只改这里；装配逻辑（content/*）不需要动。
 
-export const ISSUE = { cn: '2026 冬', en: 'WINTER 2026', no: 'VOL. 02' };   // TODO 期号待确认
+// 只保留季节与年份：刊物不做期号（原 VOL. 02 是占位，已从封面、版权页、1-6 海报移除）
+export const ISSUE = { cn: '2026 冬', en: 'WINTER 2026' };
 
 export const CHAPTERS = {
   1: { cn: '文学', en: 'LITERATURE' },
