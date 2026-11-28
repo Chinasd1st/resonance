@@ -69,8 +69,8 @@
       const t = p.textContent.trim();
       if (!t && !p.querySelector('img,.math')) { p.remove(); return; }
       const inCell = !!p.closest('td,th');
-      // section numbers: "1", "1.", "一", "Part 1" — never inside a table cell ("一", "五" are data there)
-      if (!inCell && /^(\d{1,2}[\.．、]?|[一二三四五六七八九十]{1,3})$/.test(t)) { const h = RS.dom.renameEl(p, 'h3'); h.classList.add('num'); h.textContent = t.replace(/[\.．、]$/, ''); return; }
+      // section numbers: "1", "1.", "9-1", "-1", "一", "Part 1" — never inside a table cell ("一", "五" are data there)
+      if (!inCell && /^(-?\d{1,2}(?:-\d{1,2})?[\.．、]?|[一二三四五六七八九十]{1,3})$/.test(t)) { const h = RS.dom.renameEl(p, 'h3'); h.classList.add('num'); h.textContent = t.replace(/[\.．、]$/, ''); return; }
       // 「Part 1 怪物与精灵之争」这类分段标题：源稿只是斜体正文，按二级标题排
       const part = t.match(/^(?:PART|Part|part)\s*(\d{1,2})\s*[：:.、]?\s*([^。！？]{2,26})$/);
       if (!inCell && part && t.length <= 30) {
