@@ -137,17 +137,52 @@ export const TEXT_FIX = {
     // 原稿的两节标题只是普通段落，升成 h3，才和 2-10 的小节同一层级
     ['<p>第一章：酸碱指示剂变色实验</p>', '<h3>第一章：酸碱指示剂变色实验</h3>'],
     ['<p>第二章：BZ反应现象模拟</p>', '<h3>第二章：BZ反应现象模拟</h3>'],
+    // 开头两张烧杯图（image2 反应前紫、image1 反应后红）原稿浮动在步骤②旁，pandoc 却错吐在开头「注：」里
+    ['<p><img src="media/2-11/media/image1.png" style="width:1.28542in;height:1.65069in" alt="截图20261114201547" /><img src="media/2-11/media/image2.png" style="width:1.20278in;height:1.65347in" alt="截图20261114201523" />注：分析软件为Python', '<p class="pnote">注：分析软件为Python'],
+    [
+      '<p>②用镊子夹取一小块干冰，放入配制好的酸碱指示剂中并观察现象（现象如右图）。</p>',
+      '<p>②用镊子夹取一小块干冰，放入配制好的酸碱指示剂中并观察现象（现象如右图）。</p>'
+      + '\n<p><img src="media/2-11/media/image2.png" style="width:1.20278in;height:1.65347in" alt="" />'
+      + '<img src="media/2-11/media/image1.png" style="width:1.28542in;height:1.65069in" alt="" /></p>'
+      + '\n<p class="figlabel">反应前　反应后</p>\n<p class="figsrc">图片来源：网络</p>',
+    ],
+    // 清除①与②之间错位残留的标注行
+    ['<p>①向烧杯中加入蒸馏水，取紫色石蕊试液加入蒸馏水中，用玻璃棒搅拌，配制适当浓度的酸碱指示剂；</p>\n<p><strong>反应前 反应后</strong></p>\n<p><strong>图片来源：网络</strong></p>', '<p>①向烧杯中加入蒸馏水，取紫色石蕊试液加入蒸馏水中，用玻璃棒搅拌，配制适当浓度的酸碱指示剂；</p>'],
+    // 番外实拍两图移至文字段之后
+    [
+      '<p><img src="media/2-11/media/image4.png" style="width:1.55486in;height:1.19444in" alt="截图20261114205627" />'
+      + '<img src="media/2-11/media/image5.png" style="width:1.33681in;height:1.19028in" alt="截图20261114205643" /></p>'
+      + '\n<p>番外：作者用紫葡萄皮提取了酸碱指示剂并用碱性洗洁精充当碱性物质做了变色实验，现象见右图</p>'
+      + '\n<p><strong>反应前 反应后</strong></p>\n<p><strong>图片来源：实拍</strong></p>',
+      '<p>番外：作者用紫葡萄皮提取了酸碱指示剂并用碱性洗洁精充当碱性物质做了变色实验，现象见右图</p>'
+      + '\n<p><img src="media/2-11/media/image4.png" style="width:1.55486in;height:1.19444in" alt="" />'
+      + '<img src="media/2-11/media/image5.png" style="width:1.33681in;height:1.19028in" alt="" /></p>'
+      + '\n<p class="figlabel">反应前　反应后</p>\n<p class="figsrc">图片来源：实拍</p>',
+    ],
+    // BZ 反应两张网络实拍图从段首合并至段后并排
+    [
+      '<p><img src="media/2-11/media/image8.png" style="width:2.17708in;height:2.27986in" alt="截图20261121205838" />BZ反应是一类著名的化学振荡反应，有许多不同的版本，下面以铈作催化剂时，丙二酸在稀硫酸水溶液中被溴酸盐氧化的反应为例，给出反应现象展示：</p>'
+      + '\n<p><img src="media/2-11/media/image9.png" style="width:2.78472in;height:2.27639in" alt="截图20261121205838" /></p>',
+      '<p>BZ反应是一类著名的化学振荡反应，有许多不同的版本，下面以铈作催化剂时，丙二酸在稀硫酸水溶液中被溴酸盐氧化的反应为例，给出反应现象展示：</p>'
+      + '\n<p><img src="media/2-11/media/image8.png" style="width:2.17708in;height:2.27986in" alt="" />'
+      + '<img src="media/2-11/media/image9.png" style="width:2.78472in;height:2.27639in" alt="" /></p>',
+    ],
+    // 程序② 的「图片来源：程序生成」错排在图前，移到两图之后
+    [
+      '<p><strong>图片来源：程序生成</strong></p>'
+      + '\n<p><img src="media/2-11/media/image12.png" style="width:2.76597in;height:2.41111in" alt="截图20261122151428" />'
+      + '<img src="media/2-11/media/image13.png" style="width:2.92153in;height:2.39444in" alt="截图20261122151449" /></p>',
+      '<p><img src="media/2-11/media/image12.png" style="width:2.76597in;height:2.41111in" alt="" />'
+      + '<img src="media/2-11/media/image13.png" style="width:2.92153in;height:2.39444in" alt="" /></p>'
+      + '\n<p class="figsrc">图片来源：程序生成</p>',
+    ],
     ['<p><strong>图片来源：网络</strong></p>', '<p class="figsrc">图片来源：网络</p>'],
     ['<p><strong>图片来源：程序生成</strong></p>', '<p class="figsrc">图片来源：程序生成</p>'],
     ['<p><strong>图片来源：实拍</strong></p>', '<p class="figsrc">图片来源：实拍</p>'],
     ['<p><strong>反应前 反应后</strong></p>', '<p class="figlabel">反应前　反应后</p>'],
-    // 两处「注：」是图下的小注，不是文末注释块；加类名让 structure.js 的
-    // endnotes 不再把它连同后面整篇当成注释
-    ['<p><img src="media/2-11/media/image1.png"', '<p class="pnote"><img src="media/2-11/media/image1.png"'],
+    // 两处「注：」是图下的小注，不是文末注释块
     ['<p>注：每次渲染都取用一种规则', '<p class="pnote">注：每次渲染都取用一种规则'],
     ['<p>注：由于程序基于正弦函数', '<p class="pnote">注：由于程序基于正弦函数'],
-    // 2.60 in 与 3.08 in 两张实拍同段会缩成 60 pt 高的缩略图，拆开各占一栏宽
-    ['<img src="media/2-11/media/image7.png"', '</p><p><img src="media/2-11/media/image7.png"'],
   ],
   '2-3': [[
     '<p>谢尔宾斯基三角形</p>',
@@ -177,7 +212,7 @@ export const FIG_REF = {
 // 这里逐张点名，覆盖 src/js/figures.js「只绕横幅」的默认判断：1 = 强制绕排，0 = 不绕排
 //   2-5 图3（四种平均数的星形示意）：方图默认会绕排，缩到 44% 栏宽后图里的 H/G/A/Q 标注认不出，
 //   紧跟的 M_p 公式又放不进图侧、被推到图下，左边空出一块 → 改为按原稿尺寸居中出图
-export const FIG_FLOAT = { '2-5/image2.png': 1, '2-5/image2.jpeg': 0 };
+export const FIG_FLOAT = { '2-5/image2.png': 1, '2-5/image2.jpeg': 0, '2-11/image3.jpeg': 0 };
 
 // 插图挪锚点：{ 篇号: [[图文件, 挪到哪一段之前（该段开头的原文片段）], …] }
 // 浮动图挂在哪一段，就从哪一段的位置起排；挂点离页底太近时，整张图连同图注会被推到下一页顶，
