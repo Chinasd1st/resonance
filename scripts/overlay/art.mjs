@@ -70,13 +70,13 @@ export function artSheets(map, pos) {
         plates: [
           { rgb: RGB.orange, angle: 15, lpi: 40, shift: [2, -2], absorb: 0.7, density: 0.9,
             shapes: [
-              { kind: 'radial', cx: 164, cy: 62, r0: 26, r1: 52, peak: 0.92, half_plane: [0.55, 0.84, 134, 4] },
-              { kind: 'radial', cx: 170, cy: 52, r0: 8, r1: 22, peak: 0.65, op: 'mul_inv' },
+              { kind: 'radial', cx: 164, cy: 68, r0: 22, r1: 44, peak: 0.92, half_plane: [0.55, 0.84, 138, 4] },
+              { kind: 'radial', cx: 170, cy: 58, r0: 8, r1: 20, peak: 0.65, op: 'mul_inv' },
               { kind: 'band', x0: 120, y0: 108, x1: 216, y1: 120, fade_t: 10, peak: 1.0, op: 'mul_inv' },
             ] },
           { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.92,
             shapes: [
-              { kind: 'radial', cx: 156, cy: 54, r0: 20, r1: 48, peak: 0.82, half_plane: [-0.55, -0.84, -142, 4] },
+              { kind: 'radial', cx: 156, cy: 64, r0: 18, r1: 40, peak: 0.82, half_plane: [-0.55, -0.84, -149, 4] },
               { kind: 'band', x0: 120, y0: 108, x1: 216, y1: 120, fade_t: 10, peak: 1.0, op: 'mul_inv' },
             ] },
         ],
@@ -87,9 +87,9 @@ export function artSheets(map, pos) {
           kind: 'halftone', paper: RGB.paperWarm, seed: 42 + i, dpi: 150, quality: 84,
           plates: [
             { rgb: RGB.orange, angle: 15, lpi: 40, shift: [2, -1], absorb: 0.7, density: 0.85,
-              shapes: [{ kind: 'radial', cx: 196, cy: 278, r0: 6, r1: 36, peak: 0.88 }] },
+              shapes: [{ kind: 'radial', cx: 204, cy: 252, r0: 4, r1: 28, peak: 0.82 }] },
             { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.88,
-              shapes: [{ kind: 'radial', cx: 188, cy: 282, r0: 4, r1: 26, peak: 0.72 }] },
+              shapes: [{ kind: 'radial', cx: 196, cy: 256, r0: 3, r1: 20, peak: 0.58 }] },
           ],
         });
         out[p] = { html: imgTag(n, full) };
@@ -104,16 +104,16 @@ export function artSheets(map, pos) {
         plates: [
           { rgb: RGB.blue, angle: 15, lpi: 40, shift: [1, -1], absorb: 0.7, density: 0.9,
             shapes: [
-              { kind: 'band', x0: 126, y0: 0, x1: 216, y1: 108, fade_l: 36, fade_b: 28, peak: 0.85 },
+              { kind: 'band', x0: 126, y0: 28, x1: 216, y1: 108, fade_l: 36, fade_t: 14, fade_b: 24, peak: 0.85 },
               { kind: 'band', x0: 0, y0: 112, x1: 36, y1: 303, fade_r: 20, fade_t: 18, peak: 0.65 },
             ] },
           { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.92,
             shapes: [
-              { kind: 'band', x0: 148, y0: 18, x1: 216, y1: 88, fade_l: 28, fade_t: 14, fade_b: 24, peak: 0.78 },
+              { kind: 'band', x0: 148, y0: 34, x1: 216, y1: 88, fade_l: 28, fade_t: 14, fade_b: 20, peak: 0.76 },
               { kind: 'band', x0: 0, y0: 140, x1: 24, y1: 303, fade_r: 14, fade_t: 22, peak: 0.52 },
             ] },
           { rgb: RGB.chem, angle: 75, lpi: 42, shift: [2, 1], absorb: 0.65, density: 0.85,
-            shapes: [{ kind: 'radial', cx: 190, cy: 52, r0: 6, r1: 24, peak: 0.75 }] },
+            shapes: [{ kind: 'radial', cx: 190, cy: 58, r0: 6, r1: 22, peak: 0.75 }] },
         ],
       });
       out[p0] = { html: imgTag(n0, full) + railL };
@@ -122,9 +122,9 @@ export function artSheets(map, pos) {
           kind: 'halftone', paper: RGB.tint, seed: 52 + i, dpi: 200, quality: 85,
           plates: [
             { rgb: RGB.blue, angle: 15, lpi: 40, shift: [1, -1], absorb: 0.7, density: 0.88,
-              shapes: [{ kind: 'band', x0: 172, y0: 0, x1: 216, y1: 303, fade_l: 24, peak: 0.78 }] },
+              shapes: [{ kind: 'band', x0: 176, y0: 0, x1: 216, y1: 303, fade_l: 22, peak: 0.72 }] },
             { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.92,
-              shapes: [{ kind: 'band', x0: 178, y0: 90, x1: 216, y1: 303, fade_l: 22, fade_t: 140, peak: 0.85 }] },
+              shapes: [{ kind: 'band', x0: 192, y0: 90, x1: 216, y1: 303, fade_l: 14, fade_t: 120, peak: 0.85 }] },
           ],
         });
         out[p] = { html: imgTag(n, full) + railR };
@@ -136,12 +136,12 @@ export function artSheets(map, pos) {
         kind: 'halftone', paper: RGB.paperWarm, seed: 71, dpi: 300,
         plates: [
           { rgb: RGB.news, angle: 15, lpi: 38, shift: [2, -1], absorb: 0.7, density: 0.9,
-            shapes: [{ kind: 'radial', cx: 168, cy: 52, r0: 16, r1: 42, peak: 0.85 }] },
+            shapes: [{ kind: 'radial', cx: 168, cy: 56, r0: 14, r1: 36, peak: 0.85 }] },
           { rgb: RGB.blueDeep, angle: 45, lpi: 42, shift: [0, 0], absorb: 0.7, density: 0.88,
             shapes: [
-              { kind: 'slats', x0: 116, y0: 0, x1: 216, y1: 108, angle: -24, pitch: 11, duty: 0.34, fade_l: 36, fade_b: 28, peak: 0.42 },
-              { kind: 'radial', cx: 168, cy: 52, r0: 38, r1: 58, peak: 0.38, op: 'add' },
-              { kind: 'radial', cx: 168, cy: 52, r0: 22, r1: 36, peak: 0.85, op: 'mul_inv' },
+              { kind: 'slats', x0: 116, y0: 26, x1: 216, y1: 106, angle: -24, pitch: 11, duty: 0.34, fade_l: 36, fade_t: 14, fade_b: 24, peak: 0.42 },
+              { kind: 'radial', cx: 168, cy: 56, r0: 32, r1: 50, peak: 0.36, op: 'add' },
+              { kind: 'radial', cx: 168, cy: 56, r0: 20, r1: 32, peak: 0.85, op: 'mul_inv' },
             ] },
         ],
       });
@@ -153,10 +153,10 @@ export function artSheets(map, pos) {
         kind: 'halftone', paper: RGB.paperWarm, seed: 81, dpi: 300,
         plates: [
           { rgb: RGB.orange, angle: 15, lpi: 40, shift: [2, -1], absorb: 0.7, density: 0.9,
-            shapes: [{ kind: 'radial', cx: 174, cy: 84, r0: 14, r1: 52, peak: 0.9, half_plane: [0, -1, -98, 6] }] },
+            shapes: [{ kind: 'radial', cx: 174, cy: 70, r0: 12, r1: 42, peak: 0.9, half_plane: [0, -1, -84, 5] }] },
           { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.92,
-            shapes: [{ kind: 'ridge', pts: [[108, 102], [136, 92], [160, 96], [186, 82], [216, 88]],
-              feather_top: 2.5, fade_bottom: [104, 114], x0: 108, fade_l: 22, peak: 0.88 }] },
+            shapes: [{ kind: 'ridge', pts: [[112, 88], [138, 78], [162, 83], [186, 68], [216, 75]],
+              feather_top: 2.5, fade_bottom: [88, 96], x0: 112, fade_l: 20, peak: 0.86 }] },
         ],
       });
       out[p0] = { html: imgTag(n0, full) };
