@@ -96,6 +96,6 @@ npm run diff -- 旧.pdf 新.pdf   # 逐页像素回归
 | `dist/resonance-screen.pdf` | 210 × 297 | = Media | 阅读版 |
 | `dist/resonance-print-rgb.pdf` | 216 × 303 | 内缩 3 mm | 付印（RGB） |
 | `dist/resonance-print-cmyk.pdf` | 216 × 303 | 内缩 3 mm | DeviceCMYK + OutputIntent |
-| `dist/resonance-demo.pdf` | 同 screen | 同 screen | 叠水印试读版 |
+| `dist/resonance-demo.pdf` | 同 print-rgb（216 × 303） | 同 print-rgb | 叠水印试读版（`build-demo.mjs` 以 print-rgb 为底） |
 
 `dist/*.pdf` 被 Acrobat 打开时无法替换，`pdf/merge.py` 会另存 `.new.pdf` 并以 exit 2 退出（`LOCKED`）——关掉阅读器重跑。
