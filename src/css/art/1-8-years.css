@@ -1,0 +1,31 @@
+/* 1-8 岁月：黄昏沉山（p21）至深夜冷月（p22）的昼夜反转半调双联排版。 */
+.article.art-years .opener.aop { height: calc(var(--bl) * 16); }         /* 240pt：留足 480pt 让前 20 行（450pt）稳落黄昏页 */
+.art-years .aop { color: var(--c-ink); }
+.art-years .aop .k { color: var(--c-k70); }
+.art-years .aop .k .tags b { color: var(--c-orange) !important; }
+.art-years .aop .num {
+  position: absolute; left: -3pt; top: calc(var(--bl) * 1.5);
+  /* 大编号与标题「岁月」形成温暖落日到夜色的字重反差 */
+  font: 700 84pt/78pt var(--ff-display); letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums; color: var(--c-orange);
+}
+.art-years .aop .title {
+  position: absolute; left: 0; top: calc(var(--bl) * 7.5);
+  font: 900 44pt/52.5pt "SHSerif", serif; letter-spacing: .06em; color: var(--c-ink);
+}
+.art-years .aop .foot {
+  position: absolute; left: 0; right: 0; bottom: var(--bl);
+  padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-k45);
+  display: flex; justify-content: space-between; align-items: baseline;
+  font: var(--t-byline); color: var(--c-k70);
+}
+.art-years .aop .foot .who { font-weight: 700; color: var(--c-ink); }
+.art-years .aop .foot .who span { font-weight: 500; color: var(--c-k70); margin-left: 6pt; }
+.art-years .aop .foot .en { font: var(--t-tag); letter-spacing: .12em; color: var(--c-orange); }
+
+/* 从「也挽留不住月光」切换至夜页（p22），之后诗行转入反白纸色 */
+.art-years .text p.night-turn { break-before: page; }
+.art-years .text p.night-turn,
+.art-years .text p.night-turn ~ p { color: var(--c-paper); }
+.art-years .text p.coda-line { font-weight: 600; color: var(--c-tint); }
+.art-years .text p:not(.coda-line) + p.coda-line { margin-top: var(--bl-half); }

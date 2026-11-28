@@ -147,6 +147,32 @@ export function artSheets(map, pos) {
       });
       out[p0] = { html: imgTag(n0, full) };
     }
+    if (id === '1-8') {
+      const [p0, ...rest] = pages;
+      const n0 = img('1-8-p1', {
+        kind: 'halftone', paper: RGB.paperWarm, seed: 81, dpi: 300,
+        plates: [
+          { rgb: RGB.orange, angle: 15, lpi: 40, shift: [2, -1], absorb: 0.7, density: 0.9,
+            shapes: [{ kind: 'radial', cx: 174, cy: 84, r0: 14, r1: 52, peak: 0.9, half_plane: [0, -1, -98, 6] }] },
+          { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.92,
+            shapes: [{ kind: 'ridge', pts: [[108, 102], [136, 92], [160, 96], [186, 82], [216, 88]],
+              feather_top: 2.5, fade_bottom: [104, 114], x0: 108, fade_l: 22, peak: 0.88 }] },
+        ],
+      });
+      out[p0] = { html: imgTag(n0, full) };
+      rest.forEach((p, i) => {
+        const n = img(`1-8-p${i + 2}`, {
+          kind: 'halftone', paper: RGB.ink, tex_strength: 0.4, seed: 82 + i, dpi: 300,
+          plates: [
+            { rgb: RGB.blue, angle: 15, lpi: 40, shift: [2, -1], absorb: 0.5, density: 0.92, blend: 'over',
+              shapes: [{ kind: 'radial', cx: 162, cy: 215, r0: 18, r1: 68, peak: 0.58 }] },
+            { rgb: RGB.tint, angle: 45, lpi: 42, shift: [0, 0], absorb: 0.4, density: 0.96, blend: 'over',
+              shapes: [{ kind: 'radial', cx: 162, cy: 215, r0: 12, r1: 30, peak: 0.92 }] },
+          ],
+        });
+        out[p] = { html: imgTag(n, full), dark: true };
+      });
+    }
     if (id === '1-6') {
       const [p0, ...rest] = pages;
       // 满版：全页 216 × 303 mm 统一渲染银盐黑底与 35mm 颗粒，花卉羽化嵌入下三分之二，

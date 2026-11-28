@@ -54,6 +54,13 @@ function artOpener(a, kicker, tags, who) {
       <h1 class="title">${esc(a.title)}</h1>
       <div class="foot"><span class="en">MID-AUTUMN · EIGHTH MONTH FIFTEENTH</span><span>月光如水 · 与谁同</span></div>
     </header>`;
+  if (a.id === '1-8') return `
+    <header class="opener aop">
+      <div class="k"><span>${kicker}</span><span class="tags">${tags}</span></div>
+      <div class="num">${pad(a.seq)}</div>
+      <h1 class="title">${esc(a.title)}</h1>
+      <div class="foot"><span class="who">${who}</span><span class="en">DUSK &amp; MOONLIGHT // YEARS</span></div>
+    </header>`;
   if (a.id === '1-6') return `
     <header class="opener aop">
       <div class="sw-top"><span>${kicker} // ${FORM_EN[a.form] || ''}</span><span>RESONANCE · VOL. 02</span></div>
@@ -104,6 +111,12 @@ function artFrag(a, frag) {
   if (a.id === '1-7') {
     if (!frag.includes('<p>——八月十五</p>')) console.warn('ART miss 1-7 sign');
     frag = frag.replace('<p>——八月十五</p>', '<p class="sign">——八月十五</p>');
+  }
+  if (a.id === '1-8') {
+    if (!frag.includes('<p>也挽留不住月光</p>')) console.warn('ART miss 1-8 night-turn');
+    frag = frag.replace('<p>也挽留不住月光</p>', '<p class="night-turn">也挽留不住月光</p>');
+    frag = frag.replace('<p>夕阳下山 明月又亮</p>', '<p class="coda-line">夕阳下山 明月又亮</p>');
+    frag = frag.replace('<p>年年岁月 何苦情长</p>', '<p class="coda-line">年年岁月 何苦情长</p>');
   }
   return frag;
 }

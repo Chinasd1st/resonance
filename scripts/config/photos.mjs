@@ -42,6 +42,7 @@ export const ART = {
   '1-5': { cls: 'art-shaft' },
   '1-6': { cls: 'art-swiss', full: true },
   '1-7': { cls: 'art-moon' },
+  '1-8': { cls: 'art-years' },
 };
 
 // 油墨色（RGB），与 tokens.css 同值：c.ink / c.blue / c.blueDeep / c.orange / c.news / c.tint / c.chem / 暖纸
