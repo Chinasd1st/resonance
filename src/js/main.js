@@ -21,6 +21,8 @@
     RS.text.cleanText(text);
     RS.tables.tables(text);
     RS.math.math(text);
+    // 提示行在上面的公式排版之后才能量到下块的真实高度
+    RS.structure.keepNext(text);
     // endnotes of a poem/lyric must not inherit the verse column: pull them back to the body margin
     if (sec.classList.contains('verse')) {
       const nb = text.querySelector('.notes');

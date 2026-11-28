@@ -8,6 +8,10 @@ import { fig23square } from './2-3-quarter.mjs';
 import { fig23seg } from './2-3-segment.mjs';
 import { sierpinski, koch, vicsek, hilbert } from './2-3-fractal-set.mjs';
 import { fig28 } from './2-8-fourier.mjs';
+import {
+  phiSnowflake, hexSnowflake, dendriteSnowflake,
+  coralFractal, metasequoiaFractal, phiLeafFractal, selaginellaFractal,
+} from './2-10-fractals.mjs';
 
 export const FIGURES = {
   '2-1/image1.jpeg': fig21,
@@ -20,4 +24,11 @@ export const FIGURES = {
   '2-3/image4.jpeg': vicsek,
   '2-3/image5.jpeg': hilbert,
   '2-8/image2.png': fig28,
+  '2-10/image12.jpeg': phiSnowflake,
+  '2-10/image13.jpeg': hexSnowflake,
+  '2-10/image14.png': dendriteSnowflake,
+  '2-10/image24.png': coralFractal,
+  '2-10/image25.png': metasequoiaFractal,
+  '2-10/image26.jpeg': phiLeafFractal,
+  '2-10/image27.jpeg': selaginellaFractal,
 };

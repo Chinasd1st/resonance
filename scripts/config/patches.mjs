@@ -26,9 +26,6 @@ export const FIG_W = {
     'image4.jpeg': [1.077, 1.0556],
     'image5.jpeg': [1.0556, 1.0556],
   },
-  // 2-10：珊瑚分形 3.46 in 比一栏（3.32 in）宽 3 mm，落到通栏会横断两栏且留白；
-  // 收到 3.20 in 留住栏内
-  '2-10': { 'image24.png': [3.2, 2.4554] },
 };
 
 // pandoc 转换丢段的地方在这里补回来：docx 里那段正文前面挂着一个「图注文本框」，
@@ -48,40 +45,138 @@ export const TEXT_FIX = {
       + '已有记忆数（<span class="math inline">M</span>）则有',
     ],
   ],
-  // 2-10：八个「自然分形」的例子在原稿里各是一行加粗（会被当成八个小标题），
-  // 实际是同一句里的并列词，收成一行；「图片来源」与「反应前 反应后」同理，
-  // 它们是图注不是标题，加类名挡住 structure.js 的「整段加粗→标题」判定
+  // 2-10：八张自然分形归位至「我们先来欣赏下面一组图片：」之后排成 2×4 图版；
+  // 还原雪花 / 油滴 / 树木 / 群山各组图与「程序模拟：」「图片来源：」的真实先后顺序
   '2-10': [
+    ['<p>名词注释：</p>', '<p class="keepnext">名词注释：</p>'],
     [
       '<p><strong>雨花石</strong></p>\n<p><strong>雪花</strong></p>\n<p><strong>水晶</strong></p>'
       + '\n<p><strong>铋晶体</strong></p>\n<p><strong>星云</strong></p>\n<p><strong>萤石</strong></p>'
-      + '\n<p><strong>潮汐树</strong></p>\n<p><strong>罗马花椰菜</strong></p>',
-      '<p class="kwline">雨花石　雪花　水晶　铋晶体　星云　萤石　潮汐树　罗马花椰菜</p>',
+      + '\n<p><strong>潮汐树</strong></p>\n<p><strong>罗马花椰菜</strong></p>'
+      + '\n<p><img src="media/2-10/media/image8.png" style="width:1.32917in;height:1.66597in" alt="ys" /></p>',
+      '<p>有了非欧几何，我们可以扩展研究的对象，将平直的空间扩展到扭曲的空间。但这还远远不够。自然界的许多物体并非只有平直和弯曲之分。我们先来欣赏下面一组图片：</p>'
+      + '\n<p><img src="media/2-10/media/image8.png" style="width:1.32917in;height:1.66597in" alt="萤石" />'
+      + '<img src="media/2-10/media/image7.jpeg" style="width:1.62222in;height:1.64792in" alt="罗马花椰菜" />'
+      + '<img src="media/2-10/media/image6.jpeg" style="width:1.26597in;height:1.68125in" alt="潮汐树" />'
+      + '<img src="media/2-10/media/image2.jpeg" style="width:1.29792in;height:1.69792in" alt="星云" /></p>'
+      + '\n<p><img src="media/2-10/media/image4.jpeg" style="width:1.45347in;height:1.75972in" alt="铋晶体" />'
+      + '<img src="media/2-10/media/image5.jpeg" style="width:1.45972in;height:1.83472in" alt="水晶" />'
+      + '<img src="media/2-10/media/image3.jpeg" style="width:1.67153in;height:1.85278in" alt="雪花" />'
+      + '<img src="media/2-10/media/image1.jpeg" style="width:1.57569in;height:1.82778in" alt="雨花石" /></p>',
+    ],
+    [
+      '<p><strong>图片来源：网络</strong></p>'
+      + '\n<p><img src="media/2-10/media/image12.jpeg" style="width:2.37986in;height:2.69097in" alt="正六边形——φ雪花" />'
+      + '<img src="media/2-10/media/image13.jpeg" style="width:2.6in;height:2.71597in" alt="雪花分形.（2,108）" />'
+      + '<img src="media/2-10/media/image14.png" style="width:2.41042in;height:2.79653in" alt="雪花分形.（1+pt·φ+1÷φ,192）" />程序模拟：</p>'
+      + '\n<p><strong>图片来源：程序生成</strong></p>',
+      '<p><img src="media/2-10/media/image11.png" style="width:2.09306in;height:2.61736in" alt="" />'
+      + '<img src="media/2-10/media/image10.GIF" style="width:2.62014in;height:2.62014in" alt="" />'
+      + '<img src="media/2-10/media/image9.png" style="width:2.57222in;height:2.63056in" alt="" /></p>'
+      + '\n<p class="figsrc">图片来源：网络</p>\n<p class="keepnext">程序模拟：</p>'
+      + '\n<p><img src="media/2-10/media/image14.png" style="width:2.41042in;height:2.79653in" alt="雪花分形.（1+pt·φ+1÷φ,192）" />'
+      + '<img src="media/2-10/media/image13.jpeg" style="width:2.6in;height:2.71597in" alt="雪花分形.（2,108）" />'
+      + '<img src="media/2-10/media/image12.jpeg" style="width:2.37986in;height:2.69097in" alt="正六边形——φ雪花" /></p>'
+      + '\n<p class="figsrc">图片来源：程序生成</p>',
+    ],
+    [
+      '<img src="media/2-10/media/image15.png" style="width:2.98333in;height:2.51528in" alt="截图20261121222256" /><img src="media/2-10/media/image16.png" style="width:3.46181in;height:2.44306in" alt="截图20261121222229" />',
+      '<img src="media/2-10/media/image16.png" style="width:3.46181in;height:2.44306in" alt="" /><img src="media/2-10/media/image15.png" style="width:2.98333in;height:2.51528in" alt="" />',
+    ],
+    [
+      '<img src="media/2-10/media/image17.jpeg" style="width:2.21042in;height:2.21042in" alt="随机相切圆.填充.主颜色亮度渲染.嵌套.(50,2,0.3,1,1,255 192 0)" />'
+      + '<img src="media/2-10/media/image18.jpeg" style="width:2.16181in;height:2.16181in" alt="随机相切圆.填充.坐标渲染.嵌套.(50,2,0.3)" />'
+      + '<img src="media/2-10/media/image19.jpeg" style="width:2.19514in;height:2.19514in" alt="随机相切圆.填充.主颜色亮度渲染.(50,0.3,2.3,0,255 192 0)" />'
+      + '<img src="media/2-10/media/image20.jpeg" style="width:2.24028in;height:2.24028in" alt="随机相切圆.填充.坐标渲染.(300,0.01)" />'
+      + '<img src="media/2-10/media/image21.jpeg" style="width:2.25278in;height:2.25278in" alt="随机相切圆.填充.(150,1)" />',
+      '<img src="media/2-10/media/image21.jpeg" style="width:2.25278in;height:2.25278in" alt="随机相切圆.填充.(150,1)" />'
+      + '<img src="media/2-10/media/image20.jpeg" style="width:2.24028in;height:2.24028in" alt="随机相切圆.填充.坐标渲染.(300,0.01)" />'
+      + '<img src="media/2-10/media/image19.jpeg" style="width:2.19514in;height:2.19514in" alt="随机相切圆.填充.主颜色亮度渲染.(50,0.3,2.3,0,255 192 0)" /></p>'
+      + '\n<p><img src="media/2-10/media/image18.jpeg" style="width:2.16181in;height:2.16181in" alt="随机相切圆.填充.坐标渲染.嵌套.(50,2,0.3)" />'
+      + '<img src="media/2-10/media/image17.jpeg" style="width:2.21042in;height:2.21042in" alt="随机相切圆.填充.主颜色亮度渲染.嵌套.(50,2,0.3,1,1,255 192 0)" />',
+    ],
+    [
+      '<img src="media/2-10/media/image22.jpeg" style="width:1.31181in;height:1.75in" alt="4af92bdd8d6ec932cef595744018477e301" /><img src="media/2-10/media/image23.png" style="width:2.89653in;height:1.71944in" alt="截图20261122102307" />',
+      '<img src="media/2-10/media/image23.png" style="width:2.89653in;height:1.71944in" alt="" /><img src="media/2-10/media/image22.jpeg" style="width:1.31181in;height:1.75in" alt="" />',
+    ],
+    ['</p>\n<p><img src="media/2-10/media/image27.jpeg"', '<img src="media/2-10/media/image27.jpeg"'],
+    // pandoc 完全看不见的两张：28（网络实拍，竖幅截图）与 31/32/33（程序输出的三张山）。
+    // 它们原本和 29/30 混在同一段浮动图形里，只能按位置补回去。
+    // 注意 find 不能写进「还没有出现在 HTML 里」的 img ——那正是 2-10 早先五处 miss 的原因
+    ['<p><img src="media/2-10/media/image29.png"',
+      '<p>话不多说，直接看图像：</p>\n<p><img src="media/2-10/media/image29.png"'],
+    ['alt="截图20261122140916" />',
+      'alt="截图20261122140916" /><img src="media/2-10/media/image28.png" style="width:1.43403in;height:2.01875in" alt="" />'],
+    [
+      '<p><strong>图片来源：网络</strong></p>\n<p><strong>图片来源：程序生成</strong></p>',
+      '<p class="figsrc">图片来源：网络</p>'
+      + '\n<p><img src="media/2-10/media/image31.jpeg" style="width:2.53333in;height:2.53333in" alt="山峰模拟.半山.(10 2 1 0 30 (0 255 0))" />'
+      + '<img src="media/2-10/media/image32.jpeg" style="width:2.41111in;height:2.41111in" alt="山峰模拟.半山.(100 1 0.9 π÷2 25 (0 193 92))" />'
+      + '<img src="media/2-10/media/image33.png" style="width:2.42639in;height:2.42639in" alt="山峰模拟.半山.(100 1 1 π 50 (0 152 0))" /></p>'
+      + '\n<p class="figsrc">图片来源：程序生成</p>',
     ],
     ['<p><strong>图片来源：网络</strong></p>', '<p class="figsrc">图片来源：网络</p>'],
     ['<p><strong>图片来源：程序生成</strong></p>', '<p class="figsrc">图片来源：程序生成</p>'],
-    // 五张随机相切圆原在一个段落里 → 一行五个缩略图（每个 14 mm，什么都看不清）。
-    // 拆成 3 + 2 两行，单格回到 24 mm / 38 mm
-    ['<img src="media/2-10/media/image19.jpeg"', '</p><p><img src="media/2-10/media/image19.jpeg"'],
-    // 珊瑚（3.46 in）与水杉（1.42 in）同段会被判成通栏行，竖幅的水杉被拉到半页高。
-    // 拆成两张单图，珊瑚另收到 3.2 in 以便留在栏内
-    ['<img src="media/2-10/media/image25.png"', '</p><p><img src="media/2-10/media/image25.png"'],
   ],
   '2-11': [
     // 原稿的两节标题只是普通段落，升成 h3，才和 2-10 的小节同一层级
     ['<p>第一章：酸碱指示剂变色实验</p>', '<h3>第一章：酸碱指示剂变色实验</h3>'],
     ['<p>第二章：BZ反应现象模拟</p>', '<h3>第二章：BZ反应现象模拟</h3>'],
+    // 开头两张烧杯图（image2 反应前紫、image1 反应后红）原稿浮动在步骤②旁，pandoc 却错吐在开头「注：」里
+    ['<p><img src="media/2-11/media/image1.png" style="width:1.28542in;height:1.65069in" alt="截图20261114201547" /><img src="media/2-11/media/image2.png" style="width:1.20278in;height:1.65347in" alt="截图20261114201523" />注：分析软件为Python', '<p class="pnote">注：分析软件为Python'],
+    [
+      '<p><strong>反应前 反应后</strong></p>\n<p><strong>图片来源：网络</strong></p>',
+      '<p>②用镊子夹取一小块干冰，放入配制好的酸碱指示剂中并观察现象（现象如右图）。</p>'
+      + '\n<p><img src="media/2-11/media/image2.png" style="width:1.20278in;height:1.65347in" alt="" />'
+      + '<img src="media/2-11/media/image1.png" style="width:1.28542in;height:1.65069in" alt="" /></p>'
+      + '\n<p class="figlabel">反应前　反应后</p>\n<p class="figsrc">图片来源：网络</p>',
+    ],
+    // 番外实拍两图移至文字段之后
+    [
+      '<p><img src="media/2-11/media/image4.png" style="width:1.55486in;height:1.19444in" alt="截图20261114205627" />'
+      + '<img src="media/2-11/media/image5.png" style="width:1.33681in;height:1.19028in" alt="截图20261114205643" /></p>'
+      + '\n<p>番外：作者用紫葡萄皮提取了酸碱指示剂并用碱性洗洁精充当碱性物质做了变色实验，现象见右图。</p>'
+      + '\n<p><strong>反应前 反应后</strong></p>\n<p><strong>图片来源：实拍</strong></p>',
+      '<p>番外：作者用紫葡萄皮提取了酸碱指示剂并用碱性洗洁精充当碱性物质做了变色实验，现象见右图。</p>'
+      + '\n<p><img src="media/2-11/media/image4.png" style="width:1.55486in;height:1.19444in" alt="" />'
+      + '<img src="media/2-11/media/image5.png" style="width:1.33681in;height:1.19028in" alt="" /></p>'
+      + '\n<p class="figlabel">反应前　反应后</p>\n<p class="figsrc">图片来源：实拍</p>',
+    ],
+    // BZ 反应两张网络实拍图从段首合并至段后并排
+    [
+      '<p><img src="media/2-11/media/image8.png" style="width:2.17708in;height:2.27986in" alt="截图20261121205838" />BZ反应是一类著名的化学振荡反应，有许多不同的版本，下面以铈作催化剂时，丙二酸在稀硫酸水溶液中被溴酸盐氧化的反应为例，给出反应现象展示：</p>'
+      + '\n<p><img src="media/2-11/media/image9.png" style="width:2.78472in;height:2.27639in" alt="截图20261121205838" /></p>',
+      '<p>BZ反应是一类著名的化学振荡反应，有许多不同的版本，下面以铈作催化剂时，丙二酸在稀硫酸水溶液中被溴酸盐氧化的反应为例，给出反应现象展示：</p>'
+      + '\n<p><img src="media/2-11/media/image8.png" style="width:2.17708in;height:2.27986in" alt="" />'
+      + '<img src="media/2-11/media/image9.png" style="width:2.78472in;height:2.27639in" alt="" /></p>',
+    ],
+    // 程序② 的「图片来源：程序生成」错排在图前，移到两图之后
+    [
+      '<p><strong>图片来源：程序生成</strong></p>\n<p>注：由于程序基于正弦函数',
+      '<p><img src="media/2-11/media/image12.png" style="width:2.76597in;height:2.41111in" alt="" />'
+      + '<img src="media/2-11/media/image13.png" style="width:2.92153in;height:2.39444in" alt="" /></p>'
+      + '\n<p class="figsrc">图片来源：程序生成</p>'
+      + '\n<p class="pnote">注：由于程序基于正弦函数',
+    ],
+    // 清理临时截图文件名，使图注编号与同组其余图统一
+    ['alt="C:/Users/Pi/Desktop/Video/碱 颜色变化 2(1).png碱 颜色变化 2(1)"', 'alt=""'],
+    ['alt="bz 1"', 'alt=""'],
+    ['<p>实验原理：</p>', '<p class="keepnext">实验原理：</p>'],
+    ['<p>颜色分析：</p>', '<p class="keepnext">颜色分析：</p>'],
     ['<p><strong>图片来源：网络</strong></p>', '<p class="figsrc">图片来源：网络</p>'],
     ['<p><strong>图片来源：程序生成</strong></p>', '<p class="figsrc">图片来源：程序生成</p>'],
-    ['<p><strong>图片来源：实拍</strong></p>', '<p class="figsrc">图片来源：实拍</p>'],
-    ['<p><strong>反应前 反应后</strong></p>', '<p class="figlabel">反应前　反应后</p>'],
-    // 两处「注：」是图下的小注，不是文末注释块；加类名让 structure.js 的
-    // endnotes 不再把它连同后面整篇当成注释
-    ['<p><img src="media/2-11/media/image1.png"', '<p class="pnote"><img src="media/2-11/media/image1.png"'],
+    // 两处「注：」是图下的小注，不是文末注释块
     ['<p>注：每次渲染都取用一种规则', '<p class="pnote">注：每次渲染都取用一种规则'],
-    ['<p>注：由于程序基于正弦函数', '<p class="pnote">注：由于程序基于正弦函数'],
-    // 2.60 in 与 3.08 in 两张实拍同段会缩成 60 pt 高的缩略图，拆开各占一栏宽
-    ['<img src="media/2-11/media/image7.png"', '</p><p><img src="media/2-11/media/image7.png"'],
+  ],
+  // 1-9：原稿分节号跳过了 2（1、3、4…），按连续序号重排；
+  // 番外一标题自带一个冒号，下一段又单独排了一个「：」，删掉重复的那段
+  '1-9': [
+    ['<p>3.</p>', '<p>2.</p>'],
+    ['<p>4.</p>', '<p>3.</p>'],
+    ['<p>5.</p>', '<p>4.</p>'],
+    ['<p>6.</p>', '<p>5.</p>'],
+    ['<p>7.</p>', '<p>6.</p>'],
+    ['<p>：</p>', ''],
   ],
   '2-3': [[
     '<p>谢尔宾斯基三角形</p>',
@@ -104,6 +199,12 @@ export const FIG_REF = {
     // 肖像在版面上居中、正文另起，说「右边」既不对也不是坐标；改指图号
     ['认识右边这个人吗？', '认识[[fig:image2.png]]里的这个人吗？'],
   ],
+  // 2-11 的两处「右图」都指一对「反应前／反应后」并置图，按出图顺序各给一个图号。
+  // 这两处分别由 TEXT_FIX 补入与原文带入，所以要在 TEXT_FIX 之后处理（见 applyPatches 顺序）
+  '2-11': [
+    ['（现象如右图）', '（现象如[[fig:image2.png]]、[[fig:image1.png]]）'],
+    ['现象见右图。', '现象见[[fig:image4.png]]、[[fig:image5.png]]。'],
+  ],
 };
 
 // 竖幅肖像默认不绕排（绕排会把行宽挤窄，Chrome 把浮动图推到页顶时还会留空洞），
@@ -111,7 +212,7 @@ export const FIG_REF = {
 // 这里逐张点名，覆盖 src/js/figures.js「只绕横幅」的默认判断：1 = 强制绕排，0 = 不绕排
 //   2-5 图3（四种平均数的星形示意）：方图默认会绕排，缩到 44% 栏宽后图里的 H/G/A/Q 标注认不出，
 //   紧跟的 M_p 公式又放不进图侧、被推到图下，左边空出一块 → 改为按原稿尺寸居中出图
-export const FIG_FLOAT = { '2-5/image2.png': 1, '2-5/image2.jpeg': 0 };
+export const FIG_FLOAT = { '2-5/image2.png': 1, '2-5/image2.jpeg': 0, '2-11/image3.jpeg': 0 };
 
 // 插图挪锚点：{ 篇号: [[图文件, 挪到哪一段之前（该段开头的原文片段）], …] }
 // 浮动图挂在哪一段，就从哪一段的位置起排；挂点离页底太近时，整张图连同图注会被推到下一页顶，

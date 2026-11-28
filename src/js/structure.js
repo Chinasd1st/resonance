@@ -126,5 +126,22 @@
     }
   }
 
-  RS.structure = { stripHead, structure };
+  // 「实验原理：」「颜色分析：」这类引出下一块的短提示行，Chrome 不认 break-after: avoid
+  // （后面是带 break-inside: avoid 的行间公式时尤其不认，标签会被单独留在页底）。
+  // 只能把标签和下块包进一个不可切分的盒子，让分页点落在盒子之前。
+  // 下块本身超过一页高时不包：那样的盒子会溢出一页，反而更糟
+  const PAGE_PX = 248 / 25.4 * 96;   // 版心高（@page 上下边距之外）
+  function keepNext(text) {
+    text.querySelectorAll(':scope > p.keepnext').forEach(p => {
+      const next = p.nextElementSibling;
+      if (!next || next.classList.contains('keepbox')) return;
+      if (next.getBoundingClientRect().height > PAGE_PX * 0.85) return;
+      const box = document.createElement('div');
+      box.className = 'keepbox';
+      p.before(box);
+      box.append(p, next);
+    });
+  }
+
+  RS.structure = { stripHead, structure, keepNext };
 })(window.RS = window.RS || {});

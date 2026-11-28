@@ -34,7 +34,7 @@ export function loadArticles({ only = null } = {}) {
     const ov = OVERRIDE[m.id] || {};
     const clubs = ov.clubs || clubsFromTag(tag);
     const serif = ov.font ? ov.font === 'serif' : m.form !== 'essay';
-    return { ...m, ch, seq, tag, clubs, serif, verse: m.form === 'poem' || m.form === 'lyrics' };
+    return { ...m, ch, seq, tag, clubs, serif, verse: m.form === 'poem' || m.form === 'lyrics', docx: at('docs', f) };
   }).sort((a, b) => a.ch - b.ch || a.seq - b.seq);
 
   return { all, rendered: only ? all.filter(a => only.includes(a.id)) : all };

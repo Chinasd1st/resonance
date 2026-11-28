@@ -8,6 +8,11 @@ import { ART, ART_PHOTO } from '../config/photos.mjs';
 import { SWAP_IMG, FIG_W, FIG_FLOAT, FIG_MOVE, TEXT_FIX, FIG_REF, FIG_WRAP, TRIG_CARD } from '../config/patches.mjs';
 import { FIGURES } from '../figures/index.mjs';
 import { applyRareGlyphs } from './rare-glyphs.mjs';
+import { tagParagraphs } from './docx-tags.mjs';
+
+// 从 docx XML 回填段落对齐/缩进/段距的篇目。pandoc 只搬文本，见 content/docx-tags.mjs；
+// 先只接 1-9（诗行与书信都靠 jc/ind 定位），确认版式后再逐篇扩。
+const DOCX_LAYOUT = new Set(['1-9']);
 
 // 开篇（正文层）。kicker = 「CH 01 — 01 / 10」，tags = 社团 / 体裁
 function artOpener(a, kicker, tags, who) {
@@ -149,6 +154,9 @@ function applyPatches(a, raw) {
   let frag = raw.replace(/\r\n/g, '\n');
   // pandoc 把图片指到 build/media/…，而 book.html 就在 build/ 下，去掉多余的 build/
   frag = frag.replace(/src="build\//g, 'src="');
+  // 移除原稿自带的超链接标签及 Hyperlink 包裹 span，保留纯文本
+  frag = frag.replace(/<a\b[^>]*>([\s\S]*?)<\/a>/gi, '$1');
+  frag = frag.replace(/<span\b[^>]*data-custom-style="Hyperlink"[^>]*>([\s\S]*?)<\/span>/gi, '$1');
 
   for (const [file, rep] of Object.entries(SWAP_IMG[a.id] || {})) {
     const re = new RegExp(`<img[^>]*media/${file.replace('.', '\\.')}[^>]*>`);
@@ -215,9 +223,10 @@ function applyPatches(a, raw) {
 
 export function article(a, articles) {
   let frag = applyPatches(a, fs.readFileSync(B(`html/${a.id}.html`), 'utf8'));
-  // 公式密集的篇目改为单栏：独立公式不再通栏切断双栏正文；
-  // 2-1 的插图比一栏还宽、塞进双栏会留出大块空白，也按单栏排
-  const single = !a.verse && ((frag.match(/class="math display"/g) || []).length >= 8 || a.id === '2-1');
+  // 段落属性要在补丁之后打：补丁按 <p>text 匹配，先加属性会让锚点 miss
+  if (DOCX_LAYOUT.has(a.id)) frag = tagParagraphs(frag, a.docx);
+  // 公式密集的篇目以及 2-10 / 2-11 图版密集篇目改为单栏
+  const single = !a.verse && ((frag.match(/class="math display"/g) || []).length >= 8 || ['2-1', '2-10', '2-11'].includes(a.id));
   if (a.id === '2-3') frag = applyRareGlyphs(frag);
 
   const art = ART[a.id];

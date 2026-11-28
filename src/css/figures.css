@@ -30,10 +30,30 @@ figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
    它是图下的一行署名，右对齐、6.6 pt、k70 —— 比图注轻一档，但仍在同一基线体系里。
    选择器带 .text p 才压得住 article.css 的 `.text p { text-indent: 2em }` */
 .text p.figsrc { font: 400 6.6pt/9.9pt var(--ff-ui); letter-spacing: .02em; color: var(--c-k70);
-  text-indent: 0; text-align: right; margin: -4pt 0 10pt; }
+  text-indent: 0; text-align: right; margin: -4pt 0 10pt; break-before: avoid; }
 /* 「反应前／反应后」这类两组图的栏头：居中一行小字，不参与标题层级 */
 .text p.figlabel { font: 600 6.6pt/9.9pt var(--ff-ui); letter-spacing: .14em; color: var(--c-k70);
-  text-indent: 0; text-align: center; margin: 7pt 0 2pt; }
+  text-indent: 0; text-align: center; margin: 7pt 0 2pt; break-before: avoid; }
+/* 2-10 / 2-11 单栏模式下的多图行：不再受限于 60pt 缩略行高，按单栏宽度自然舒展 */
+[data-id="2-10"] figure.row .cell :is(img, svg.dfig),
+[data-id="2-11"] figure.row .cell :is(img, svg.dfig) { width: 100%; height: auto; max-height: 155pt; object-fit: contain; }
+[data-id="2-10"] figure.row .cell svg.dfig { max-height: 175pt; }
+/* 2-11 只有图 3 是单幅（颜色分析的散点图），其余都成对出现。单幅也收到 155 pt：
+   一来和成对的两张同高，二来省下的 20 mm 让「颜色分析 + 图 6/7」整块装进 p60 页底，
+   p60、p61 不再各留 1/4 页的空白（页末留白由 62 mm + 38 mm 变为 0 + 0）。
+   width 必须带 !important：单图的行内宽度（238.8 pt）压得过 max-height，
+   只限高会把 1.197 的画幅拉成 1.54，图 3 就成了横向压扁的图 */
+[data-id="2-11"] figure.col img { width: auto !important; height: auto !important; max-height: 155pt; }
+/* 2-10「自然模拟」四联图版：四图统一高度齐平 */
+[data-id="2-10"] figure.row[style*="--n: 4"] .cell img { height: 108pt; object-fit: cover; }
+/* 连绵群山那一组是横幅夹竖幅（image29 1.26、image30 1.08、image28 0.71）：
+   按格子底对齐时顶边参差，竖幅还会在格子里左右留白。
+   改成等高照片条 —— 三张同为 155 pt 高、宽度按比例，正好铺满栏宽，顶边、底边与图注都在一条线上 */
+[data-id="2-10"] figure.row:has(img[src$="image28.png"]) {
+  display: flex; justify-content: center; align-items: flex-end; gap: 10pt;
+}
+[data-id="2-10"] figure.row:has(img[src$="image28.png"]) .cell { flex: 0 0 auto; width: auto; }
+[data-id="2-10"] figure.row:has(img[src$="image28.png"]) .cell img { width: auto; height: 155pt; max-width: 100%; }
 /* 并列词串（2-10 的八个自然分形例子）：一行排开，靠字距分组，不用顿号。
    word-break: keep-all —— 中文默认可在任意字间断行，这行词串必须整词换行 */
 .text p.kwline { font: 500 7.4pt/12pt var(--ff-ui); letter-spacing: .04em; color: var(--c-blue-deep);
@@ -41,6 +61,11 @@ figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
 /* 图下长注（「注：分析软件为 Python……」）：按注释字号排，不占正文行距 */
 .text p.pnote { font: var(--t-note); color: var(--c-k70); text-indent: 0; text-align: left;
   margin: 0 0 7.5pt; }
+/* 引出下文图版/公式的短提示行（「实验原理：」「颜色分析：」「名词注释：」）：不孤立留在页底。
+   break-after: avoid 在 Chrome 的分页里只对纯文本块生效，后面跟着不可切分的公式时会被忽略，
+   所以 src/js/structure.js 的 keepNext 把「提示行 + 下块」包成 .keepbox 一起不可切分 */
+.text p.keepnext { break-after: avoid; }
+.text .keepbox { break-inside: avoid; }
 /* 表格里的分形四联：四张图的原比例差异很大（谢尔宾斯基近方、科赫宽扁）。
    用 grid 把单元格切成「74pt 图区 + 图注行」：图在各自的图区里垂直居中
    （不再顶着单元格上沿），图注落在同一条基线上 */

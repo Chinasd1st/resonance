@@ -38,6 +38,14 @@
 .article.sans  .text { font: var(--t-body-sans); }
 .text p { text-indent: 2em; text-align: justify; }
 .text p.noindent, .text p.eq, .text p.led { text-indent: 0; }
+/* 原稿段落属性（docx-tags）：pandoc 丢掉的居中 / 右对齐 / 齐左 / 段距，按 XML 回填。
+   诗行与题记居中，落款和阶梯行右对齐；两者都取消正文的两字首行缩进 */
+.text p[data-jc="center"] { text-align: center; text-indent: 0; }
+.text p[data-jc="right"]  { text-align: right;  text-indent: 0; }
+.text p[data-ind="flush"] { text-indent: 0; }
+/* 原稿 12 / 24 pt 段距，按 15 pt 基线取整，不破坏行网格 */
+.text p[data-gap="12"] { margin-top: var(--bl); }
+.text p[data-gap="24"] { margin-top: calc(var(--bl) * 2); }
 .text h2 { font: var(--t-h2); color: var(--c-blue); margin: calc(var(--bl) * 1.15) 0 var(--bl-half); break-after: avoid; font-feature-settings: "palt"; }
 .text h2::before { content: ""; display: inline-block; width: 9pt; height: 9pt; margin-right: 5pt; vertical-align: -.5pt; background: var(--sparkle) center / contain no-repeat; }
 .text h2:first-child, .text h3:first-child { margin-top: 0; }
