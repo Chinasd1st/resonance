@@ -59,15 +59,18 @@ npm run all                                   # 四份 PDF
 ## 5. 构建与验收
 
 ```bash
-npm run build      # 装配 + 两遍打印 + 分页回填 + 合层，约 45 秒
-npm run all        # build → demo → cmyk
+npm run build      # 全量：装配 + 两遍打印 + 分页回填 + 底图 + 合层（约 62 秒）
+npm run release    # 全量 + demo + cmyk（交付时跑，日常不要跑）
+npm run shot -- 4 20          # 从**现有** PDF 取页渲 PNG（约 2 秒，不构建）
+npm run overlay    # 复用正文层，只重做 overlay + 合层（约 10 秒）
+npm run body       # 复用 overlay 层与底图，只重做正文层 + 合层（约 15 秒）
 npm run figs       # 逐张渲出 figures/ 的 SVG，目检用
 npm run diff -- 旧.pdf 新.pdf   # 逐页像素回归
 ```
 
 ### 5.1 一次改完，只构建一次
 
-**一批改动全部写完再构建。** 不要每改一处就跑 `npm run build`——一次构建要 Chrome 打两遍再走 Python 合层，四十五秒起步；改十处就建十次，等于把同一份排版重算十遍，除了拖时间没有任何信息量。
+**一批改动全部写完再构建。** 不要每改一处就跑 `npm run build`——一次构建要 Chrome 打两遍再走 Python 合层，六十秒起步；改十处就建十次，等于把同一份排版重算十遍，除了拖时间没有任何信息量。
 
 迭代期的定位靠**局部证据**，不靠重建：
 
@@ -75,10 +78,26 @@ npm run diff -- 旧.pdf 新.pdf   # 逐页像素回归
 | --- | --- | --- |
 | 某段 HTML 补丁有没有命中 | 看 `build/html/<id>.html`、`build/book.html` | 零 |
 | 某个元素的真实位置 | `getBoundingClientRect` 量一下（Chrome 里跑几行） | 秒级 |
-| 某一页长什么样 | `pypdfium2` 把**现有** PDF 渲成 PNG，按毫米裁条看 | 秒级 |
+| **上一步的产物长什么样** | `npm run shot -- 4 20`（取页渲图，可选 `--pdf=cmyk`、`--scale=6`） | **2 s** |
+| 只改了 overlay 层（页码、书眉、色标） | `npm run overlay` | **10 s** |
+| 只改了正文层（文案、补丁表、正文 CSS），且页序不变 | `npm run body` | **15 s** |
+| 改了底图参数（`art.mjs` 的 spec） | `npm run build`（必须全量，底图要重算） | 62 s |
 | 某篇改动是否只影响自己 | `node scripts/build.mjs --only 1-2`（只排这几篇） | 十几秒 |
 
 构建一次的时机是「这一批改动我认为已经完整」，不是「改了一行想看看」。构建完一次做完 §5.2 的全部核对，不要建一次、看一页、再建一次。
+
+**日常不出 demo / cmyk。** 这两个只是同一份 PDF 的派生（叠水印 / Ghostscript 转 CMYK），每改一处就重出等于白等两分钟，而且它们不参与版式判断。只有交付或要核对印刷效果时才 `npm run release`。
+
+**全量为什么贵**：62 秒里约 40 秒花在底图（8 组半调 / 银盐 / 雾化，Python 逐像素）。所以只要没动 `art.mjs` 的 spec，`--no-art` 就是最值钱的那个开关——`npm run overlay` 与 `npm run body` 都默认带上它。
+
+### 5.1.1 增量开关的口径
+
+`--reuse=body` / `--reuse=overlay` 复用上一步的 PDF，**只在检查时用**：
+
+- 复用即代表「那一层没变」。改了正文却 `--reuse=body`，产出就是旧的，而且不会报错。
+- 增量产出**不能当交付件**：`npm run release` 必须从全量开始。
+- `--reuse=body` 与 `--only` 互斥（`--only` 会改页序），脚本里已有断言。
+- `--no-art` 复用 `build/art/*.jpg`；改了 `art.mjs` 的 spec 却加这个开关，底图不会更新。
 
 ### 5.2 每次构建必须核对
 
