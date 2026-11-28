@@ -26,9 +26,6 @@ export const FIG_W = {
     'image4.jpeg': [1.077, 1.0556],
     'image5.jpeg': [1.0556, 1.0556],
   },
-  // 2-10：珊瑚分形 3.46 in 比一栏（3.32 in）宽 3 mm，落到通栏会横断两栏且留白；
-  // 收到 3.20 in 留住栏内
-  '2-10': { 'image24.png': [3.2, 2.4554] },
 };
 
 // pandoc 转换丢段的地方在这里补回来：docx 里那段正文前面挂着一个「图注文本框」，
@@ -48,24 +45,93 @@ export const TEXT_FIX = {
       + '已有记忆数（<span class="math inline">M</span>）则有',
     ],
   ],
-  // 2-10：八个「自然分形」的例子在原稿里各是一行加粗（会被当成八个小标题），
-  // 实际是同一句里的并列词，收成一行；「图片来源」与「反应前 反应后」同理，
-  // 它们是图注不是标题，加类名挡住 structure.js 的「整段加粗→标题」判定
+  // 2-10：八张自然分形归位至「我们先来欣赏下面一组图片：」之后排成 2×4 图版；
+  // 还原雪花 / 油滴 / 树木 / 群山各组图与「程序模拟：」「图片来源：」的真实先后顺序
   '2-10': [
     [
       '<p><strong>雨花石</strong></p>\n<p><strong>雪花</strong></p>\n<p><strong>水晶</strong></p>'
-      + '\n<p><strong>铋晶体</strong></p>\n<p><strong>星云</strong></p>\n<p><strong>萤石</strong></p>'
-      + '\n<p><strong>潮汐树</strong></p>\n<p><strong>罗马花椰菜</strong></p>',
-      '<p class="kwline">雨花石　雪花　水晶　铋晶体　星云　萤石　潮汐树　罗马花椰菜</p>',
+      + '\n<p><strong>铋晶体</strong></p>\n<p><strong>星云</strong></p>'
+      + '\n<p><img src="media/2-10/media/image1.jpeg" style="width:1.57569in;height:1.82778in" alt="mn" />'
+      + '<img src="media/2-10/media/image2.jpeg" style="width:1.29792in;height:1.69792in" alt="xy" />'
+      + '<img src="media/2-10/media/image3.jpeg" style="width:1.67153in;height:1.85278in" alt="snow" />'
+      + '<img src="media/2-10/media/image4.jpeg" style="width:1.45347in;height:1.75972in" alt="bi" />'
+      + '<img src="media/2-10/media/image5.jpeg" style="width:1.45972in;height:1.83472in" alt="crystal" /></p>'
+      + '\n<p><strong>萤石</strong></p>\n<p><strong>潮汐树</strong></p>\n<p><strong>罗马花椰菜</strong></p>'
+      + '\n<p><img src="media/2-10/media/image6.jpeg" style="width:1.26597in;height:1.68125in" alt="cxs" />'
+      + '<img src="media/2-10/media/image7.jpeg" style="width:1.62222in;height:1.64792in" alt="hyc" /></p>'
+      + '\n<p>有了非欧几何，我们可以扩展研究的对象，将平直的空间扩展到扭曲的空间。但这还远远不够。自然界的许多物体并非只有平直和弯曲之分。我们先来欣赏下面一组图片：</p>'
+      + '\n<p><img src="media/2-10/media/image8.png" style="width:1.32917in;height:1.66597in" alt="ys" /></p>',
+      '<p>有了非欧几何，我们可以扩展研究的对象，将平直的空间扩展到扭曲的空间。但这还远远不够。自然界的许多物体并非只有平直和弯曲之分。我们先来欣赏下面一组图片：</p>'
+      + '\n<p><img src="media/2-10/media/image8.png" style="width:1.32917in;height:1.66597in" alt="萤石" />'
+      + '<img src="media/2-10/media/image7.jpeg" style="width:1.62222in;height:1.64792in" alt="罗马花椰菜" />'
+      + '<img src="media/2-10/media/image6.jpeg" style="width:1.26597in;height:1.68125in" alt="潮汐树" />'
+      + '<img src="media/2-10/media/image2.jpeg" style="width:1.29792in;height:1.69792in" alt="星云" /></p>'
+      + '\n<p><img src="media/2-10/media/image4.jpeg" style="width:1.45347in;height:1.75972in" alt="铋晶体" />'
+      + '<img src="media/2-10/media/image5.jpeg" style="width:1.45972in;height:1.83472in" alt="水晶" />'
+      + '<img src="media/2-10/media/image3.jpeg" style="width:1.67153in;height:1.85278in" alt="雪花" />'
+      + '<img src="media/2-10/media/image1.jpeg" style="width:1.57569in;height:1.82778in" alt="雨花石" /></p>',
+    ],
+    [
+      '<p><strong>图片来源：网络</strong></p>'
+      + '\n<p><img src="media/2-10/media/image9.png" style="width:2.57222in;height:2.63056in" alt="u=1267469662,701356925&amp;fm=253&amp;fmt=auto" />'
+      + '<img src="media/2-10/media/image10.GIF" style="width:2.62014in;height:2.62014in" alt="u=836691999,2486722495&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=GIF" />'
+      + '<img src="media/2-10/media/image11.png" style="width:2.09306in;height:2.61736in" alt="3bf33a87e950352a13ea5381cca753fdb0118ba0" /></p>'
+      + '\n<p><img src="media/2-10/media/image12.jpeg" style="width:2.37986in;height:2.69097in" alt="正六边形——φ雪花" />'
+      + '<img src="media/2-10/media/image13.jpeg" style="width:2.6in;height:2.71597in" alt="雪花分形.（2,108）" />'
+      + '<img src="media/2-10/media/image14.png" style="width:2.41042in;height:2.79653in" alt="雪花分形.（1+pt·φ+1÷φ,192）" />程序模拟：</p>'
+      + '\n<p><strong>图片来源：程序生成</strong></p>',
+      '<p><img src="media/2-10/media/image11.png" style="width:2.09306in;height:2.61736in" alt="" />'
+      + '<img src="media/2-10/media/image10.GIF" style="width:2.62014in;height:2.62014in" alt="" />'
+      + '<img src="media/2-10/media/image9.png" style="width:2.57222in;height:2.63056in" alt="" /></p>'
+      + '\n<p class="figsrc">图片来源：网络</p>\n<p>程序模拟：</p>'
+      + '\n<p><img src="media/2-10/media/image14.png" style="width:2.41042in;height:2.79653in" alt="雪花分形.（1+pt·φ+1÷φ,192）" />'
+      + '<img src="media/2-10/media/image13.jpeg" style="width:2.6in;height:2.71597in" alt="雪花分形.（2,108）" />'
+      + '<img src="media/2-10/media/image12.jpeg" style="width:2.37986in;height:2.69097in" alt="正六边形——φ雪花" /></p>'
+      + '\n<p class="figsrc">图片来源：程序生成</p>',
+    ],
+    [
+      '<img src="media/2-10/media/image15.png" style="width:2.98333in;height:2.51528in" alt="截图20261121222256" /><img src="media/2-10/media/image16.png" style="width:3.46181in;height:2.44306in" alt="截图20261121222229" />',
+      '<img src="media/2-10/media/image16.png" style="width:3.46181in;height:2.44306in" alt="" /><img src="media/2-10/media/image15.png" style="width:2.98333in;height:2.51528in" alt="" />',
+    ],
+    [
+      '<img src="media/2-10/media/image17.jpeg" style="width:2.21042in;height:2.21042in" alt="随机相切圆.填充.主颜色亮度渲染.嵌套.(50,2,0.3,1,1,255 192 0)" />'
+      + '<img src="media/2-10/media/image18.jpeg" style="width:2.16181in;height:2.16181in" alt="随机相切圆.填充.坐标渲染.嵌套.(50,2,0.3)" />'
+      + '<img src="media/2-10/media/image19.jpeg" style="width:2.19514in;height:2.19514in" alt="随机相切圆.填充.主颜色亮度渲染.(50,0.3,2.3,0,255 192 0)" />'
+      + '<img src="media/2-10/media/image20.jpeg" style="width:2.24028in;height:2.24028in" alt="随机相切圆.填充.坐标渲染.(300,0.01)" />'
+      + '<img src="media/2-10/media/image21.jpeg" style="width:2.25278in;height:2.25278in" alt="随机相切圆.填充.(150,1)" />',
+      '<img src="media/2-10/media/image21.jpeg" style="width:2.25278in;height:2.25278in" alt="随机相切圆.填充.(150,1)" />'
+      + '<img src="media/2-10/media/image20.jpeg" style="width:2.24028in;height:2.24028in" alt="随机相切圆.填充.坐标渲染.(300,0.01)" />'
+      + '<img src="media/2-10/media/image19.jpeg" style="width:2.19514in;height:2.19514in" alt="随机相切圆.填充.主颜色亮度渲染.(50,0.3,2.3,0,255 192 0)" /></p>'
+      + '\n<p><img src="media/2-10/media/image18.jpeg" style="width:2.16181in;height:2.16181in" alt="随机相切圆.填充.坐标渲染.嵌套.(50,2,0.3)" />'
+      + '<img src="media/2-10/media/image17.jpeg" style="width:2.21042in;height:2.21042in" alt="随机相切圆.填充.主颜色亮度渲染.嵌套.(50,2,0.3,1,1,255 192 0)" />',
+    ],
+    [
+      '<img src="media/2-10/media/image22.jpeg" style="width:1.31181in;height:1.75in" alt="4af92bdd8d6ec932cef595744018477e301" /><img src="media/2-10/media/image23.png" style="width:2.89653in;height:1.71944in" alt="截图20261122102307" />',
+      '<img src="media/2-10/media/image23.png" style="width:2.89653in;height:1.71944in" alt="" /><img src="media/2-10/media/image22.jpeg" style="width:1.31181in;height:1.75in" alt="" />',
+    ],
+    ['</p>\n<p><img src="media/2-10/media/image27.jpeg"', '<img src="media/2-10/media/image27.jpeg"'],
+    [
+      '<p><img src="media/2-10/media/image28.png" style="width:1.43403in;height:2.01875in" alt="截图20261122145041" /></p></li>\n</ol>'
+      + '\n<p>话不多说，直接看图像：</p>'
+      + '\n<p><img src="media/2-10/media/image29.png" style="width:1.99722in;height:1.57917in" alt="截图20261122140729" />'
+      + '<img src="media/2-10/media/image30.png" style="width:1.7125in;height:1.58056in" alt="截图20261122140916" /></p>'
+      + '\n<p><strong>图片来源：网络</strong></p>\n<p><strong>图片来源：程序生成</strong></p>'
+      + '\n<p><img src="media/2-10/media/image31.jpeg" style="width:2.53333in;height:2.53333in" alt="山峰模拟.半山.(10 2 1 0 30 (0 255 0))" />'
+      + '<img src="media/2-10/media/image32.jpeg" style="width:2.41111in;height:2.41111in" alt="山峰模拟.半山.(100 1 0.9 π÷2 25 (0 193 92))" />'
+      + '<img src="media/2-10/media/image33.png" style="width:2.42639in;height:2.42639in" alt="山峰模拟.半山.(100 1 1 π 50 (0 152 0))" /></p>',
+      '</li>\n</ol>'
+      + '\n<p>话不多说，直接看图像：</p>'
+      + '\n<p><img src="media/2-10/media/image29.png" style="width:1.99722in;height:1.57917in" alt="" />'
+      + '<img src="media/2-10/media/image30.png" style="width:1.7125in;height:1.58056in" alt="" />'
+      + '<img src="media/2-10/media/image28.png" style="width:1.43403in;height:2.01875in" alt="" /></p>'
+      + '\n<p class="figsrc">图片来源：网络</p>'
+      + '\n<p><img src="media/2-10/media/image33.png" style="width:2.42639in;height:2.42639in" alt="山峰模拟.半山.(100 1 1 π 50 (0 152 0))" />'
+      + '<img src="media/2-10/media/image32.jpeg" style="width:2.41111in;height:2.41111in" alt="山峰模拟.半山.(100 1 0.9 π÷2 25 (0 193 92))" />'
+      + '<img src="media/2-10/media/image31.jpeg" style="width:2.53333in;height:2.53333in" alt="山峰模拟.半山.(10 2 1 0 30 (0 255 0))" /></p>'
+      + '\n<p class="figsrc">图片来源：程序生成</p>',
     ],
     ['<p><strong>图片来源：网络</strong></p>', '<p class="figsrc">图片来源：网络</p>'],
     ['<p><strong>图片来源：程序生成</strong></p>', '<p class="figsrc">图片来源：程序生成</p>'],
-    // 五张随机相切圆原在一个段落里 → 一行五个缩略图（每个 14 mm，什么都看不清）。
-    // 拆成 3 + 2 两行，单格回到 24 mm / 38 mm
-    ['<img src="media/2-10/media/image19.jpeg"', '</p><p><img src="media/2-10/media/image19.jpeg"'],
-    // 珊瑚（3.46 in）与水杉（1.42 in）同段会被判成通栏行，竖幅的水杉被拉到半页高。
-    // 拆成两张单图，珊瑚另收到 3.2 in 以便留在栏内
-    ['<img src="media/2-10/media/image25.png"', '</p><p><img src="media/2-10/media/image25.png"'],
   ],
   '2-11': [
     // 原稿的两节标题只是普通段落，升成 h3，才和 2-10 的小节同一层级
