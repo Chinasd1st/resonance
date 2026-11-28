@@ -145,8 +145,10 @@ function artCoda(a, frag) {
  * 重绘必须最后：它要读 FIG_W 改过后的宽度，再按 viewBox 比例重算高度。
  */
 function applyPatches(a, raw) {
+  // 补丁表按 LF 写；pandoc 在 Windows 上输出 CRLF，不归一化的话跨行补丁永远 miss
+  let frag = raw.replace(/\r\n/g, '\n');
   // pandoc 把图片指到 build/media/…，而 book.html 就在 build/ 下，去掉多余的 build/
-  let frag = raw.replace(/src="build\//g, 'src="');
+  frag = frag.replace(/src="build\//g, 'src="');
 
   for (const [file, rep] of Object.entries(SWAP_IMG[a.id] || {})) {
     const re = new RegExp(`<img[^>]*media/${file.replace('.', '\\.')}[^>]*>`);
