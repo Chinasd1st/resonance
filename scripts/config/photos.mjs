@@ -41,8 +41,17 @@ export const ART = {
   '1-6': { cls: 'art-swiss', full: true },
 };
 
-// 油墨色（RGB），与 tokens.css 同值：c.ink / c.blue / c.orange / c.news / c.tint
-export const RGB = { ink: [0x1D, 0x1D, 0x1B], blue: [0x45, 0x8C, 0xEE], orange: [0xED, 0x72, 0x07], news: [0xF2, 0xB7, 0x05], tint: [0xE6, 0xF1, 0xFF] };
+// 油墨色（RGB），与 tokens.css 同值：c.ink / c.blue / c.blueDeep / c.orange / c.news / c.tint / c.chem / 暖纸
+export const RGB = {
+  ink: [0x1D, 0x1D, 0x1B],
+  blue: [0x45, 0x8C, 0xEE],
+  blueDeep: [0x2F, 0x6F, 0xD6],
+  orange: [0xED, 0x72, 0x07],
+  news: [0xF2, 0xB7, 0x05],
+  tint: [0xE6, 0xF1, 0xFF],
+  chem: [0x1F, 0xA6, 0x7A],
+  paperWarm: [0xEE, 0xE9, 0xDE],
+};
 
 // 1-1 的车灯光线：跨页坐标（mm，左页出血左上角为原点；右页 x +210，两页成品边在订口相接）
 // 起点是左页照片里车头灯的位置，向右上斜穿订口，从右页切口上角出去

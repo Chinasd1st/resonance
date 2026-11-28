@@ -27,7 +27,7 @@ export function artSheets(map, pos) {
   for (const id of Object.keys(ART)) {
     if (!map.dests[`a-${id}`]) continue;
     const pages = pagesOf(id);
-    const photo = at(ART_PHOTO[id].src);
+    const photo = ART_PHOTO[id] ? at(ART_PHOTO[id].src) : null;
     if (id === '1-1') {
       const [p0, ...rest] = pages;
       // 墨 + 车灯黄双色网：暖色版取「warm」通道（车灯），暗版做骨架
@@ -81,7 +81,7 @@ export function artSheets(map, pos) {
   return { out, specs };
 }
 
-const SCRIPT_OF = { 'swiss-photo': 'art/swiss-photo.py', orb: 'art/orb-art.py' };
+const SCRIPT_OF = { 'swiss-photo': 'art/swiss-photo.py', orb: 'art/orb-art.py', halftone: 'art/halftone-art.py' };
 
 export function renderArt(specs) {
   fs.mkdirSync(B('art'), { recursive: true });
