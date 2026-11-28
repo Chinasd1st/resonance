@@ -58,6 +58,7 @@ export function frontMatter(articles) {
         <dt>编者</dt><dd>陈安浙　钱成昊　钱东成　夏宁　章茹涵</dd>
         <dt>美术</dt><dd>宋静弘</dd>
         <dt>排版</dt><dd>赵奕辉</dd>
+        <dt>版式参考</dt><dd>章节页排版 X@_madebygray</dd>
         <dt>印务</dt><dd>章茹涵</dd>
         <dt>开本</dt><dd>A4（210 × 297 mm）</dd>
         <dt class="grp">篇目配图</dt>
