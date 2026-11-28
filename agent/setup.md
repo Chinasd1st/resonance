@@ -101,7 +101,7 @@ npm run diff -- 旧.pdf 新.pdf   # 逐页像素回归
 
 ### 5.2 每次构建必须核对
 
-- **58 页**（6 前置 + 52 正文）
+- **65 页**（6 前置 + 59 正文）
 - `mathErrors` 为空
 - 无 `TEXT_FIX miss` / `FIG_REF miss`
 - 改结构或版式后加一道 `npm run diff -- 旧.pdf 新.pdf`，逐页零差异才算没动版式

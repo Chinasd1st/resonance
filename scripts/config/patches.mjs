@@ -26,6 +26,9 @@ export const FIG_W = {
     'image4.jpeg': [1.077, 1.0556],
     'image5.jpeg': [1.0556, 1.0556],
   },
+  // 2-10：珊瑚分形 3.46 in 比一栏（3.32 in）宽 3 mm，落到通栏会横断两栏且留白；
+  // 收到 3.20 in 留住栏内
+  '2-10': { 'image24.png': [3.2, 2.4554] },
 };
 
 // pandoc 转换丢段的地方在这里补回来：docx 里那段正文前面挂着一个「图注文本框」，
@@ -44,6 +47,41 @@ export const TEXT_FIX = {
       '称为厚度（<span class="math inline">p</span>），新记忆数（<span class="math inline">m</span>），'
       + '已有记忆数（<span class="math inline">M</span>）则有',
     ],
+  ],
+  // 2-10：八个「自然分形」的例子在原稿里各是一行加粗（会被当成八个小标题），
+  // 实际是同一句里的并列词，收成一行；「图片来源」与「反应前 反应后」同理，
+  // 它们是图注不是标题，加类名挡住 structure.js 的「整段加粗→标题」判定
+  '2-10': [
+    [
+      '<p><strong>雨花石</strong></p>\n<p><strong>雪花</strong></p>\n<p><strong>水晶</strong></p>'
+      + '\n<p><strong>铋晶体</strong></p>\n<p><strong>星云</strong></p>\n<p><strong>萤石</strong></p>'
+      + '\n<p><strong>潮汐树</strong></p>\n<p><strong>罗马花椰菜</strong></p>',
+      '<p class="kwline">雨花石　雪花　水晶　铋晶体　星云　萤石　潮汐树　罗马花椰菜</p>',
+    ],
+    ['<p><strong>图片来源：网络</strong></p>', '<p class="figsrc">图片来源：网络</p>'],
+    ['<p><strong>图片来源：程序生成</strong></p>', '<p class="figsrc">图片来源：程序生成</p>'],
+    // 五张随机相切圆原在一个段落里 → 一行五个缩略图（每个 14 mm，什么都看不清）。
+    // 拆成 3 + 2 两行，单格回到 24 mm / 38 mm
+    ['<img src="media/2-10/media/image19.jpeg"', '</p><p><img src="media/2-10/media/image19.jpeg"'],
+    // 珊瑚（3.46 in）与水杉（1.42 in）同段会被判成通栏行，竖幅的水杉被拉到半页高。
+    // 拆成两张单图，珊瑚另收到 3.2 in 以便留在栏内
+    ['<img src="media/2-10/media/image25.png"', '</p><p><img src="media/2-10/media/image25.png"'],
+  ],
+  '2-11': [
+    // 原稿的两节标题只是普通段落，升成 h3，才和 2-10 的小节同一层级
+    ['<p>第一章：酸碱指示剂变色实验</p>', '<h3>第一章：酸碱指示剂变色实验</h3>'],
+    ['<p>第二章：BZ反应现象模拟</p>', '<h3>第二章：BZ反应现象模拟</h3>'],
+    ['<p><strong>图片来源：网络</strong></p>', '<p class="figsrc">图片来源：网络</p>'],
+    ['<p><strong>图片来源：程序生成</strong></p>', '<p class="figsrc">图片来源：程序生成</p>'],
+    ['<p><strong>图片来源：实拍</strong></p>', '<p class="figsrc">图片来源：实拍</p>'],
+    ['<p><strong>反应前 反应后</strong></p>', '<p class="figlabel">反应前　反应后</p>'],
+    // 两处「注：」是图下的小注，不是文末注释块；加类名让 structure.js 的
+    // endnotes 不再把它连同后面整篇当成注释
+    ['<p><img src="media/2-11/media/image1.png"', '<p class="pnote"><img src="media/2-11/media/image1.png"'],
+    ['<p>注：每次渲染都取用一种规则', '<p class="pnote">注：每次渲染都取用一种规则'],
+    ['<p>注：由于程序基于正弦函数', '<p class="pnote">注：由于程序基于正弦函数'],
+    // 2.60 in 与 3.08 in 两张实拍同段会缩成 60 pt 高的缩略图，拆开各占一栏宽
+    ['<img src="media/2-11/media/image7.png"', '</p><p><img src="media/2-11/media/image7.png"'],
   ],
   '2-3': [[
     '<p>谢尔宾斯基三角形</p>',

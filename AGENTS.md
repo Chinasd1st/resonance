@@ -10,9 +10,9 @@
 
 ## 1. 这是什么
 
-《共鸣 RESONANCE》校刊的排版工程：把作者交来的 Word 稿，排成可付印的 PDF。不是内容管理系统，也不是网站——所有代码都服务于“把 19 篇 docx 排成一本 58 页、蓝橙双色的刊物”。
+《共鸣 RESONANCE》校刊的排版工程：把作者交来的 Word 稿，排成可付印的 PDF。不是内容管理系统，也不是网站——所有代码都服务于“把 21 篇 docx 排成一本 65 页、蓝橙双色的刊物”。
 
-**当前基线**：19 篇稿件、2 章（`1` 文学 / `2` 交叉）、6 页罗马页码前置页 + 52 页正文，共 **58 页**；产物四份：`dist/resonance-screen.pdf`（阅读版）、`-print-rgb.pdf`（付印，3 mm 出血）、`-print-cmyk.pdf`（DeviceCMYK + OutputIntent）、`-demo.pdf`（叠水印的试读版）。
+**当前基线**：21 篇稿件、2 章（`1` 文学 10 篇 / `2` 交叉 11 篇）、6 页罗马页码前置页 + 59 页正文，共 **65 页**；产物四份：`dist/resonance-screen.pdf`（阅读版）、`-print-rgb.pdf`（付印，3 mm 出血）、`-print-cmyk.pdf`（DeviceCMYK + OutputIntent）、`-demo.pdf`（叠水印的试读版）。
 
 ## 2. 环境与初始化（克隆后第一件事）
 
@@ -66,7 +66,7 @@ npm run all
 | 路径 | 内容 | 是否入库 |
 | --- | --- | --- |
 | `docs/*.docx` | **唯一正文源**。一篇一个文件，文件名形如 `2-8_（数）波纳万象，函数无穷.docx` | 是 |
-| `content/manifest.json` | 19 篇的元数据：`id`（`2-8` 这种，章号取自前缀）、`title`、`author`、`author_note`、`form`（体裁，决定书眉的 ESSAY / PROSE…）、`subtitle`、`strip_lines`（要从正文剥掉的标题行） | 是 |
+| `content/manifest.json` | 21 篇的元数据：`id`（`2-8` 这种，章号取自前缀）、`title`、`author`、`author_note`、`form`（体裁，决定书眉的 ESSAY / PROSE…）、`subtitle`、`strip_lines`（要从正文剥掉的标题行） | 是 |
 | `src/css/tokens.css` | 版面与字号令牌：成品 210×297、出血 3 mm、版心 496×720 pt、基线 15 pt、三族字体、调色板 | 是 |
 | `src/css/*.css` | 版式分区：`base`（页面与基础元素）、`frontmatter`（序言页与目录）、`article`（开篇/正文/标题/条目/诗栏）、`math`（公式）、`figures`（图与图注/公式卡）、`tables`（三线表/生僻字）、`notes`（注释）、`chapter`（章扉页）、`overlay`（书眉页脚）；`art/` 下是篇目跨页 | 是 |
 | `src/js/*.js` | **运行时排版**（在 Chrome 里跑）：state / dom / text / lists / structure / figures / refs / tables / math / equations / main。页面走 `file://`，Chrome 不加载 ES module，所以是顺序加载的经典脚本，只共享 `window.RS` | 是 |
@@ -146,7 +146,7 @@ npm run all                  # build → demo → cmyk
 ## 7. 验收方式
 
 - 只认渲染出来的 PDF：`pypdfium2` 把页面渲成 PNG 打开看（`pdf[i].render(scale=2).to_pil().save(...)`），逐项看版式；不要用 DOM 尺寸代替目检，也不要每改一行就截图刷屏。
-- 每次重建确认 **58 页**、`mathErrors` 为空、无 `TEXT_FIX miss` / `FIG_REF miss`。改结构（拆分模块、重排 CSS）后再加一道 `npm run diff -- <旧.pdf> <新.pdf>`：逐页像素零差异才算没动版式。
+- 每次重建确认 **65 页**、`mathErrors` 为空、无 `TEXT_FIX miss` / `FIG_REF miss`。改结构（拆分模块、重排 CSS）后再加一道 `npm run diff -- <旧.pdf> <新.pdf>`：逐页像素零差异才算没动版式。
 - 不测量字符坐标来判断“有没有被裁”，先看渲染结果。
 
 ## 8. 已知未完成
@@ -155,3 +155,4 @@ npm run all                  # build → demo → cmyk
 - 字体仍是 Chrome 子集化的 Type3 大户（参考刊 InDesign 为 0），部分老 RIP 可能报错。
 - `icc/gs_default_cmyk.icc` 是占位 profile，付印前应换 FOGRA39。
 - 2-2 的“韦伯常数”表格在源 docx 里是合并单元格，pandoc 转出后每行重复文字，尚未改成三线表。
+- **2-10 有 14 张图没进版**：原稿把它们放在浮动图形（`mc:AlternateContent` + `wps:wsp` 的 blipFill）里，pandoc 只认 `pic:pic`，所以只转出 19 张。最明显的是「分形几何——自然模拟」那组八图（萤石 / 罗马花椰菜 / 潮汐树 / 星云 / 铋晶体 / 水晶 / 雪花 / 雨花石），现在只剩一行并列词。图都在 `docs/2-10_*.docx` 的 `word/media/` 里（`image1–7, 9–11, 28, 31–33`），需要按偏移量（`wp:positionH/V` 的 `posOffset`）还原顺序后单独补进 `scripts/config/patches.mjs` 或做成图版组件。
