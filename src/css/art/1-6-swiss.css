@@ -1,20 +1,25 @@
 /* 1-6 几乎处处：瑞士国际主义单篇跨页（Google Sans + 银盐黑白花卉）。 */
 /* ---------- 1-6 几乎处处 · 瑞士国际主义单篇跨页（Google Sans + 银盐黑白花卉） ---------- */
+/* 满版：黑底铺满 216 × 303（只给跨页首页，`.full`），纸白底色留给右页的诗歌页 */
 .swiss-bg { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; background: #F2F2F0; }
-.folio.swiss { color: #111111; }
-.folio.swiss i { background: #111111; }
+/* 与 swiss-photo.py 的 black_floor(#191919) 对齐：照片的暗底才能和页面黑无缝相接 */
+.swiss-bg.full { background: #191919; }
+.folio.swiss { color: #FFFFFF; }
+.folio.swiss i { background: #FFFFFF; }
 
-/* 左页海报（p18 左页版心起点 x=18mm, y=23mm；画框居中于成品页 x=31mm, y=39mm -> 相对版心 left=13mm, top=16mm） */
+/* 左页海报（p18）：坐标相对 .aop（= 版心左上角，x 18 mm / y 23 mm）。
+   left:0 + width:100% 让文字压齐版心左右边线，与全书正文同一条边；
+   底色与照片在 overlay 层满出血，所以版心之外没有白边。 */
 .art-swiss .aop { color: #FFFFFF; }
 .art-swiss .aop .sw-top {
-  position: absolute; left: 13mm; width: 154mm; top: 10.5mm;
+  position: absolute; left: 0; width: 100%; top: 0;
   display: flex; justify-content: space-between; align-items: baseline;
-  font: 700 6.2pt/8pt "GS W", "SHS", sans-serif; letter-spacing: .12em; color: #111111;
+  font: 700 6.2pt/8pt "GS W", "SHS", sans-serif; letter-spacing: .12em; color: #FFFFFF;
 }
-.art-swiss .aop .sw-top span:last-child { font-weight: 500; color: #525250; }
+.art-swiss .aop .sw-top span:last-child { font-weight: 500; color: #C9C9C4; }
 .art-swiss .aop .sw-poster {
-  position: absolute; left: 13mm; top: 16mm; width: 154mm; height: 212mm;
-  padding: 6.2mm 6.2mm;
+  position: absolute; left: 0; top: 12mm; width: 100%;
+  height: calc(var(--block-h) - 26mm);
   display: flex; flex-direction: column; justify-content: space-between;
 }
 .art-swiss .aop .sw-band { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: start; width: 100%; }
@@ -35,12 +40,12 @@
   letter-spacing: .14em; color: rgba(255,255,255,0.78);
 }
 .art-swiss .aop .sw-bot {
-  position: absolute; left: 13mm; width: 154mm; top: 230.5mm;
-  padding-top: 3pt; border-top: .25pt solid #8C8C88;
+  position: absolute; left: 0; width: 100%; bottom: 0;
+  padding-top: 3pt; border-top: .25pt solid #6E6E6A;
   display: flex; justify-content: space-between; align-items: baseline;
-  font: 400 5.6pt/8pt "GS W", "SHS", sans-serif; letter-spacing: .08em; color: #525250;
+  font: 400 5.6pt/8pt "GS W", "SHS", sans-serif; letter-spacing: .08em; color: #B9B9B5;
 }
-.art-swiss .aop .sw-bot b { font-weight: 700; color: #111111; }
+.art-swiss .aop .sw-bot b { font-weight: 700; color: #FFFFFF; }
 .art-swiss .aop .sw-bot .ref b { color: #D92B1B; }
 
 /* 右页（p19）：显性瑞士双栏网格诗歌 + 底部注释，整体收于一页 */

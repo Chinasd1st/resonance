@@ -64,16 +64,17 @@ export function artSheets(map, pos) {
     }
     if (id === '1-6') {
       const [p0, ...rest] = pages;
-      // 银盐黑白：暗底延伸、压黑、暗角、颗粒，画框 154 × 212 mm 居中于成品页
+      // 满版：黑底铺满 216 × 303（`.swiss-bg.full`），照片按页宽出 216 × 144 的横幅（源图 3:2），
+      // 压在页面下三分之二处；文字栅格在正文层，靠 `src/css/art/1-6-swiss.css` 贴齐版心
       const n = img('1-6-photo', {
         kind: 'swiss-photo', photo,
-        out_w_mm: 154, out_h_mm: 212,
-        fit: 'contain_dark', anchor_y: 0.94, pad_x: 0.0,
+        out_w_mm: 216, out_h_mm: 136,
+        fit: 'contain_dark', anchor_y: 0.5, pad_x: 0.0,
         dpi: 300, lum_weights: [0.58, 0.34, 0.08],
         shadow_crush: 0.05, contrast: 1.52, gamma: 0.76,
         black_floor: 0.10, white_ceil: 0.95, vignette: 0.16, grain: 0.032, seed: 16,
       });
-      out[p0] = { html: `<div class="swiss-bg"></div>` + imgTag(n, [31, 39, 154, 212]), swiss: true };
+      out[p0] = { html: `<div class="swiss-bg full"></div>` + imgTag(n, [0, 112, 216, 136]), swiss: true };
       rest.forEach(p => { out[p] = { html: `<div class="swiss-bg"></div>`, noRh: true, swiss: true }; });
     }
   }
