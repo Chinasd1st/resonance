@@ -30,7 +30,7 @@ export const ART_PHOTO = {
   '1-3': { src: 'assets/articles/1-3.jpg', short: 'Nico le terrible · CC0',
     credit: 'Nico le terrible 摄，“Wuzhen by night 5”，CC0' },
   '1-6': { src: 'assets/articles/1-6.jpg', short: 'STEVE WALKER · CC BY 2.0',
-    credit: 'Steve Walker Photography 摄，“IMG_8531（Tulip Bouquet）”，CC BY 2.0（Openverse / Flickr）；经黑白银盐颗粒化处理；版式设计参考 X@AarzooAly（瑞士国际主义风格）' },
+    credit: 'Steve Walker Photography 摄，“IMG_8531（Tulip Bouquet）”，CC BY 2.0（Openverse / Flickr）；经黑白银盐颗粒化处理' },
 };
 
 /** cls 对应 src/css/art/*.css 的类名；full = 开篇独占整页照片 */

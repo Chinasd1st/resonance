@@ -38,10 +38,12 @@
   display: block; margin-top: 2.5pt; font: 500 5.2pt/7.5pt "GS W", "SHS", sans-serif;
   letter-spacing: .14em; color: rgba(255,255,255,0.78);
 }
+/* 底栏：原来左「DESIGN REF」右「PHOTO」两栏，去掉设计参考后只剩照片署名，
+   改成右对齐单栏；线用本篇的套印红（与右页页眉、注释标号同色），不再是中性灰 */
 .art-swiss .aop .sw-bot {
   position: absolute; left: 0; width: 100%; bottom: 0;
-  padding-top: 3pt; border-top: .25pt solid #6E6E6A;
-  display: flex; justify-content: space-between; align-items: baseline;
+  padding-top: 3pt; border-top: .5pt solid #D92B1B;
+  display: flex; justify-content: flex-end; align-items: baseline;
   font: 400 5.6pt/8pt "GS W", "SHS", sans-serif; letter-spacing: .08em; color: #B9B9B5;
 }
 .art-swiss .aop .sw-bot b { font-weight: 700; color: #FFFFFF; }
@@ -49,7 +51,7 @@
 /* 右页（p19）：显性瑞士双栏网格诗歌 + 底部注释，整体收于一页 */
 .art-swiss.verse .text {
   margin-left: 0; width: 100%;
-  column-count: 2; column-gap: var(--col-gap); column-rule: .35pt solid #D0D0CC;
+  column-count: 2; column-gap: var(--col-gap); column-rule: .35pt solid #D92B1B;
   column-fill: balance;
 }
 .art-swiss.verse .swiss-rh-head {

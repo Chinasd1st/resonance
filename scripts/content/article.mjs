@@ -78,11 +78,10 @@ function artOpener(a, kicker, tags, who) {
         <div class="sw-band bot">
           <div class="sw-cell">TONGXIANG HIGH<br>STUDENT JOURNAL<br>WINTER 2026<br>OPEN CALL<br>MONOCHROME<span class="gap"></span>// 01</div>
           <div class="sw-cell c">POETRY 06</div>
-          <div class="sw-cell r">DESIGN REF<br>X@AarzooAly<br>TULIP STUDY<br>CC BY 2.0<br>SWISS GRID<span class="gap"></span>26</div>
+          <div class="sw-cell r">TULIP STUDY<br>CC BY 2.0<br>SWISS GRID<span class="gap"></span>26</div>
         </div>
       </div>
       <div class="sw-bot">
-        <span class="ref"><b>DESIGN REF:</b> X@AarzooAly · SWISS INTERNATIONAL STYLE</span>
         <span><b>PHOTO:</b> ${esc(ph.short)}</span>
       </div>
     </header>`;
