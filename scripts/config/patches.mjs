@@ -135,9 +135,9 @@ export const TEXT_FIX = {
     [
       '<p><img src="media/2-11/media/image4.png" style="width:1.55486in;height:1.19444in" alt="截图20261114205627" />'
       + '<img src="media/2-11/media/image5.png" style="width:1.33681in;height:1.19028in" alt="截图20261114205643" /></p>'
-      + '\n<p>番外：作者用紫葡萄皮提取了酸碱指示剂并用碱性洗洁精充当碱性物质做了变色实验，现象见右图</p>'
+      + '\n<p>番外：作者用紫葡萄皮提取了酸碱指示剂并用碱性洗洁精充当碱性物质做了变色实验，现象见右图。</p>'
       + '\n<p><strong>反应前 反应后</strong></p>\n<p><strong>图片来源：实拍</strong></p>',
-      '<p>番外：作者用紫葡萄皮提取了酸碱指示剂并用碱性洗洁精充当碱性物质做了变色实验，现象见右图</p>'
+      '<p>番外：作者用紫葡萄皮提取了酸碱指示剂并用碱性洗洁精充当碱性物质做了变色实验，现象见右图。</p>'
       + '\n<p><img src="media/2-11/media/image4.png" style="width:1.55486in;height:1.19444in" alt="" />'
       + '<img src="media/2-11/media/image5.png" style="width:1.33681in;height:1.19028in" alt="" /></p>'
       + '\n<p class="figlabel">反应前　反应后</p>\n<p class="figsrc">图片来源：实拍</p>',
