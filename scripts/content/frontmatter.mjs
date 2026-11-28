@@ -3,7 +3,7 @@
 import { CHAPTERS, CLUBS, ISSUE, COPY, clubVar } from '../config/issue.mjs';
 import { TITLE_GRID } from '../config/geometry.mjs';
 import { ART_PHOTO, CH_PHOTO } from '../config/photos.mjs';
-import { ccMarks } from './cc.mjs';
+import { ccLine, ccMarks } from './cc.mjs';
 import { esc, pad } from '../lib/html.mjs';
 
 const CLUB_LIST = ['music', 'chem', 'philo', 'news', 'math'];
@@ -48,7 +48,9 @@ export function frontMatter(articles) {
   <div class="page fm fm-colophon" id="fm-4">
     <div class="block">
       <h4>COLOPHON / 版权信息</h4>
-      <dl class="meta">
+      <!-- 著录与图片来源共用一张 dl：同一个 56 pt 标签列、同一套字号行距。
+           许可不再写成「CC BY-SA 4.0」文字，改为官方图标 + 版本号（cc.mjs 的 ccLine）。 -->
+      <dl>
         <dt>刊名</dt><dd>共鸣（RESONANCE）</dd>
         <dt>期号</dt><dd>${ISSUE.cn} <span class="tbd">〔待确认〕</span></dd>
         <dt>出品</dt><dd>浙江省桐乡市高级中学<br>音乐社 × 化学社 × 哲学社 × 新闻社 × 数学社</dd>
@@ -59,16 +61,11 @@ export function frontMatter(articles) {
         <dt>排版</dt><dd>赵奕辉</dd>
         <dt>印务</dt><dd>章茹涵</dd>
         <dt>开本</dt><dd>A4（210 × 297 mm）</dd>
+        <dt class="grp">篇目配图</dt>
+        ${Object.keys(ART_PHOTO).map(id => `<dt>${id}</dt><dd>${esc(ART_PHOTO[id].credit)}，${ccLine(ART_PHOTO[id].lic)}${ART_PHOTO[id].note ? `<em>；${esc(ART_PHOTO[id].note)}</em>` : ''}</dd>`).join('')}
+        <dt class="grp">章扉页照片</dt>
+        ${Object.keys(CH_PHOTO).map(ch => `<dt>${pad(ch)}</dt><dd>${esc(CH_PHOTO[ch].credit)}，${ccLine(CH_PHOTO[ch].lic)}</dd>`).join('')}
       </dl>
-
-      <div class="credits">
-        <h5>图片来源 <span>IMAGE CREDITS</span></h5>
-        <div class="cr-col"><em>篇目配图</em>${Object.keys(ART_PHOTO).map(id =>
-          `<p><b>${id}</b>${esc(ART_PHOTO[id].credit)}</p>`).join('')}</div>
-        <div class="cr-col"><em>章扉页照片</em>${Object.keys(CH_PHOTO).map(ch =>
-          `<p><b>${pad(ch)}</b>${esc(CH_PHOTO[ch].credit)}</p>`).join('')}</div>
-        <p class="cr-src">均来自 Wikimedia Commons / Openverse / 美国国家公园管理局</p>
-      </div>
 
       <div class="lic">
         <div class="lic-marks">${ccMarks()}</div>

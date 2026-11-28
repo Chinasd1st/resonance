@@ -1,5 +1,7 @@
 // 图片与色标：章扉页、篇目跨页、正扉页光球用到的照片、引语、油墨色。
-// 照片只用公有领域 / CC0 / CC BY，授权文字同时印在版权页（frontmatter 会读 credit）。
+// 照片只用公有领域 / CC0 / CC BY，授权同时印在版权页（frontmatter 读 credit + lic + note）。
+// lic 是 cc.mjs 的 LIC 表里的键（'by-sa-4.0' / 'by-2.0' / 'cc0' / 'pd'），版权页据此出 CC 图标，
+// 所以 credit 里不要重复写许可名，也不要写「经裁切」这类工序描述。
 
 // 正扉页底图：颗粒渐变光球 + 竖条半透明磨砂层（scripts/art/orb-art.py），
 // 色标取刊物色板（橙 → 音乐社橙 → 哲学社紫 → 信号蓝 → 深蓝）
@@ -16,21 +18,26 @@ export const CH_QUOTE = {
 
 // 章扉页照片：focus 为裁切中心（0–1）
 export const CH_PHOTO = {
-  1: { src: 'assets/chapters/ch1.jpg', focus: [0.62, 0.62], credit: '“Sea of clouds”，liu qiaojun 摄，CC0' },
-  2: { src: 'assets/chapters/ch2.jpg', focus: [0.5, 0.55], credit: '“Chitina River Below the Nizina River and Chakina River Confluences (2)”，美国国家公园管理局阿拉斯加区摄，公有领域' },
+  1: { src: 'assets/chapters/ch1.jpg', focus: [0.62, 0.62], lic: 'cc0',
+    credit: '“Sea of clouds”，liu qiaojun 摄' },
+  2: { src: 'assets/chapters/ch2.jpg', focus: [0.5, 0.55], lic: 'pd',
+    credit: '“Chitina River Below the Nizina River and Chakina River Confluences (2)”，美国国家公园管理局阿拉斯加区摄' },
 };
 
 // 篇目跨页（DESIGN-TOKENS §7.6）：第一章前三篇与 1-6《几乎处处》，
 // 满版的东西画在 overlay 层并垫在正文下面（merge.py 的 under 页）
 export const ART_PHOTO = {
-  '1-1': { src: 'assets/articles/1-1.jpg', short: 'Killarnee · CC BY-SA 4.0',
-    credit: 'Killarnee 摄，“Karlsruhe at night – railroad crossing Brunnenstückweg, Karlsruhe-Rüppurr - 3”，CC BY-SA 4.0；本图为改编作品，同以 CC BY-SA 4.0 授权' },
-  '1-2': { src: 'assets/articles/1-2.jpg', short: 'W.carter · CC BY-SA 4.0',
-    credit: 'W.carter 摄，“Sleet and rain through a bus window on road 162”，CC BY-SA 4.0；本图为改编作品，同以 CC BY-SA 4.0 授权' },
-  '1-3': { src: 'assets/articles/1-3.jpg', short: 'Nico le terrible · CC0',
-    credit: 'Nico le terrible 摄，“Wuzhen by night 5”，CC0' },
-  '1-6': { src: 'assets/articles/1-6.jpg', short: 'STEVE WALKER · CC BY 2.0',
-    credit: 'Steve Walker Photography 摄，“IMG_8531（Tulip Bouquet）”，CC BY 2.0（Openverse / Flickr）；经黑白银盐颗粒化处理' },
+  '1-1': { src: 'assets/articles/1-1.jpg', short: 'Killarnee · CC BY-SA 4.0', lic: 'by-sa-4.0',
+    credit: 'Killarnee 摄，“Karlsruhe at night – railroad crossing Brunnenstückweg, Karlsruhe-Rüppurr - 3”',
+    note: '本图为改编作品，同以原许可授权' },
+  '1-2': { src: 'assets/articles/1-2.jpg', short: 'W.carter · CC BY-SA 4.0', lic: 'by-sa-4.0',
+    credit: 'W.carter 摄，“Sleet and rain through a bus window on road 162”',
+    note: '本图为改编作品，同以原许可授权' },
+  '1-3': { src: 'assets/articles/1-3.jpg', short: 'Nico le terrible · CC0', lic: 'cc0',
+    credit: 'Nico le terrible 摄，“Wuzhen by night 5”' },
+  '1-6': { src: 'assets/articles/1-6.jpg', short: 'STEVE WALKER · CC BY 2.0', lic: 'by-2.0',
+    credit: 'Steve Walker Photography 摄，“IMG_8531（Tulip Bouquet）”（Openverse / Flickr）',
+    note: '经黑白银盐颗粒化处理' },
 };
 
 /** cls 对应 src/css/art/*.css 的类名；full = 开篇独占整页照片 */

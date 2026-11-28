@@ -34,7 +34,7 @@
 .fm-title .clubs li + li::before { content: "×"; margin: 0 10pt; font: 400 8pt/15pt "GS W", sans-serif; }
 
 /* iv · colophon (white)
-   三段式：著录信息（dl.meta）→ 图片来源（.credits）→ 授权标识（.lic）。
+   两段式：著录 + 图片来源（同一张 dl）→ 授权标识（.lic）。
    整块 bottom:0 定位，内容向上生长，所以加内容只会挤向上方的留白。 */
 .fm-colophon .block { position: absolute; left: 0; bottom: 0; width: var(--col-w); font: var(--t-caption); }
 .fm-colophon .block h4 { font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue); margin: 0 0 7.5pt; }
@@ -43,26 +43,30 @@
 .fm-colophon dd { margin: 0; }
 .fm-colophon .tbd { color: var(--c-orange); }
 
-/* 图片来源：按篇号悬挂缩进，篇号进蓝色，正文退到第二栏，避免每一行都从「1-1」开始歪 */
-.fm-colophon .credits { margin-top: 10.5pt; padding-top: 7.5pt; border-top: .5pt solid var(--c-gridline); }
-.fm-colophon .credits h5 { font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue); margin: 0 0 5pt; }
-.fm-colophon .credits h5 span { color: var(--c-k45); font-weight: 500; margin-left: 4pt; letter-spacing: .06em; }
-.fm-colophon .cr-col em { display: block; font: 500 6.8pt/9.4pt var(--ff-ui); font-style: normal; letter-spacing: .06em; color: var(--c-k45); margin: 4pt 0 2pt; }
-.fm-colophon .cr-col p { margin: 0 0 2.5pt; padding-left: 17pt; text-indent: -17pt; font: 400 6.8pt/9.6pt var(--ff-ui); color: var(--c-ink); }
-.fm-colophon .cr-col p b { display: inline-block; width: 17pt; text-indent: 0; font: 700 6.8pt/9.6pt var(--ff-ui); color: var(--c-blue); }
-.fm-colophon .cr-src { margin: 4pt 0 0; font: 400 6.6pt/9pt var(--ff-ui); color: var(--c-k45); }
+/* 图片来源与著录共用同一张 dl：组标题跨两栏，篇号仍是 56 pt 标签列，
+   所以「刊名 / 主编 / 1-1 / 01」四种标签在同一条竖线上。
+   灰阶只有两档：标签（含组标题）k70、内容 ink。组标题靠跨栏和字距区分，不再靠更浅的灰，
+   否则「篇目配图」比「开本」浅一档，整块看起来像两种颜色。 */
+.fm-colophon dt.grp { grid-column: 1 / -1; margin: 7.5pt 0 2pt; font: 500 6.8pt/9.4pt var(--ff-ui); letter-spacing: .08em; color: var(--c-k70); }
+.fm-colophon dd em { font-style: normal; color: inherit; }
+
+/* 行内许可标识：8 pt 图标 + 版本号，跟文字同基线；版本号是许可名的一部分，不能省 */
+.fm-colophon .cc-lic { display: inline-flex; align-items: center; gap: 1.2pt; vertical-align: -.6pt; }
+.fm-colophon .cc-lic i { font: 500 6.6pt/1 var(--ff-ui); font-style: normal; letter-spacing: .02em; color: var(--c-k70); margin-left: .8pt; }
 
 /* 授权：官方 presskit 图标内联上色（图标自带外圈，不要再垫圆底）；
    字号比著录信息小半号，让标识行成为整块的黑点 */
 .fm-colophon .lic { margin-top: 11pt; padding-top: 7.5pt; border-top: .5pt solid var(--c-gridline); }
 .fm-colophon .lic-marks { display: flex; align-items: center; gap: 2.2pt; margin-bottom: 5pt; }
 .fm-colophon .ccm { display: block; width: 16pt; height: 16pt; }
-.fm-colophon .ccm svg { display: block; width: 100%; height: 100%; }
+.fm-colophon .ccm.sm { width: 8pt; height: 8pt; }
+/* overflow 必须可见：pd.svg 的 viewBox 是 384 格、图形略出框，裁掉会变成平底 */
+.fm-colophon .ccm svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .fm-colophon .ccm svg path { fill: var(--c-blue); }
 .fm-colophon .lic-text b { display: block; font: 700 7.5pt/11.25pt var(--ff-ui); color: var(--c-ink); }
 .fm-colophon .lic-text span { display: block; font: 400 6.8pt/9.4pt var(--ff-ui); color: var(--c-k70); }
 .fm-colophon .lic-url { letter-spacing: .015em; }
-.fm-colophon .lic-note { margin: 5pt 0 0; font: 400 6.4pt/8.8pt var(--ff-ui); color: var(--c-k45); }
+.fm-colophon .lic-note { margin: 5pt 0 0; font: 400 6.4pt/8.8pt var(--ff-ui); color: var(--c-k70); }
 
 /* v · TOC（单页容纳两章，行距按 720pt 版心整体压缩；同时是最后一页前置页，分页交给章首页的 break-before） */
 .fm-toc { height: auto; break-after: auto; }
