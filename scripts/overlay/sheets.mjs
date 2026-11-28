@@ -32,7 +32,7 @@ export function overlayHtml(map, frontPages, arts, articles) {
       inner += chapterSheet(o.ch, right, articles);
       // 章扉页页脚带：通栏细线，切口侧页码、订口侧「# 章名」（纸面上，墨色）
       inner += `<div class="strip ${right ? 'r' : 'l'}"><span class="tagc"># ${CHAPTERS[o.ch].cn}　${CHAPTERS[o.ch].en}</span><span>${folio}</span></div>`;
-    } else if (folio) inner += `<div class="folio ${right ? 'r' : 'l'}${art && art.dark ? ' inv' : ''}${art && art.swiss ? ' swiss' : ''}"><i></i>${folio}</div>`;
+    } else if (folio) inner += `<div class="folio ${right ? 'r' : 'l'}${art && art.dark ? ' inv' : ''}${art && art.swiss ? ' swiss' : ''}">${folio}</div>`;
     // running head
     if (p > FRONT && o && !isStart && o.kind === 'article' && !(art && art.noRh)) {
       // 书眉：CHAPTER 02 ESSAY 05　标题

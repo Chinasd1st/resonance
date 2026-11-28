@@ -5,7 +5,6 @@
 /* 与 swiss-photo.py 的 black_floor(#191919) 对齐：照片的暗底才能和页面黑无缝相接 */
 .swiss-bg.full { background: #191919; }
 .folio.swiss { color: #FFFFFF; }
-.folio.swiss i { background: #FFFFFF; }
 
 /* 左页海报（p18）：坐标相对 .aop（= 版心左上角，x 18 mm / y 23 mm）。
    left:0 + width:100% 让文字压齐版心左右边线，与全书正文同一条边；
@@ -46,7 +45,6 @@
   font: 400 5.6pt/8pt "GS W", "SHS", sans-serif; letter-spacing: .08em; color: #B9B9B5;
 }
 .art-swiss .aop .sw-bot b { font-weight: 700; color: #FFFFFF; }
-.art-swiss .aop .sw-bot .ref b { color: #D92B1B; }
 
 /* 右页（p19）：显性瑞士双栏网格诗歌 + 底部注释，整体收于一页 */
 .art-swiss.verse .text {

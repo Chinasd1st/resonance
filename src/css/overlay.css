@@ -9,10 +9,10 @@ html, body { margin: 0; background: none; -webkit-print-color-adjust: exact; }
 
 .sheet { width: 216mm; height: 303mm; position: relative; break-after: page; overflow: hidden; }
 
-.folio { position: absolute; top: calc(303mm - 3mm - 14mm - 6pt); font: var(--t-folio); letter-spacing: .04em; font-variant-numeric: tabular-nums; color: var(--c-ink); }
-.folio i { display: block; width: var(--grid-col); height: var(--rule-thin); background: var(--c-k45); margin-bottom: 5pt; }
+/* 页码：只有数字，没有上面的横线。top 里那 5.5pt 是原先 <i> 占位（0.5pt 线 + 5pt 间距）的补偿，
+   去掉线之后数字仍落在原位，否则会整体上移 1.9 mm，跟书眉挤在一起 */
+.folio { position: absolute; top: calc(303mm - 3mm - 14mm - 0.5pt); font: var(--t-folio); letter-spacing: 0; font-variant-numeric: tabular-nums; color: var(--c-ink); }
 .folio.r { right: 18mm; text-align: right; }
-.folio.r i { margin-left: auto; }
 .folio.l { left: 18mm; }
 
 .rh { position: absolute; top: calc(3mm + 12mm - 6pt); font: var(--t-runhead); letter-spacing: .08em; color: var(--c-k70); white-space: nowrap; }
@@ -21,11 +21,12 @@ html, body { margin: 0; background: none; -webkit-print-color-adjust: exact; }
 
 .tab { position: absolute; right: 0; width: calc(3mm + 4pt); height: 30pt; }
 
+/* 章扉页页脚带：线用章主题色（蓝），不再用中性灰 */
 .strip {
-  position: absolute; top: calc(303mm - 3mm - 14mm - 6pt - 5pt - var(--rule-thin));
+  position: absolute; top: calc(303mm - 3mm - 14mm - 0.5pt - 5pt - var(--rule-thin));
   display: flex; justify-content: space-between; width: var(--block-w);
-  padding-top: 5pt; border-top: var(--rule-thin) solid var(--c-k45);
-  font: var(--t-folio); letter-spacing: .04em; font-variant-numeric: tabular-nums; color: var(--c-ink);
+  padding-top: 5pt; border-top: var(--rule-thin) solid var(--c-blue);
+  font: var(--t-folio); letter-spacing: 0; font-variant-numeric: tabular-nums; color: var(--c-ink);
 }
 .strip .tagc { font: var(--t-runhead); letter-spacing: .08em; color: var(--c-k70); }
 .strip.r { right: 18mm; }

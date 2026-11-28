@@ -13,7 +13,6 @@
 .beam { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; overflow: hidden; }
 .beam line { stroke: var(--c-news); stroke-width: .35; }           /* 0.35 mm ≈ 1 pt，全书最粗线 */
 .folio.inv, .rh.inv { color: var(--c-paper); }
-.folio.inv i { background: var(--c-k70); }
 
 /* ---------- 正文层：共用 ---------- */
 .article.art .opener.aop { height: var(--opener-h); position: relative; display: block; }
