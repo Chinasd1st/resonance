@@ -8,8 +8,12 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
+    "shot": "node scripts/tools/shot.mjs",
+    "body": "node scripts/build.mjs --reuse=overlay --no-art",
+    "overlay": "node scripts/build.mjs --reuse=body --no-art",
     "demo": "node scripts/build-demo.mjs",
     "cmyk": "node scripts/build-cmyk.mjs",
+    "release": "node scripts/build.mjs && node scripts/build-demo.mjs --no-open && node scripts/build-cmyk.mjs",
     "all": "node scripts/build.mjs && node scripts/build-demo.mjs --no-open && node scripts/build-cmyk.mjs",
     "figs": "node scripts/tools/figpreview.mjs",
     "diff": "python scripts/tools/pdfdiff.py"
