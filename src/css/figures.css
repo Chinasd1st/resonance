@@ -40,6 +40,14 @@ figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
 [data-id="2-10"] figure.row .cell svg.dfig { max-height: 175pt; }
 /* 2-10「自然模拟」四联图版：四图统一高度齐平 */
 [data-id="2-10"] figure.row[style*="--n: 4"] .cell img { height: 108pt; object-fit: cover; }
+/* 连绵群山那一组是横幅夹竖幅（image29 1.26、image30 1.08、image28 0.71）：
+   按格子底对齐时顶边参差，竖幅还会在格子里左右留白。
+   改成等高照片条 —— 三张同为 155 pt 高、宽度按比例，正好铺满栏宽，顶边、底边与图注都在一条线上 */
+[data-id="2-10"] figure.row:has(img[src$="image28.png"]) {
+  display: flex; justify-content: center; align-items: flex-end; gap: 10pt;
+}
+[data-id="2-10"] figure.row:has(img[src$="image28.png"]) .cell { flex: 0 0 auto; width: auto; }
+[data-id="2-10"] figure.row:has(img[src$="image28.png"]) .cell img { width: auto; height: 155pt; max-width: 100%; }
 /* 并列词串（2-10 的八个自然分形例子）：一行排开，靠字距分组，不用顿号。
    word-break: keep-all —— 中文默认可在任意字间断行，这行词串必须整词换行 */
 .text p.kwline { font: 500 7.4pt/12pt var(--ff-ui); letter-spacing: .04em; color: var(--c-blue-deep);
