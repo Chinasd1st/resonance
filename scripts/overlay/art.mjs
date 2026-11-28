@@ -64,17 +64,17 @@ export function artSheets(map, pos) {
     }
     if (id === '1-6') {
       const [p0, ...rest] = pages;
-      // 满版：黑底铺满 216 × 303（`.swiss-bg.full`），照片按页宽出 216 × 144 的横幅（源图 3:2），
-      // 压在页面下三分之二处；文字栅格在正文层，靠 `src/css/art/1-6-swiss.css` 贴齐版心
+      // 满版：全页 216 × 303 mm 统一渲染银盐黑底与 35mm 颗粒，花卉羽化嵌入下三分之二，
+      // 消除图片与纯色背景之间的颗粒/明暗接缝；文字栅格在正文层贴齐版心
       const n = img('1-6-photo', {
         kind: 'swiss-photo', photo,
-        out_w_mm: 216, out_h_mm: 136,
-        fit: 'contain_dark', anchor_y: 0.5, pad_x: 0.0,
+        out_w_mm: 216, out_h_mm: 303,
+        fit: 'place_dark', place_y_mm: 112, place_h_mm: 136, feather_mm: 14,
         dpi: 300, lum_weights: [0.58, 0.34, 0.08],
         shadow_crush: 0.05, contrast: 1.52, gamma: 0.76,
-        black_floor: 0.10, white_ceil: 0.95, vignette: 0.16, grain: 0.032, seed: 16,
+        black_floor: 0.098, white_ceil: 0.95, vignette: 0.16, grain: 0.032, seed: 16,
       });
-      out[p0] = { html: `<div class="swiss-bg full"></div>` + imgTag(n, [0, 112, 216, 136]), swiss: true };
+      out[p0] = { html: imgTag(n, full), swiss: true };
       rest.forEach(p => { out[p] = { html: `<div class="swiss-bg"></div>`, noRh: true, swiss: true }; });
     }
   }

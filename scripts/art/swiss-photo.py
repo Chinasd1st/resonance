@@ -4,9 +4,10 @@
 spec 参数：
   photo: 源图路径
   out_w_mm, out_h_mm: 输出尺寸（mm）
-  fit: 'cover'（默认裁切填满）| 'contain_dark'（暗底延伸：按宽度/pad缩放放置，上下左右黑底无缝融合）
+  fit: 'cover'（默认裁切填满）| 'contain_dark'（暗底延伸）| 'place_dark'（全页黑底+羽化放置，底噪无缝）
   anchor_y: fit='contain_dark' 时图片垂直锚点（0=顶，0.5=中，1.0=贴底，默认 0.85）
-  pad_x: fit='contain_dark' 时左右留黑比例（默认 0.0）
+  pad_x: fit='contain_dark'|'place_dark' 时左右留黑比例（默认 0.0）
+  place_y_mm, place_h_mm, feather_mm: fit='place_dark' 时照片纵向起止（mm）与边缘羽化宽度
   focus: [fx, fy] fit='cover' 裁切中心（0–1，默认 [0.5, 0.5]）
   zoom: 放大倍数（默认 1.0）
   dpi: 分辨率（默认 300）
@@ -29,6 +30,11 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 
+def _smoothstep(t):
+    t = np.clip(t, 0.0, 1.0)
+    return t * t * (3.0 - 2.0 * t)
+
+
 def main(spec_path, out_path):
     s = json.load(open(spec_path, encoding='utf8'))
     dpi = s.get('dpi', 300)
@@ -40,7 +46,34 @@ def main(spec_path, out_path):
     sw, sh = src.size
     fit = s.get('fit', 'cover')
 
-    if fit == 'contain_dark':
+    if fit == 'place_dark':
+        pad_x = s.get('pad_x', 0.0)
+        place_y = round(s.get('place_y_mm', 112.0) * mm)
+        place_h = max(1, round(s.get('place_h_mm', 136.0) * mm))
+        target_w = max(1, round(pw * (1.0 - 2.0 * pad_x)))
+        target_h = max(1, round(sh * (target_w / sw)))
+        if target_h > place_h:
+            target_h = place_h
+            target_w = max(1, round(sw * (target_h / sh)))
+        resized = src.resize((target_w, target_h), Image.LANCZOS)
+        src_rgb = np.asarray(resized, np.float32) / 255.0
+
+        f_px = max(1.0, float(s.get('feather_mm', 14.0)) * mm)
+        yy = np.arange(target_h, dtype=np.float32)[:, None]
+        my = np.minimum(_smoothstep((yy + 0.5) / f_px), _smoothstep((target_h - yy - 0.5) / f_px))
+        mask = my
+        if target_w < pw:
+            fx_px = max(1.0, min(f_px, 8.0 * mm))
+            xx = np.arange(target_w, dtype=np.float32)[None, :]
+            mx = np.minimum(_smoothstep((xx + 0.5) / fx_px), _smoothstep((target_w - xx - 0.5) / fx_px))
+            mask = my * mx
+        src_rgb *= mask[..., None]
+
+        rgb = np.zeros((ph, pw, 3), np.float32)
+        ox = (pw - target_w) // 2
+        oy = max(0, min(ph - target_h, place_y + (place_h - target_h) // 2))
+        rgb[oy:oy + target_h, ox:ox + target_w] = src_rgb
+    elif fit == 'contain_dark':
         pad_x = s.get('pad_x', 0.0)
         target_w = max(1, round(pw * (1.0 - 2.0 * pad_x)))
         target_h = max(1, round(sh * (target_w / sw)))
@@ -53,7 +86,7 @@ def main(spec_path, out_path):
         oy = round((ph - target_h) * s.get('anchor_y', 0.85))
         oy = max(0, min(ph - target_h, oy))
         canvas.paste(resized, (ox, oy))
-        crop = canvas
+        rgb = np.asarray(canvas, np.float32) / 255.0
     else:
         zoom = s.get('zoom', 1.0)
         scale = max(pw / sw, ph / sh) * zoom
@@ -62,8 +95,8 @@ def main(spec_path, out_path):
         left = min(max(fx * sw - cw / 2, 0), max(0, sw - cw))
         top = min(max(fy * sh - ch / 2, 0), max(0, sh - ch))
         crop = src.resize((pw, ph), Image.LANCZOS, box=(left, top, left + cw, top + ch))
+        rgb = np.asarray(crop, np.float32) / 255.0
 
-    rgb = np.asarray(crop, np.float32) / 255.0
     wr, wg, wb = s.get('lum_weights', [0.30, 0.56, 0.14])
     lum = rgb[..., 0] * wr + rgb[..., 1] * wg + rgb[..., 2] * wb
 
