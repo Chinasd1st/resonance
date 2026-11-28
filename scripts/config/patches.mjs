@@ -51,16 +51,8 @@ export const TEXT_FIX = {
     ['<p>名词注释：</p>', '<p class="keepnext">名词注释：</p>'],
     [
       '<p><strong>雨花石</strong></p>\n<p><strong>雪花</strong></p>\n<p><strong>水晶</strong></p>'
-      + '\n<p><strong>铋晶体</strong></p>\n<p><strong>星云</strong></p>'
-      + '\n<p><img src="media/2-10/media/image1.jpeg" style="width:1.57569in;height:1.82778in" alt="mn" />'
-      + '<img src="media/2-10/media/image2.jpeg" style="width:1.29792in;height:1.69792in" alt="xy" />'
-      + '<img src="media/2-10/media/image3.jpeg" style="width:1.67153in;height:1.85278in" alt="snow" />'
-      + '<img src="media/2-10/media/image4.jpeg" style="width:1.45347in;height:1.75972in" alt="bi" />'
-      + '<img src="media/2-10/media/image5.jpeg" style="width:1.45972in;height:1.83472in" alt="crystal" /></p>'
-      + '\n<p><strong>萤石</strong></p>\n<p><strong>潮汐树</strong></p>\n<p><strong>罗马花椰菜</strong></p>'
-      + '\n<p><img src="media/2-10/media/image6.jpeg" style="width:1.26597in;height:1.68125in" alt="cxs" />'
-      + '<img src="media/2-10/media/image7.jpeg" style="width:1.62222in;height:1.64792in" alt="hyc" /></p>'
-      + '\n<p>有了非欧几何，我们可以扩展研究的对象，将平直的空间扩展到扭曲的空间。但这还远远不够。自然界的许多物体并非只有平直和弯曲之分。我们先来欣赏下面一组图片：</p>'
+      + '\n<p><strong>铋晶体</strong></p>\n<p><strong>星云</strong></p>\n<p><strong>萤石</strong></p>'
+      + '\n<p><strong>潮汐树</strong></p>\n<p><strong>罗马花椰菜</strong></p>'
       + '\n<p><img src="media/2-10/media/image8.png" style="width:1.32917in;height:1.66597in" alt="ys" /></p>',
       '<p>有了非欧几何，我们可以扩展研究的对象，将平直的空间扩展到扭曲的空间。但这还远远不够。自然界的许多物体并非只有平直和弯曲之分。我们先来欣赏下面一组图片：</p>'
       + '\n<p><img src="media/2-10/media/image8.png" style="width:1.32917in;height:1.66597in" alt="萤石" />'
@@ -74,9 +66,6 @@ export const TEXT_FIX = {
     ],
     [
       '<p><strong>图片来源：网络</strong></p>'
-      + '\n<p><img src="media/2-10/media/image9.png" style="width:2.57222in;height:2.63056in" alt="u=1267469662,701356925&amp;fm=253&amp;fmt=auto" />'
-      + '<img src="media/2-10/media/image10.GIF" style="width:2.62014in;height:2.62014in" alt="u=836691999,2486722495&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=GIF" />'
-      + '<img src="media/2-10/media/image11.png" style="width:2.09306in;height:2.61736in" alt="3bf33a87e950352a13ea5381cca753fdb0118ba0" /></p>'
       + '\n<p><img src="media/2-10/media/image12.jpeg" style="width:2.37986in;height:2.69097in" alt="正六边形——φ雪花" />'
       + '<img src="media/2-10/media/image13.jpeg" style="width:2.6in;height:2.71597in" alt="雪花分形.（2,108）" />'
       + '<img src="media/2-10/media/image14.png" style="width:2.41042in;height:2.79653in" alt="雪花分形.（1+pt·φ+1÷φ,192）" />程序模拟：</p>'
@@ -111,24 +100,19 @@ export const TEXT_FIX = {
       '<img src="media/2-10/media/image23.png" style="width:2.89653in;height:1.71944in" alt="" /><img src="media/2-10/media/image22.jpeg" style="width:1.31181in;height:1.75in" alt="" />',
     ],
     ['</p>\n<p><img src="media/2-10/media/image27.jpeg"', '<img src="media/2-10/media/image27.jpeg"'],
+    // pandoc 完全看不见的两张：28（网络实拍，竖幅截图）与 31/32/33（程序输出的三张山）。
+    // 它们原本和 29/30 混在同一段浮动图形里，只能按位置补回去。
+    // 注意 find 不能写进「还没有出现在 HTML 里」的 img ——那正是 2-10 早先五处 miss 的原因
+    ['<p><img src="media/2-10/media/image29.png"',
+      '<p>话不多说，直接看图像：</p>\n<p><img src="media/2-10/media/image29.png"'],
+    ['alt="截图20261122140916" />',
+      'alt="截图20261122140916" /><img src="media/2-10/media/image28.png" style="width:1.43403in;height:2.01875in" alt="" />'],
     [
-      '<p><img src="media/2-10/media/image28.png" style="width:1.43403in;height:2.01875in" alt="截图20261122145041" /></p></li>\n</ol>'
-      + '\n<p>话不多说，直接看图像：</p>'
-      + '\n<p><img src="media/2-10/media/image29.png" style="width:1.99722in;height:1.57917in" alt="截图20261122140729" />'
-      + '<img src="media/2-10/media/image30.png" style="width:1.7125in;height:1.58056in" alt="截图20261122140916" /></p>'
-      + '\n<p><strong>图片来源：网络</strong></p>\n<p><strong>图片来源：程序生成</strong></p>'
+      '<p><strong>图片来源：网络</strong></p>\n<p><strong>图片来源：程序生成</strong></p>',
+      '<p class="figsrc">图片来源：网络</p>'
       + '\n<p><img src="media/2-10/media/image31.jpeg" style="width:2.53333in;height:2.53333in" alt="山峰模拟.半山.(10 2 1 0 30 (0 255 0))" />'
       + '<img src="media/2-10/media/image32.jpeg" style="width:2.41111in;height:2.41111in" alt="山峰模拟.半山.(100 1 0.9 π÷2 25 (0 193 92))" />'
-      + '<img src="media/2-10/media/image33.png" style="width:2.42639in;height:2.42639in" alt="山峰模拟.半山.(100 1 1 π 50 (0 152 0))" /></p>',
-      '</li>\n</ol>'
-      + '\n<p>话不多说，直接看图像：</p>'
-      + '\n<p><img src="media/2-10/media/image29.png" style="width:1.99722in;height:1.57917in" alt="" />'
-      + '<img src="media/2-10/media/image30.png" style="width:1.7125in;height:1.58056in" alt="" />'
-      + '<img src="media/2-10/media/image28.png" style="width:1.43403in;height:2.01875in" alt="" /></p>'
-      + '\n<p class="figsrc">图片来源：网络</p>'
-      + '\n<p><img src="media/2-10/media/image33.png" style="width:2.42639in;height:2.42639in" alt="山峰模拟.半山.(100 1 1 π 50 (0 152 0))" />'
-      + '<img src="media/2-10/media/image32.jpeg" style="width:2.41111in;height:2.41111in" alt="山峰模拟.半山.(100 1 0.9 π÷2 25 (0 193 92))" />'
-      + '<img src="media/2-10/media/image31.jpeg" style="width:2.53333in;height:2.53333in" alt="山峰模拟.半山.(10 2 1 0 30 (0 255 0))" /></p>'
+      + '<img src="media/2-10/media/image33.png" style="width:2.42639in;height:2.42639in" alt="山峰模拟.半山.(100 1 1 π 50 (0 152 0))" /></p>'
       + '\n<p class="figsrc">图片来源：程序生成</p>',
     ],
     ['<p><strong>图片来源：网络</strong></p>', '<p class="figsrc">图片来源：网络</p>'],
@@ -141,14 +125,12 @@ export const TEXT_FIX = {
     // 开头两张烧杯图（image2 反应前紫、image1 反应后红）原稿浮动在步骤②旁，pandoc 却错吐在开头「注：」里
     ['<p><img src="media/2-11/media/image1.png" style="width:1.28542in;height:1.65069in" alt="截图20261114201547" /><img src="media/2-11/media/image2.png" style="width:1.20278in;height:1.65347in" alt="截图20261114201523" />注：分析软件为Python', '<p class="pnote">注：分析软件为Python'],
     [
-      '<p>②用镊子夹取一小块干冰，放入配制好的酸碱指示剂中并观察现象（现象如右图）。</p>',
+      '<p><strong>反应前 反应后</strong></p>\n<p><strong>图片来源：网络</strong></p>',
       '<p>②用镊子夹取一小块干冰，放入配制好的酸碱指示剂中并观察现象（现象如右图）。</p>'
       + '\n<p><img src="media/2-11/media/image2.png" style="width:1.20278in;height:1.65347in" alt="" />'
       + '<img src="media/2-11/media/image1.png" style="width:1.28542in;height:1.65069in" alt="" /></p>'
       + '\n<p class="figlabel">反应前　反应后</p>\n<p class="figsrc">图片来源：网络</p>',
     ],
-    // 清除①与②之间错位残留的标注行
-    ['<p>①向烧杯中加入蒸馏水，取紫色石蕊试液加入蒸馏水中，用玻璃棒搅拌，配制适当浓度的酸碱指示剂；</p>\n<p><strong>反应前 反应后</strong></p>\n<p><strong>图片来源：网络</strong></p>', '<p>①向烧杯中加入蒸馏水，取紫色石蕊试液加入蒸馏水中，用玻璃棒搅拌，配制适当浓度的酸碱指示剂；</p>'],
     // 番外实拍两图移至文字段之后
     [
       '<p><img src="media/2-11/media/image4.png" style="width:1.55486in;height:1.19444in" alt="截图20261114205627" />'
@@ -170,12 +152,11 @@ export const TEXT_FIX = {
     ],
     // 程序② 的「图片来源：程序生成」错排在图前，移到两图之后
     [
-      '<p><strong>图片来源：程序生成</strong></p>'
-      + '\n<p><img src="media/2-11/media/image12.png" style="width:2.76597in;height:2.41111in" alt="截图20261122151428" />'
-      + '<img src="media/2-11/media/image13.png" style="width:2.92153in;height:2.39444in" alt="截图20261122151449" /></p>',
+      '<p><strong>图片来源：程序生成</strong></p>\n<p>注：由于程序基于正弦函数',
       '<p><img src="media/2-11/media/image12.png" style="width:2.76597in;height:2.41111in" alt="" />'
       + '<img src="media/2-11/media/image13.png" style="width:2.92153in;height:2.39444in" alt="" /></p>'
-      + '\n<p class="figsrc">图片来源：程序生成</p>',
+      + '\n<p class="figsrc">图片来源：程序生成</p>'
+      + '\n<p class="pnote">注：由于程序基于正弦函数',
     ],
     // 清理临时截图文件名，使图注编号与同组其余图统一
     ['alt="C:/Users/Pi/Desktop/Video/碱 颜色变化 2(1).png碱 颜色变化 2(1)"', 'alt=""'],
@@ -186,7 +167,6 @@ export const TEXT_FIX = {
     ['<p><strong>图片来源：程序生成</strong></p>', '<p class="figsrc">图片来源：程序生成</p>'],
     // 两处「注：」是图下的小注，不是文末注释块
     ['<p>注：每次渲染都取用一种规则', '<p class="pnote">注：每次渲染都取用一种规则'],
-    ['<p>注：由于程序基于正弦函数', '<p class="pnote">注：由于程序基于正弦函数'],
   ],
   '2-3': [[
     '<p>谢尔宾斯基三角形</p>',
