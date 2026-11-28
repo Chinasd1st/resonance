@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import { B, at } from '../lib/path.mjs';
 import { runPy } from '../lib/run.mjs';
-import { esc, pad } from '../lib/html.mjs';
+import { dashJoin, esc, pad } from '../lib/html.mjs';
 import { CHAPTERS } from '../config/issue.mjs';
 import { CH_PHOTO, CH_QUOTE } from '../config/photos.mjs';
 import { chapterGeom } from '../config/geometry.mjs';
@@ -30,7 +30,7 @@ export function chapterSheet(ch, right, articles) {
       <div class="k">CHAPTER ${pad(ch)}</div>
       <div class="cn">${CHAPTERS[ch].cn}</div>
       <div class="en">${CHAPTERS[ch].en[0]}${CHAPTERS[ch].en.slice(1).toLowerCase()}</div>
-      ${q ? `<div class="quote">${esc(q.text)}<span>——《${esc(q.from)}》</span></div>` : ''}
+      ${q ? `<div class="quote">${dashJoin(esc(q.text))}<span>${dashJoin(`——《${esc(q.from)}》`, '-.19em')}</span></div>` : ''}
       <div class="list">${list}</div>
     </div>
     <div class="letters">${letters}</div></div>`;
