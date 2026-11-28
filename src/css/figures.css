@@ -47,6 +47,8 @@ figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
 /* 图下长注（「注：分析软件为 Python……」）：按注释字号排，不占正文行距 */
 .text p.pnote { font: var(--t-note); color: var(--c-k70); text-indent: 0; text-align: left;
   margin: 0 0 7.5pt; }
+/* 引出下文图版/公式的短提示行（「实验原理：」「颜色分析：」「名词注释：」）：不孤立留在页底 */
+.text p.keepnext { break-after: avoid; }
 /* 表格里的分形四联：四张图的原比例差异很大（谢尔宾斯基近方、科赫宽扁）。
    用 grid 把单元格切成「74pt 图区 + 图注行」：图在各自的图区里垂直居中
    （不再顶着单元格上沿），图注落在同一条基线上 */

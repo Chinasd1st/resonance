@@ -48,6 +48,7 @@ export const TEXT_FIX = {
   // 2-10：八张自然分形归位至「我们先来欣赏下面一组图片：」之后排成 2×4 图版；
   // 还原雪花 / 油滴 / 树木 / 群山各组图与「程序模拟：」「图片来源：」的真实先后顺序
   '2-10': [
+    ['<p>名词注释：</p>', '<p class="keepnext">名词注释：</p>'],
     [
       '<p><strong>雨花石</strong></p>\n<p><strong>雪花</strong></p>\n<p><strong>水晶</strong></p>'
       + '\n<p><strong>铋晶体</strong></p>\n<p><strong>星云</strong></p>'
@@ -83,7 +84,7 @@ export const TEXT_FIX = {
       '<p><img src="media/2-10/media/image11.png" style="width:2.09306in;height:2.61736in" alt="" />'
       + '<img src="media/2-10/media/image10.GIF" style="width:2.62014in;height:2.62014in" alt="" />'
       + '<img src="media/2-10/media/image9.png" style="width:2.57222in;height:2.63056in" alt="" /></p>'
-      + '\n<p class="figsrc">图片来源：网络</p>\n<p>程序模拟：</p>'
+      + '\n<p class="figsrc">图片来源：网络</p>\n<p class="keepnext">程序模拟：</p>'
       + '\n<p><img src="media/2-10/media/image14.png" style="width:2.41042in;height:2.79653in" alt="雪花分形.（1+pt·φ+1÷φ,192）" />'
       + '<img src="media/2-10/media/image13.jpeg" style="width:2.6in;height:2.71597in" alt="雪花分形.（2,108）" />'
       + '<img src="media/2-10/media/image12.jpeg" style="width:2.37986in;height:2.69097in" alt="正六边形——φ雪花" /></p>'
@@ -176,10 +177,13 @@ export const TEXT_FIX = {
       + '<img src="media/2-11/media/image13.png" style="width:2.92153in;height:2.39444in" alt="" /></p>'
       + '\n<p class="figsrc">图片来源：程序生成</p>',
     ],
+    // 清理临时截图文件名，使图注编号与同组其余图统一
+    ['alt="C:/Users/Pi/Desktop/Video/碱 颜色变化 2(1).png碱 颜色变化 2(1)"', 'alt=""'],
+    ['alt="bz 1"', 'alt=""'],
+    ['<p>实验原理：</p>', '<p class="keepnext">实验原理：</p>'],
+    ['<p>颜色分析：</p>', '<p class="keepnext">颜色分析：</p>'],
     ['<p><strong>图片来源：网络</strong></p>', '<p class="figsrc">图片来源：网络</p>'],
     ['<p><strong>图片来源：程序生成</strong></p>', '<p class="figsrc">图片来源：程序生成</p>'],
-    ['<p><strong>图片来源：实拍</strong></p>', '<p class="figsrc">图片来源：实拍</p>'],
-    ['<p><strong>反应前 反应后</strong></p>', '<p class="figlabel">反应前　反应后</p>'],
     // 两处「注：」是图下的小注，不是文末注释块
     ['<p>注：每次渲染都取用一种规则', '<p class="pnote">注：每次渲染都取用一种规则'],
     ['<p>注：由于程序基于正弦函数', '<p class="pnote">注：由于程序基于正弦函数'],
