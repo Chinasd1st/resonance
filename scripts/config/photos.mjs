@@ -23,10 +23,10 @@ export const CH_PHOTO = {
 // 篇目跨页（DESIGN-TOKENS §7.6）：第一章前三篇与 1-6《几乎处处》，
 // 满版的东西画在 overlay 层并垫在正文下面（merge.py 的 under 页）
 export const ART_PHOTO = {
-  '1-1': { src: 'assets/articles/1-1.jpg', short: 'Killarnee · CC BY-SA 4.0 · 经裁切、网点化',
-    credit: 'Killarnee 摄，“Karlsruhe at night – railroad crossing Brunnenstückweg, Karlsruhe-Rüppurr - 3”，CC BY-SA 4.0；经裁切与网点化处理，改编图同以 CC BY-SA 4.0 授权' },
-  '1-2': { src: 'assets/articles/1-2.jpg', short: 'W.carter · CC BY-SA 4.0 · 经裁切、网点化',
-    credit: 'W.carter 摄，“Sleet and rain through a bus window on road 162”，CC BY-SA 4.0；经裁切与网点化处理，改编图同以 CC BY-SA 4.0 授权' },
+  '1-1': { src: 'assets/articles/1-1.jpg', short: 'Killarnee · CC BY-SA 4.0',
+    credit: 'Killarnee 摄，“Karlsruhe at night – railroad crossing Brunnenstückweg, Karlsruhe-Rüppurr - 3”，CC BY-SA 4.0；本图为改编作品，同以 CC BY-SA 4.0 授权' },
+  '1-2': { src: 'assets/articles/1-2.jpg', short: 'W.carter · CC BY-SA 4.0',
+    credit: 'W.carter 摄，“Sleet and rain through a bus window on road 162”，CC BY-SA 4.0；本图为改编作品，同以 CC BY-SA 4.0 授权' },
   '1-3': { src: 'assets/articles/1-3.jpg', short: 'Nico le terrible · CC0',
     credit: 'Nico le terrible 摄，“Wuzhen by night 5”，CC0' },
   '1-6': { src: 'assets/articles/1-6.jpg', short: 'STEVE WALKER · CC BY 2.0',
