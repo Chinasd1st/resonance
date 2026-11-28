@@ -1,0 +1,13 @@
+# 构建期 Python 依赖。装法：python -m pip install -r requirements.txt
+# 版本下限按本机实测（pypdf 7.1.1 / pypdfium2 5.15.2 / numpy 2.5.4 / Pillow 13.0 / fonttools 4.68），
+# 上限不锁：这些库都向后兼容得很好，锁死反而会在换机时装不上。
+
+# —— 每次构建都要 ——
+pypdf>=7.1            # 合并两层、写书签、挂 OutputIntent、压水印
+pypdfium2>=4.0        # 在 PDF 里查字定位（1-2 雾蓝底收在哪一行）、pdfdiff 渲染
+numpy>=1.26           # 网点、光栅、颗粒、OKLab 插值
+Pillow>=10.0          # 位图读写与滤镜
+
+# —— 只在重新生成 fonts/ 时需要 ——
+fonttools>=4.40       # 切 Google Sans Flex 可变字体（只取 wght 轴）
+brotli>=1.0           # fonttools 读 woff2 时需要

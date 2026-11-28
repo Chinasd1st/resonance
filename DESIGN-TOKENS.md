@@ -6,7 +6,7 @@
 
 **本文件记录的是一切已经在 `dist/` 里印出来的版式事实。** v0.1 里那套"红信号色 / GS Cond / 纯灰中性色"的方案已经作废，现行为"蓝色信号色 / 蓝灰中性 / 两族字体"。
 
-维护规则：`src/tokens.css` 由第 9 节逐字生成；`src/book.css` 的取值必须能在本文件里找到出处。发现文档与成品不符时，**以 `book.css` 的实际渲染为准，回头改本文件**，不要在 CSS 里留没有出处的数值。
+维护规则：`src/css/tokens.css` 由第 9 节逐字生成；`src/css/` 下各分区（`article` / `frontmatter` / `figures` …）的取值必须能在本文件里找到出处。发现文档与成品不符时，**以 CSS 的实际渲染为准，回头改本文件**，不要在 CSS 里留没有出处的数值。
 
 ---
 
@@ -37,7 +37,7 @@
 | `resonance-print-rgb.pdf` | 216 × 303 | 内缩 3 mm | = Media |
 | `resonance-print-cmyk.pdf` | 216 × 303 | 内缩 3 mm | = Media |
 
-Chrome 直接按 216 × 303 出页；TrimBox / BleedBox 由 `scripts/merge.py`（pypdf）与 `scripts/build-cmyk.mjs` 写入。
+Chrome 直接按 216 × 303 出页；TrimBox / BleedBox 由 `scripts/pdf/merge.py`（pypdf）与 `scripts/build-cmyk.mjs` 写入。
 
 ---
 
@@ -97,7 +97,7 @@ Chrome 直接按 216 × 303 出页；TrimBox / BleedBox 由 `scripts/merge.py`�
 - 大编号：`--t-mega`（150 pt/135 pt），占 1–5 栏，底边与标题基线对齐（`margin-left:-6pt; margin-bottom:-8pt`）。
 - 标题：`--t-title`（30 pt）；标题超过 12 字自动换 `--t-title-long`（24 pt）。
 - 署名行：左「作者 + 单位（500 字重、蓝深）」，右社团标签 + 文体标签（7 pt、0.1 em）。
-- **注**：markup 里保留了 `.clubbar`（社团色条）与 `.rule`（分割线）两个占位节点，但 `book.css` 里没有对应样式，成品上**没有**色条和分割线 —— 见 §11 待确认第 7 条。
+- **注**：markup 里保留了 `.clubbar`（社团色条）与 `.rule`（分割线）两个占位节点，但 `src/css/` 里没有对应样式，成品上**没有**色条和分割线 —— 见 §11 待确认第 7 条。
 
 ---
 
@@ -114,7 +114,7 @@ Chrome 直接按 216 × 303 出页；TrimBox / BleedBox 由 `scripts/merge.py`�
 | `SHSerif` 400 | `fonts/NotoSerifCJKsc-*.otf` | 文学正文；篇目跨页（§7.8）的标题与引语另用 500 / 600 / 900 |
 | `KaTeX_*` | `node_modules/katex/dist/fonts` | 公式 |
 
-v0.1 计划过的第三族 `GS Cond`（窄体）在正文里**没有进入实现**：大编号与章名用 `GS Display` 的 700 字重。`GS W` 是 Google Sans Flex **只动字重轴**的静态实例：wght 取 400/500/700/900，wdth / opsz / ROND / slnt 全部钉在字体默认值（100 / 18 / 0 / 0），实例里不残留 `fvar` / `gvar`。章扉页禁用除字重以外的可变轴，所以不用 `GS Text`（opsz 12）、`GS Display`（opsz 72）或 `GS Cond`（wdth 25）。`fonts/` 共 223 MB，不入 git（`.gitignore`），由 `scripts/fonts.py` 生成。
+v0.1 计划过的第三族 `GS Cond`（窄体）在正文里**没有进入实现**：大编号与章名用 `GS Display` 的 700 字重。`GS W` 是 Google Sans Flex **只动字重轴**的静态实例：wght 取 400/500/700/900，wdth / opsz / ROND / slnt 全部钉在字体默认值（100 / 18 / 0 / 0），实例里不残留 `fvar` / `gvar`。章扉页禁用除字重以外的可变轴，所以不用 `GS Text`（opsz 12）、`GS Display`（opsz 72）或 `GS Cond`（wdth 25）。`fonts/` 共 223 MB，不入 git（`.gitignore`），由 `scripts/setup/fonts.py` 生成。
 
 ### 3.2 字族栈
 
@@ -200,9 +200,9 @@ Google Sans 排在思源前面，西文与数字自动取 Google Sans，汉字�
 | h2 / h3 / 公式引导段 | `break-after: avoid`（引出公式的那段与公式不分页） |
 
 **破折号**（思源黑体 U+2014 字身仅 0.894 em，两个并排会露白口）：
-`transform.js` 里把连续 `——` 拆成 `<span class="em">—<i>—</i></span>`；若字体没有 `ccmp` 破折号连字（实测无），加 `nj` 类，用 `margin-left:-.32em` 把两段墨迹接成一条线。这是当前唯一合法的写法，不要在正文里直接打两个 `—`。
+`src/js/text.js` 里把连续 `——` 拆成 `<span class="em">—<i>—</i></span>`；若字体没有 `ccmp` 破折号连字（实测无），加 `nj` 类，用 `margin-left:-.32em` 把两段墨迹接成一条线。这是当前唯一合法的写法，不要在正文里直接打两个 `—`。
 
-**预处理清洗**（`transform.js`）：
+**预处理清洗**（`src/js/text.js`）：
 删行首全角空格 / `&nbsp;` / 手打缩进；删中西文间手打半角空格（避免与 `text-autospace` 叠成双倍）；引号统一 `“ ”`；省略号统一 `……`；公式后紧跟「当/若/且/则/即/故/其中」时自动补逗号。
 
 ---
@@ -267,8 +267,8 @@ Google Sans 排在思源前面，西文与数字自动取 Google Sans，汉字�
 
 参照两张图：一张是雪山照片挂粗网、上面压一格格实色蓝圆、圆里落字母的海报；一张是米色纸上的网点插画，四色网点有轻微套印错位。本刊做法：
 
-- **画在 overlay 层**（`build.mjs` 的 `chapterSheet` + `src/chapter.css`），正文层只留一张空页和 `#ch-N` 锚点。正文层里任何超出版心的元素都会让 Chrome 把整份文档等比缩小（57 页的稿子会缩成 49 页）。
-- **底图**：`scripts/chapter-art.py` 生成整张出血页位图（216 × 303 mm，300 dpi，JPEG q90），由 `renderChapterArt` 在出 overlay 之前调用；章首页在左页还是右页由实际页序决定，几何随之镜像。
+- **画在 overlay 层**（`scripts/content/chapter.mjs` 的 `chapterSheet` + `src/css/chapter.css`），正文层只留一张空页和 `#ch-N` 锚点。正文层里任何超出版心的元素都会让 Chrome 把整份文档等比缩小（57 页的稿子会缩成 49 页）。
+- **底图**：`scripts/art/chapter-art.py` 生成整张出血页位图（216 × 303 mm，300 dpi，JPEG q90），由 `renderChapterArt` 在出 overlay 之前调用；章首页在左页还是右页由实际页序决定，几何随之镜像。
   - 纸：暖白 RGB(238, 233, 222)，叠低频斑驳（±0.55% / ±0.4%）、细颗粒（σ ≈ 2%）与随机短纤维；整页（含照片与蓝圆）都乘上同一张纸纹。
   - 照片：朴素分色成 CMYK（骨架黑，K 从灰成分 12% 以上开始），42 lpi 余弦圆点网，网角 C15° / M75° / Y0° / K45°；套印错位 C (+3, +1) px、M (−2, +2) px、Y (+1, −3) px、K 不动（300 dpi 下约 0.1–0.25 mm）；油墨按纸纹深浅吸墨（0.75–1.05）。
   - 蓝圆：`c.blue` 实色，4 列 × 5 行，直径 24 mm，中距 35.5 mm，在照片区里水平、垂直各自居中。
@@ -309,7 +309,7 @@ Google Sans 排在思源前面，西文与数字自动取 Google Sans，汉字�
 | 图注 | `t.caption`，`c.k70`，距图 3.75 pt；图号 7.5 pt 700 `c.blue`，右距 4 pt |
 | 重绘图 `svg.dfig` | 内联 SVG，与 `img` 走同一套 figure 布置；宽度由 `data-fw` 可选放宽（仅 2-1 用 56%） |
 
-**插图重绘**（`scripts/figures.mjs`，2026-11 起）：原稿里由 Word / Excel / Desmos / GeoGebra 生成的图表一律改为程序生成的矢量 SVG，随页面字体一起排版，印刷时无栅格化。
+**插图重绘**（`scripts/figures/`，2026-11 起）：原稿里由 Word / Excel / Desmos / GeoGebra 生成的图表一律改为程序生成的矢量 SVG，随页面字体一起排版，印刷时无栅格化。
 
 - **单位**：`viewBox` 用户单位 = pt，与成品尺寸 1:1，因此 `stroke-width` 和 `font-size` 写的就是实际磅值；不设额外缩放，避免图内小字被整体缩小。
 - **线条**：网格 0.25 pt（`c.gridline`）；坐标轴 0.55 pt（`c.k70`）；数据曲线 1.5 pt；几何线框 0.6–0.7 pt；分形 0.42–0.55 pt。
@@ -333,7 +333,7 @@ Google Sans 排在思源前面，西文与数字自动取 Google Sans，汉字�
 
 ### 7.6 篇末注释 / 诗
 
-- 注释：上方 0.5 pt `c.blue` 线，标签为「注释」或「注」（由 `transform.js` 按原文判定），7.5 pt 700 `c.blue`、0.14 em；条目悬挂 12 pt，编号绝对定位、等宽数字；正文 `c.k70`。
+- 注释：上方 0.5 pt `c.blue` 线，标签为「注释」或「注」（由 `src/js/structure.js` 按原文判定），7.5 pt 700 `c.blue`、0.14 em；条目悬挂 12 pt，编号绝对定位、等宽数字；正文 `c.k70`。
 - 诗：单栏，左起第 4 栏，宽 3 栏 + 2 沟；`t.poem`，不缩进、不两端对齐；节间空 1.5 bl；诗末注释回正文双栏排。
 
 ### 7.7 目录（v–vi）
@@ -350,10 +350,10 @@ Google Sans 排在思源前面，西文与数字自动取 Google Sans，汉字�
 
 **机制**
 
-- 配置在 `build.mjs` 的 `ART` / `ART_PHOTO` / `artOpener` / `artFrag` / `artCoda` / `artSheets`，样式在 `src/art.css`（正文层、overlay 层共用一个文件）。
+- 配置在 `scripts/config/photos.mjs` 的 `ART` / `ART_PHOTO`，版式在 `scripts/content/article.mjs` 的 `artOpener` / `artFrag` / `artCoda`，overlay 页在 `scripts/overlay/art.mjs` 的 `artSheets`；样式在 `src/css/art/`（`base` + 每篇一份，正文层与 overlay 层共用）。
 - 满版的东西（底色、网点照片、斜线、雾蓝底）画在 overlay 层，`merge.py` 把这些页的 overlay **垫在正文下面**（页码列表写在 `build/under.json`），正文字直接压在照片上。正文字号、行距、栏宽都不变，所以各篇页数不受影响。
-- 照片走同一条网点管线（`scripts/chapter-art.py`）：专色网（`mode: 'inks'`），每种油墨一块版，覆盖率取自暗部（`dark`）或暖色灯光（`warm`）；`fade` 让网点自上而下由无到有（雾）；`net` 画水面细网；`density` 控制实地墨量。
-- 只有排版之后才知道的位置（1-2 雾蓝底收在哪一行）由 `scripts/findtext.py` 在 body.pdf 里查字的坐标得到。
+- 照片走同一条网点管线（`scripts/art/chapter-art.py`）：专色网（`mode: 'inks'`），每种油墨一块版，覆盖率取自暗部（`dark`）或暖色灯光（`warm`）；`fade` 让网点自上而下由无到有（雾）；`net` 画水面细网；`density` 控制实地墨量。
+- 只有排版之后才知道的位置（1-2 雾蓝底收在哪一行）由 `scripts/pdf/findtext.py` 在 body.pdf 里查字的坐标得到。
 - 照片只用 CC0 / CC BY-SA 4.0，来自 Wikimedia Commons，入库的是缩到长边 3200 px 的版本（`assets/articles/`）。每张图角上印一行简短署名（6.5 / 7.5 GS W），版权页「篇目配图」一栏写全：作者、作品名、协议、经裁切与网点化处理；CC BY-SA 的改编图同以 CC BY-SA 4.0 授权。
 
 **01《在铁路口》· 夜里的白光**（左页照片页 + 右页正文，`full`）
@@ -398,7 +398,7 @@ Google Sans 排在思源前面，西文与数字自动取 Google Sans，汉字�
 
 **正扉页（iii）**：参照宽字距断词海报，满版颗粒渐变光球 + 竖条玻璃，字压在上面。
 
-- 底图 `scripts/orb-art.py`（spec 在 `build.mjs` 的 `TITLE_ORB`），overlay 层垫在正文下面（同 §7.8 的 under 页）。底色 `c.tint`；光球中心 (96, 156) mm、半径 114 × 132 mm、柔边 0.1；色标 `c.orange` → `c.music` → `c.philo` → `c.blue` → `c.blue-deep`，方向 12°，**在 OKLab 里插值**（按 RGB 直接混，橙紫之间会发褐）；颗粒 σ 0.04。右侧三条竖玻璃 132–151 / 151–170 / 170–189 mm，按玻璃棒折射取样：条内放大（取样随位置反向收缩 0.7 倍条宽）、整体错位 0.5 倍条宽，RGB 三通道错位差 ±0.04 倍条宽（色散），条内叠 +5% 柔高光（35% 处）与右缘 −6% 渐暗。**不画描边、不画亮线**，条与条之间只靠折射断口分界。
+- 底图 `scripts/art/orb-art.py`（spec 在 `scripts/config/photos.mjs` 的 `TITLE_ORB`），overlay 层垫在正文下面（同 §7.8 的 under 页）。底色 `c.tint`；光球中心 (96, 156) mm、半径 114 × 132 mm、柔边 0.1；色标 `c.orange` → `c.music` → `c.philo` → `c.blue` → `c.blue-deep`，方向 12°，**在 OKLab 里插值**（按 RGB 直接混，橙紫之间会发褐）；颗粒 σ 0.04。右侧三条竖玻璃 132–151 / 151–170 / 170–189 mm，按玻璃棒折射取样：条内放大（取样随位置反向收缩 0.7 倍条宽）、整体错位 0.5 倍条宽，RGB 三通道错位差 ±0.04 倍条宽（色散），条内叠 +5% 柔高光（35% 处）与右缘 −6% 渐暗。**不画描边、不画亮线**，条与条之间只靠折射断口分界。
 - 字标 RE— / SON / —ANCE：逐字落在 58 × 66 pt 的格子里（`TITLE_GRID`），GS W 400 56 / 66，纸白；「O」用 `c.orange`，代替原字标里的星芒。
 - 「共鸣」思源黑 300 36 / 45、0.5 em；tagline GS W 400 10 / 15、0.24 em。
 - 右上期号块 `c.blue`：年份 GS W 400 30 / 36、0.24 em，1 pt 横线 92 pt，「VOL 02」「› WINTER」17 / 27、0.3 em。
@@ -409,7 +409,7 @@ v0.1 规划的「v 卷首语」没有实现，目录占用 v–vi。
 
 ---
 
-## 9. CSS 变量（生成 `src/tokens.css`）
+## 9. CSS 变量（生成 `src/css/tokens.css`）
 
 ```css
 :root {
@@ -501,7 +501,7 @@ v1.0 相比 v0.1 删除的死 token：`--c-signal`、`--c-k6`、`--c-rich`、`--
 
 命令：`npm run build` / `npm run demo` / `npm run cmyk` / `npm run all`（`--only 2-3` 可单篇重建）。
 
-当前全书 **58 页**（前置 6 + 正文 52）。1-1 扩成跨页后比原来多一页，其后各篇整体后移一页，第二章扉页改落在右页（底图按页序自动镜像）。两张章扉页底图与三篇跨页的底图合计约 20 MB，屏幕版 / RGB 版 PDF 约 33 MB，CMYK 版约 51 MB。
+当前全书 **58 页**（前置 6 + 正文 52）。1-1 扩成跨页后比原来多一页，其后各篇整体后移一页，第二章扉页改落在右页（底图按页序自动镜像）。两张章扉页底图与三篇跨页的底图合计约 20 MB，屏幕版 / print-rgb 版各约 38.5 MB，CMYK 版约 58 MB。
 
 **已知问题**（本版未解决）：
 
