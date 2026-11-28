@@ -4,7 +4,6 @@
 .swiss-bg { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; background: #F2F2F0; }
 /* 与 swiss-photo.py 的 black_floor(#191919) 对齐：照片的暗底才能和页面黑无缝相接 */
 .swiss-bg.full { background: #191919; }
-.folio.swiss { color: #FFFFFF; }
 
 /* 左页海报（p18）：坐标相对 .aop（= 版心左上角，x 18 mm / y 23 mm）。
    left:0 + width:100% 让文字压齐版心左右边线，与全书正文同一条边；

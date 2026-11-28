@@ -185,7 +185,9 @@ export function artSheets(map, pos) {
         shadow_crush: 0.05, contrast: 1.52, gamma: 0.76,
         black_floor: 0.098, white_ceil: 0.95, vignette: 0.16, grain: 0.032, seed: 16,
       });
-      out[p0] = { html: imgTag(n, full), swiss: true };
+      // dark 只给黑底那一页：页码靠它决定反白还是墨色。右页（诗歌）是纸白，
+      // 之前跟着整跨页标了 swiss，页码也跟着白，结果 13 印在浅纸上几乎看不见。
+      out[p0] = { html: imgTag(n, full), dark: true, swiss: true };
       rest.forEach(p => { out[p] = { html: `<div class="swiss-bg"></div>`, noRh: true, swiss: true }; });
     }
   }
