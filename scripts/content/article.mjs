@@ -40,6 +40,13 @@ function artOpener(a, kicker, tags, who) {
       ${a.subtitle ? `<p class="subtitle">——${esc(a.subtitle)}</p>` : ''}
       <div class="foot"><span class="who">${who}</span><span class="en">BREAK THE RULE · 1791 × 2002</span></div>
     </header>`;
+  if (a.id === '1-5') return `
+    <header class="opener aop">
+      <div class="k"><span>${kicker}</span><span class="tags">${tags}</span></div>
+      <div class="num">159″</div>
+      <h1 class="title">${esc(a.title)}</h1>
+      <div class="foot"><span class="log">00:02:39 · ELEVATOR SHAFT</span><span>1F — 26F — B1</span></div>
+    </header>`;
   if (a.id === '1-6') return `
     <header class="opener aop">
       <div class="sw-top"><span>${kicker} // ${FORM_EN[a.form] || ''}</span><span>RESONANCE · VOL. 02</span></div>

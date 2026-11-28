@@ -1,0 +1,33 @@
+/* 1-5 大概一百五十九秒：雾蓝底上的罗斯科式蓝/墨/绿半调井道跨页。 */
+.article.art-shaft .opener.aop { height: calc(var(--bl) * 16); }         /* 240pt：为 8 个楼层节号留足垂直空间 */
+.art-shaft .aop { color: var(--c-ink); }
+.art-shaft .aop .k { color: var(--c-blue-deep); }
+.art-shaft .aop .k .tags b { color: var(--c-blue-deep) !important; }
+.art-shaft .aop .num {
+  position: absolute; left: -3pt; top: calc(var(--bl) * 1.5);
+  /* 大字时标「159″」靠字重与尺寸反差建立垂直井道尺度 */
+  font: 700 84pt/78pt var(--ff-display); letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums; color: var(--c-blue-deep);
+}
+.art-shaft .aop .title {
+  position: absolute; left: 0; top: calc(var(--bl) * 7.5);
+  font: 700 26pt/34pt "SHSerif", serif; letter-spacing: .04em; color: var(--c-ink);
+}
+.art-shaft .aop .foot {
+  position: absolute; left: 0; right: 0; bottom: var(--bl);
+  padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-blue);
+  display: flex; justify-content: space-between; align-items: baseline;
+  font: var(--t-tag); letter-spacing: .12em; color: var(--c-blue-deep);
+}
+.art-shaft .aop .foot .log { color: var(--c-k70); }
+
+.art-shaft.verse .text h3.num {
+  font: 700 15pt/22.5pt var(--ff-display); color: var(--c-blue-deep);
+  margin-top: var(--bl); margin-bottom: 3.75pt;
+}
+.art-shaft.verse .text h3.num:first-child { margin-top: 0; }
+
+/* overlay 层垂直钢缆标尺线 */
+.shaft-rail { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; overflow: hidden; }
+.shaft-rail line { stroke: var(--c-blue-deep); stroke-width: .25; }
+.shaft-rail circle { fill: var(--c-blue-deep); }

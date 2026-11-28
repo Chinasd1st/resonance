@@ -95,6 +95,41 @@ export function artSheets(map, pos) {
         out[p] = { html: imgTag(n, full) };
       });
     }
+    if (id === '1-5') {
+      const [p0, ...rest] = pages;
+      const railL = `<svg class="shaft-rail" viewBox="0 0 216 303"><line x1="11" y1="110" x2="11" y2="294"/><circle cx="11" cy="110" r="1.1"/>${[118, 154, 190, 226, 262].map(y => `<line x1="9" y1="${y}" x2="15" y2="${y}"/>`).join('')}</svg>`;
+      const railR = `<svg class="shaft-rail" viewBox="0 0 216 303"><line x1="204" y1="26" x2="204" y2="274"/><circle cx="204" cy="274" r="1.2"/>${[64, 134, 204].map(y => `<line x1="200" y1="${y}" x2="206" y2="${y}"/>`).join('')}</svg>`;
+      const n0 = img('1-5-p1', {
+        kind: 'halftone', paper: RGB.tint, seed: 51, dpi: 300,
+        plates: [
+          { rgb: RGB.blue, angle: 15, lpi: 40, shift: [1, -1], absorb: 0.7, density: 0.9,
+            shapes: [
+              { kind: 'band', x0: 126, y0: 0, x1: 216, y1: 108, fade_l: 36, fade_b: 28, peak: 0.85 },
+              { kind: 'band', x0: 0, y0: 112, x1: 36, y1: 303, fade_r: 20, fade_t: 18, peak: 0.65 },
+            ] },
+          { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.92,
+            shapes: [
+              { kind: 'band', x0: 148, y0: 18, x1: 216, y1: 88, fade_l: 28, fade_t: 14, fade_b: 24, peak: 0.78 },
+              { kind: 'band', x0: 0, y0: 140, x1: 24, y1: 303, fade_r: 14, fade_t: 22, peak: 0.52 },
+            ] },
+          { rgb: RGB.chem, angle: 75, lpi: 42, shift: [2, 1], absorb: 0.65, density: 0.85,
+            shapes: [{ kind: 'radial', cx: 190, cy: 52, r0: 6, r1: 24, peak: 0.75 }] },
+        ],
+      });
+      out[p0] = { html: imgTag(n0, full) + railL };
+      rest.forEach((p, i) => {
+        const n = img(`1-5-p${i + 2}`, {
+          kind: 'halftone', paper: RGB.tint, seed: 52 + i, dpi: 200, quality: 85,
+          plates: [
+            { rgb: RGB.blue, angle: 15, lpi: 40, shift: [1, -1], absorb: 0.7, density: 0.88,
+              shapes: [{ kind: 'band', x0: 172, y0: 0, x1: 216, y1: 303, fade_l: 24, peak: 0.78 }] },
+            { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.92,
+              shapes: [{ kind: 'band', x0: 178, y0: 90, x1: 216, y1: 303, fade_l: 22, fade_t: 140, peak: 0.85 }] },
+          ],
+        });
+        out[p] = { html: imgTag(n, full) + railR };
+      });
+    }
     if (id === '1-6') {
       const [p0, ...rest] = pages;
       // 满版：全页 216 × 303 mm 统一渲染银盐黑底与 35mm 颗粒，花卉羽化嵌入下三分之二，

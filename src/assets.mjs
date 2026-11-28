@@ -19,6 +19,7 @@ export const BOOK_CSS = [
   'art/1-2-fog.css',
   'art/1-3-mist.css',
   'art/1-4-beast.css',
+  'art/1-5-shaft.css',
   'art/1-6-swiss.css',
 ];
 
@@ -32,6 +33,7 @@ export const OVERLAY_CSS = [
   'art/1-2-fog.css',
   'art/1-3-mist.css',
   'art/1-4-beast.css',
+  'art/1-5-shaft.css',
   'art/1-6-swiss.css',
 ];
 

@@ -39,6 +39,7 @@ export const ART = {
   '1-2': { cls: 'art-fog' },
   '1-3': { cls: 'art-mist', full: true },
   '1-4': { cls: 'art-beast' },
+  '1-5': { cls: 'art-shaft' },
   '1-6': { cls: 'art-swiss', full: true },
 };
 
