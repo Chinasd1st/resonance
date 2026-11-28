@@ -32,6 +32,14 @@ function artOpener(a, kicker, tags, who) {
       <div class="k">${kicker}　${tags}</div>
       <div class="credit">图　${esc(ph.short)}</div>
     </header>`;
+  if (a.id === '1-4') return `
+    <header class="opener aop">
+      <div class="k"><span>${kicker}</span><span class="tags">${tags}</span></div>
+      <div class="num">${pad(a.seq)}</div>
+      <h1 class="title">${esc(a.title)}</h1>
+      ${a.subtitle ? `<p class="subtitle">——${esc(a.subtitle)}</p>` : ''}
+      <div class="foot"><span class="who">${who}</span><span class="en">BREAK THE RULE · 1791 × 2002</span></div>
+    </header>`;
   if (a.id === '1-6') return `
     <header class="opener aop">
       <div class="sw-top"><span>${kicker} // ${FORM_EN[a.form] || ''}</span><span>RESONANCE · VOL. 02</span></div>
@@ -82,12 +90,25 @@ function artFrag(a, frag) {
   return frag;
 }
 
-// 1-3 末段改竖排，作为整篇的收尾（从正文里取出，排在双栏之后）
+// 1-3 / 1-4 收尾段落：从正文取出排在栏尾
 function artCoda(a, frag) {
-  if (a.id !== '1-3') return { frag, coda: '' };
-  const m = frag.match(/<p>(故乡，水的故乡[\s\S]*?)<\/p>\s*$/);
-  if (!m) { console.warn('ART miss 1-3 coda'); return { frag, coda: '' }; }
-  return { frag: frag.slice(0, m.index), coda: `<div class="coda"><p>${m[1]}</p></div>` };
+  if (a.id === '1-3') {
+    const m = frag.match(/<p>(故乡，水的故乡[\s\S]*?)<\/p>\s*$/);
+    if (!m) { console.warn('ART miss 1-3 coda'); return { frag, coda: '' }; }
+    return { frag: frag.slice(0, m.index), coda: `<div class="coda"><p>${m[1]}</p></div>` };
+  }
+  if (a.id === '1-4') {
+    const m = frag.match(/<div data-custom-style="Normal">\s*<p>([\s\u00a0]*《讨厌红楼梦》其实是欣赏《红楼梦》[\s\S]*?)<\/p>\s*<\/div>\s*$/);
+    if (m) {
+      const line = m[1].trim().replace(/“红楼梦”/g, '<span class="hl">“红楼梦”</span>');
+      return { frag: frag.slice(0, m.index), coda: `<div class="coda"><p>${line}</p><span class="bopo">ㄅㄆㄇㄈㄉㄊㄋㄌ</span></div>` };
+    }
+    const mp = frag.match(/<p>([\s\u00a0]*《讨厌红楼梦》其实是欣赏《红楼梦》[\s\S]*?)<\/p>\s*$/);
+    if (!mp) { console.warn('ART miss 1-4 coda'); return { frag, coda: '' }; }
+    const line = mp[1].trim().replace(/“红楼梦”/g, '<span class="hl">“红楼梦”</span>');
+    return { frag: frag.slice(0, mp.index), coda: `<div class="coda"><p>${line}</p><span class="bopo">ㄅㄆㄇㄈㄉㄊㄋㄌ</span></div>` };
+  }
+  return { frag, coda: '' };
 }
 
 /**

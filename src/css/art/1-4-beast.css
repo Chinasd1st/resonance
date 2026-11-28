@@ -1,0 +1,40 @@
+/* 1-4 在世界中心呼唤名为爱的野兽：暖纸基调上的朱橙 + 墨双色错位半调大圆与收尾引语。 */
+.art-beast .aop { color: var(--c-ink); }
+.art-beast .aop .k { color: var(--c-k70); }
+.art-beast .aop .k .tags b { color: var(--c-orange) !important; }
+.art-beast .aop .num {
+  position: absolute; left: -3pt; top: calc(var(--bl) * 1.5);
+  /* 大编号与正文标题构成字重与尺寸反差（只用字重轴） */
+  font: 700 96pt/90pt var(--ff-display); letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums; color: var(--c-orange);
+}
+.art-beast .aop .title {
+  position: absolute; left: 0; top: calc(var(--bl) * 8); width: 68%;
+  /* 避让右侧半调圆阵，字重 900 与编号形成垂直叠压关系 */
+  font: 900 22pt/30pt "SHSerif", serif; letter-spacing: .01em; color: var(--c-ink);
+}
+.art-beast .aop .subtitle {
+  position: absolute; left: 0; top: calc(var(--bl) * 12.5); width: 68%;
+  margin: 0; font: var(--t-subtitle); color: var(--c-k70); font-feature-settings: "palt";
+}
+.art-beast .aop .foot {
+  position: absolute; left: 0; right: 0; bottom: var(--bl);
+  padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-ink);
+  display: flex; justify-content: space-between; align-items: baseline;
+  font: var(--t-byline); color: var(--c-ink);
+}
+.art-beast .aop .foot .who { font-weight: 700; }
+.art-beast .aop .foot .en { font: var(--t-tag); letter-spacing: .12em; color: var(--c-k70); text-transform: uppercase; }
+
+.art-beast .coda {
+  margin-top: var(--bl); padding-top: var(--bl-half);
+  border-top: var(--rule-hair) solid var(--c-k45);
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--col-gap);
+  break-inside: avoid;
+}
+.art-beast .coda p { margin: 0; font: 600 9.6pt/15pt "SHSerif", serif; color: var(--c-ink); text-indent: 0; }
+.art-beast .coda .hl { color: var(--c-orange); }
+.art-beast .coda .bopo {
+  flex-shrink: 0; font: 700 7.5pt/15pt "SHS", sans-serif;
+  letter-spacing: .24em; color: var(--c-k70);
+}

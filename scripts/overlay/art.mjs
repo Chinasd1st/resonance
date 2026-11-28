@@ -62,6 +62,39 @@ export function artSheets(map, pos) {
       // 正文页：同一张暖白纸（只有纸纹，150 dpi 足够）
       rest.forEach((p, i) => { out[p] = { html: imgTag(img(`1-3-paper-${i + 1}`, { seed: 30 + i, dpi: 150, quality: 82 }), full) }; });
     }
+    if (id === '1-4') {
+      const [p0, ...rest] = pages;
+      // p14：暖白纸底 + 右上开篇区双色错位裂圆半调（橙 + 墨，下方双栏正文区保持干净）
+      const n0 = img('1-4-p1', {
+        kind: 'halftone', paper: RGB.paperWarm, seed: 41, dpi: 300,
+        plates: [
+          { rgb: RGB.orange, angle: 15, lpi: 40, shift: [2, -2], absorb: 0.7, density: 0.9,
+            shapes: [
+              { kind: 'radial', cx: 164, cy: 62, r0: 26, r1: 52, peak: 0.92, half_plane: [0.55, 0.84, 134, 4] },
+              { kind: 'radial', cx: 170, cy: 52, r0: 8, r1: 22, peak: 0.65, op: 'mul_inv' },
+              { kind: 'band', x0: 120, y0: 108, x1: 216, y1: 120, fade_t: 10, peak: 1.0, op: 'mul_inv' },
+            ] },
+          { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.92,
+            shapes: [
+              { kind: 'radial', cx: 156, cy: 54, r0: 20, r1: 48, peak: 0.82, half_plane: [-0.55, -0.84, -142, 4] },
+              { kind: 'band', x0: 120, y0: 108, x1: 216, y1: 120, fade_t: 10, peak: 1.0, op: 'mul_inv' },
+            ] },
+        ],
+      });
+      out[p0] = { html: imgTag(n0, full) };
+      rest.forEach((p, i) => {
+        const n = img(`1-4-p${i + 2}`, {
+          kind: 'halftone', paper: RGB.paperWarm, seed: 42 + i, dpi: 150, quality: 84,
+          plates: [
+            { rgb: RGB.orange, angle: 15, lpi: 40, shift: [2, -1], absorb: 0.7, density: 0.85,
+              shapes: [{ kind: 'radial', cx: 196, cy: 278, r0: 6, r1: 36, peak: 0.88 }] },
+            { rgb: RGB.ink, angle: 45, lpi: 40, shift: [0, 0], absorb: 0.7, density: 0.88,
+              shapes: [{ kind: 'radial', cx: 188, cy: 282, r0: 4, r1: 26, peak: 0.72 }] },
+          ],
+        });
+        out[p] = { html: imgTag(n, full) };
+      });
+    }
     if (id === '1-6') {
       const [p0, ...rest] = pages;
       // 满版：全页 216 × 303 mm 统一渲染银盐黑底与 35mm 颗粒，花卉羽化嵌入下三分之二，
