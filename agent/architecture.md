@@ -78,7 +78,7 @@ lists.js        unwrapLists          拆 Word 列表，判「条目小标题」f
 structure.js    stripHead / structure / endnotes
 figures.js      figures()  figure 包裹、图注编号、状态 state.map
 refs.js         figrefs()  [[fig:x]] → 「图 N」（查 state.map）
-text.js         cleanText / joinDashes（破折号靠负边距接成一条线）
+text.js         cleanText / joinDashes（破折号靠负边距接成一条线，仅正文层）
 tables.js       tables()   包 .tbl，列数 ≥ 5 的通栏
 math.js         plainMath / joinConnectors / splitMathProse / demote / KaTeX
 equations.js    fitEq()   超宽公式先缩字号再转通栏（量 scrollWidth）
@@ -116,6 +116,7 @@ main.js         串起上面全部 + fonts.ready 之后再量字宽
 | C9 | 20 个字体文件名 | `setup/fonts.py` | `css/fonts.css`、`setup/envcheck.ps1` | 缺失不报错，Chrome 静默回退（「跑通≠字体对」） |
 | C10 | python 解释器与 pypdf / pypdfium2 / numpy / Pillow | 系统 | 所有 `runPy()` 调用 | 由 `lib/run.mjs` 依次试 `PYTHON`、`python`、`py`、`%LOCALAPPDATA%` 3.11–3.13；都不可用才报错 |
 | C11 | 一页 PDF = 一张 overlay | `overlay/sheets.mjs` | `pdf/merge.py` 的 `assert len(rb)==len(ro)` | 断言失败 |
+| C12a | overlay 层的破折号由构建期接合（`lib/html.mjs` 的 `dashJoin`），不是运行时 | `chapter.mjs` | overlay 没有 `text.js`，漏掉就是 0.095 em 的白口 |
 | C12 | `strip_lines` 与 HTML 标题行的归一化一致 | `manifest.json` | `js/state.js` 的 `norm()`（去 `#*空白《》`、去前导破折号） | 稿子里残留标题行 |
 
 ## 7. 现状问题（模块化的动因）
