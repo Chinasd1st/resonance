@@ -3,7 +3,7 @@
 .tbl { margin: var(--bl-half) 0 var(--bl); break-inside: avoid; }
 .tbl.wide { column-span: all; }
 .text table { width: 100%; border-collapse: collapse; font: var(--t-table); border-top: var(--rule-mid) solid var(--c-blue); border-bottom: var(--rule-mid) solid var(--c-blue); }
-.text td, .text th { padding: 3.75pt 4pt; border-bottom: var(--rule-hair) solid var(--c-k15); vertical-align: middle; text-align: left; text-indent: 0; }
+.text td, .text th { padding: 3.75pt 4pt; border-bottom: var(--rule-hair) solid var(--c-gridline); vertical-align: middle; text-align: left; text-indent: 0; }
 .text tr:first-child td { font-weight: 700; color: var(--c-blue-deep); background: var(--c-tint); border-bottom: var(--rule-thin) solid var(--c-blue); }
 .text td p { text-indent: 0; text-align: left; }
 

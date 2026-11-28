@@ -15,7 +15,7 @@
 }
 .art-years .aop .foot {
   position: absolute; left: 0; right: 0; bottom: var(--bl);
-  padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-k45);
+  padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-orange);
   display: flex; justify-content: space-between; align-items: baseline;
   font: var(--t-byline); color: var(--c-k70);
 }

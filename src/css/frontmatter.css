@@ -44,7 +44,7 @@
 .fm-colophon .tbd { color: var(--c-orange); }
 
 /* 图片来源：按篇号悬挂缩进，篇号进蓝色，正文退到第二栏，避免每一行都从「1-1」开始歪 */
-.fm-colophon .credits { margin-top: 10.5pt; padding-top: 7.5pt; border-top: .5pt solid var(--c-k15); }
+.fm-colophon .credits { margin-top: 10.5pt; padding-top: 7.5pt; border-top: .5pt solid var(--c-gridline); }
 .fm-colophon .credits h5 { font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue); margin: 0 0 5pt; }
 .fm-colophon .credits h5 span { color: var(--c-k45); font-weight: 500; margin-left: 4pt; letter-spacing: .06em; }
 .fm-colophon .cr-col em { display: block; font: 500 6.8pt/9.4pt var(--ff-ui); font-style: normal; letter-spacing: .06em; color: var(--c-k45); margin: 4pt 0 2pt; }
@@ -54,7 +54,7 @@
 
 /* 授权：官方 presskit 图标内联上色（图标自带外圈，不要再垫圆底）；
    字号比著录信息小半号，让标识行成为整块的黑点 */
-.fm-colophon .lic { margin-top: 11pt; padding-top: 7.5pt; border-top: .5pt solid var(--c-k15); }
+.fm-colophon .lic { margin-top: 11pt; padding-top: 7.5pt; border-top: .5pt solid var(--c-gridline); }
 .fm-colophon .lic-marks { display: flex; align-items: center; gap: 2.2pt; margin-bottom: 5pt; }
 .fm-colophon .ccm { display: block; width: 16pt; height: 16pt; }
 .fm-colophon .ccm svg { display: block; width: 100%; height: 100%; }
@@ -75,7 +75,7 @@
 .toc-chapter .ch .n { font: 700 21pt/26pt var(--ff-display); letter-spacing: -.02em; }
 .toc-chapter .ch .nm { font: 700 12pt/15pt "SHS", sans-serif; }
 .toc-chapter .ch .nm span { font: 500 9pt/15pt var(--ff-ui); margin-left: 8pt; letter-spacing: .06em; color: var(--c-blue-deep); }
-.toc-item { display: grid; grid-template-columns: 52pt 1fr 40pt 36pt; align-items: center; padding: 8.5pt 0; break-inside: avoid; border-bottom: var(--rule-hair) solid var(--c-k15); color: var(--c-ink); text-decoration: none; }
+.toc-item { display: grid; grid-template-columns: 52pt 1fr 40pt 36pt; align-items: center; padding: 8.5pt 0; break-inside: avoid; border-bottom: var(--rule-hair) solid var(--c-gridline); color: var(--c-ink); text-decoration: none; }
 /* 四列全部垂直居中：序号、标题块（含作者名）、圆点、页码各自在整行内居中 */
 .toc-item .n { font: 700 16pt/1 var(--ff-display); color: var(--c-blue); letter-spacing: -.02em; font-feature-settings: "tnum" 1, "pnum" 0; }
 .toc-item .t { font: 500 10pt/15pt "SHS", sans-serif; font-feature-settings: "palt"; }

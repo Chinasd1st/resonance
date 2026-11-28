@@ -28,7 +28,7 @@
 
 .art-beast .coda {
   margin-top: var(--bl); padding-top: var(--bl-half);
-  border-top: var(--rule-hair) solid var(--c-k45);
+  border-top: var(--rule-hair) solid var(--c-orange);
   display: flex; justify-content: space-between; align-items: baseline; gap: var(--col-gap);
   break-inside: avoid;
 }
