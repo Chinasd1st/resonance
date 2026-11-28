@@ -23,7 +23,8 @@
 
 1. **字体只动字重轴**：不开 `wdth` / `opsz` / `ROND` / `slnt` / `GRAD`，不写 `font-variation-settings`（`style.md` §1）。
 2. **满版只画在 overlay 层**：正文层里超出版心的元素会让 Chrome 把整本书等比缩小（`style.md` §5）。
-3. **breaking change 单独提交**并带 `!` + `BREAKING CHANGE:` 段（`git.md` §3）。
+3. **一批改动只构建一次**：改十处建十次是最常见的浪费，局部定位用渲单页 / 量 DOM / `--only`（`setup.md` §5.1）。
+4. **breaking change 单独提交**并带 `!` + `BREAKING CHANGE:` 段（`git.md` §3）。
 
 ## 新增一份规范
 

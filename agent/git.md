@@ -71,6 +71,8 @@ src/transform.js 不再存在，页面按 src/assets.mjs 注入 src/js/*.js。
 
 ## 4. 提交前检查
 
+> 构建按「一批」算：同一轮改动拆成多个提交时，在**动手写提交信息之前构建一次**、核对完再按序提交，不要每个提交各建一次（见 `setup.md` §5.1）。
+
 1. `npm run build` 通过；页数 58、`mathErrors` 为空、无 `TEXT_FIX miss` / `FIG_REF miss`。
 2. 版式改动跑了 `npm run diff -- 旧.pdf 新.pdf`，差异能逐条解释。
 3. `git status` 里没有不该进仓库的东西（`build/`、`dist/`、`fonts/`、日志、临时 PNG）。
