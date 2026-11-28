@@ -30,10 +30,16 @@ figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
    它是图下的一行署名，右对齐、6.6 pt、k70 —— 比图注轻一档，但仍在同一基线体系里。
    选择器带 .text p 才压得住 article.css 的 `.text p { text-indent: 2em }` */
 .text p.figsrc { font: 400 6.6pt/9.9pt var(--ff-ui); letter-spacing: .02em; color: var(--c-k70);
-  text-indent: 0; text-align: right; margin: -4pt 0 10pt; }
+  text-indent: 0; text-align: right; margin: -4pt 0 10pt; break-before: avoid; }
 /* 「反应前／反应后」这类两组图的栏头：居中一行小字，不参与标题层级 */
 .text p.figlabel { font: 600 6.6pt/9.9pt var(--ff-ui); letter-spacing: .14em; color: var(--c-k70);
-  text-indent: 0; text-align: center; margin: 7pt 0 2pt; }
+  text-indent: 0; text-align: center; margin: 7pt 0 2pt; break-before: avoid; }
+/* 2-10 / 2-11 单栏模式下的多图行：不再受限于 60pt 缩略行高，按单栏宽度自然舒展 */
+[data-id="2-10"] figure.row .cell :is(img, svg.dfig),
+[data-id="2-11"] figure.row .cell :is(img, svg.dfig) { width: 100%; height: auto; max-height: 155pt; object-fit: contain; }
+[data-id="2-10"] figure.row .cell svg.dfig { max-height: 175pt; }
+/* 2-10「自然模拟」四联图版：四图统一高度齐平 */
+[data-id="2-10"] figure.row[style*="--n: 4"] .cell img { height: 108pt; object-fit: cover; }
 /* 并列词串（2-10 的八个自然分形例子）：一行排开，靠字距分组，不用顿号。
    word-break: keep-all —— 中文默认可在任意字间断行，这行词串必须整词换行 */
 .text p.kwline { font: 500 7.4pt/12pt var(--ff-ui); letter-spacing: .04em; color: var(--c-blue-deep);
