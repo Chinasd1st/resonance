@@ -7,18 +7,14 @@
 //   node scripts/build-demo.mjs --no-open  只生成，不打开
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { chromium } from 'playwright-core';
+import { ROOT, B, DIST, SCRIPT } from './lib/path.mjs';
+import { py } from './lib/run.mjs';
+import { flag } from './lib/cli.mjs';
+import { launchChrome, printHtml } from './lib/browser.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const B = p => path.join(ROOT, 'build', p);
-const CHROME = process.env.CHROME || 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-const args = process.argv.slice(2);
-const flag = s => args.includes(s);
-
-const SRC = path.join(ROOT, 'dist', 'resonance-print-rgb.pdf');
-const OUT = path.join(ROOT, 'dist', 'resonance-demo.pdf');
+const SRC = DIST('resonance-print-rgb.pdf');
+const OUT = DIST('resonance-demo.pdf');
 const WM_HTML = B('demo/watermark.html');
 const WM_PDF = B('demo/watermark.pdf');
 
@@ -34,12 +30,12 @@ const MARK = {
 const TILE = { w: 78, h: 62, size: 7.4 };
 
 // ---------- 0. 没有正文就先排一版 ----------
-if (flag('--rebuild') || !fs.existsSync(SRC)) {
+if (flag('rebuild') || !fs.existsSync(SRC)) {
   console.log('排版正文…');
-  execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'build.mjs')], { cwd: ROOT, stdio: 'inherit' });
+  execFileSync(process.execPath, [SCRIPT('build.mjs')], { cwd: ROOT, stdio: 'inherit' });
 }
 
-// ---------- 1. 水印页（与正文同尺寸：216 × 303 mm） ----------
+// ---------- 1. 水印页（与正文同尺寸：216 × 303 mm）----------
 // 注意：不能用 SVG <pattern> 平铺。Chrome 打印 tiling pattern 时会把整页水印
 // 栅格化成一张 72dpi 的位图贴进 PDF，放大后必然发虚。这里改为绝对定位的
 // 真实文本节点，交给 Blink 正常输出矢量字形（PDF 里是嵌入式 Type3/TrueType 字）。
@@ -57,7 +53,7 @@ function watermarkHtml() {
     }
   }
   return `<!doctype html><html lang="zh-Hans"><head><meta charset="utf-8">
-<link rel="stylesheet" href="../../src/fonts.css">
+<link rel="stylesheet" href="../../src/css/fonts.css">
 <style>
   @page { size: 216mm 303mm; margin: 0; }
   html, body { margin: 0; background: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -84,33 +80,12 @@ function watermarkHtml() {
 
 fs.mkdirSync(path.dirname(WM_HTML), { recursive: true });
 fs.writeFileSync(WM_HTML, watermarkHtml());
-const browser = await chromium.launch({ executablePath: CHROME, headless: true });
-const page = await browser.newPage();
-await page.goto('file:///' + WM_HTML.replace(/\\/g, '/'));
-await page.evaluate(() => document.fonts.ready);
-await page.pdf({ path: WM_PDF, preferCSSPageSize: true, printBackground: true });
+const browser = await launchChrome();
+await printHtml(browser, WM_HTML, WM_PDF);
 await browser.close();
 console.log('水印页', path.relative(ROOT, WM_PDF));
 
 // ---------- 2. 逐页叠加 ----------
-const pyTry = ['python', 'py'];
-const PY_ALT = [
-  path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Python', 'Python312', 'python.exe'),
-  path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Python', 'Python313', 'python.exe'),
-];
-function py(code, argv = []) {
-  const cands = [...pyTry, ...PY_ALT.filter(p => p && fs.existsSync(p))];
-  for (const c of cands) {
-    try {
-      return execFileSync(c, ['-c', code, ...argv], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 });
-    } catch (e) {
-      if (e.code === 'ENOENT') continue;   // 换下一个解释器
-      throw e;
-    }
-  }
-  throw new Error('找不到 python（需要 pypdf）：请把 Python 加入 PATH，或改 scripts/build-demo.ps1 里的路径');
-}
-
 const STAMP = `
 import sys
 from pypdf import PdfReader, PdfWriter
@@ -125,9 +100,9 @@ with open(out, 'wb') as f:
     w.write(f)
 print(len(w.pages))
 `;
-const pages = py(STAMP, [SRC, WM_PDF, OUT]).trim();
+const pages = py(['-c', STAMP, SRC, WM_PDF, OUT]).trim();
 console.log(`写好 ${path.relative(ROOT, OUT)}（${pages} 页，${(fs.statSync(OUT).size / 1048576).toFixed(1)} MB）`);
 
-if (!flag('--no-open')) {
+if (!flag('no-open')) {
   try { execFileSync('cmd', ['/c', 'start', '', OUT], { cwd: ROOT }); } catch { /* 打不开就算了 */ }
 }

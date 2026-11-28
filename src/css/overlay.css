@@ -1,0 +1,34 @@
+/* overlay 层（满版页面）的页码、书眉、章扉页页脚带与右侧色标。
+   原先内联在 scripts/overlay/sheets.mjs 的 <style> 里，挪出来才能改一处生效一处。
+   .sheet 与正文页同尺寸（216 × 303 mm）；出血 3 mm 由 merge.py 裁。
+
+   注意：这一层的元素一律绝对定位，不参与流式排版；
+   任何越出版心的东西都必须画在这里，画到正文层会让 Chrome 把整本书等比缩小。 */
+@page { size: 216mm 303mm; margin: 0; }
+html, body { margin: 0; background: none; -webkit-print-color-adjust: exact; }
+
+.sheet { width: 216mm; height: 303mm; position: relative; break-after: page; overflow: hidden; }
+
+.folio { position: absolute; top: calc(303mm - 3mm - 14mm - 6pt); font: var(--t-folio); letter-spacing: .04em; font-variant-numeric: tabular-nums; color: var(--c-ink); }
+.folio i { display: block; width: var(--grid-col); height: var(--rule-thin); background: var(--c-k45); margin-bottom: 5pt; }
+.folio.r { right: 18mm; text-align: right; }
+.folio.r i { margin-left: auto; }
+.folio.l { left: 18mm; }
+
+.rh { position: absolute; top: calc(3mm + 12mm - 6pt); font: var(--t-runhead); letter-spacing: .08em; color: var(--c-k70); white-space: nowrap; }
+.rh.r { right: 18mm; }
+.rh.l { left: 18mm; }
+
+.tab { position: absolute; right: 0; width: calc(3mm + 4pt); height: 30pt; }
+
+.strip {
+  position: absolute; top: calc(303mm - 3mm - 14mm - 6pt - 5pt - var(--rule-thin));
+  display: flex; justify-content: space-between; width: var(--block-w);
+  padding-top: 5pt; border-top: var(--rule-thin) solid var(--c-k45);
+  font: var(--t-folio); letter-spacing: .04em; font-variant-numeric: tabular-nums; color: var(--c-ink);
+}
+.strip .tagc { font: var(--t-runhead); letter-spacing: .08em; color: var(--c-k70); }
+.strip.r { right: 18mm; }
+.strip.l { left: 18mm; flex-direction: row-reverse; }
+
+.bar { position: absolute; bottom: 0; width: 26.667pt; height: calc(240pt + 3mm); }

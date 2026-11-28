@@ -1,0 +1,27 @@
+/* 页面几何与最基础的元素样式。@page 里 calc(var()) 会被 Chrome 丢弃，所以上下边距写字面值。 */
+/* ============ Resonance · book.css (body + front matter) · v0.2 cover-derived ============ */
+@page {
+  size: 216mm 303mm;
+  /* 字面值：@page 里的 calc(var()) 会被 Chrome 丢弃，导致上下边距失效 */
+  margin: 23mm 0 26mm 0;
+}
+@page :right { margin-left: calc(var(--m-inner) + var(--bleed)); margin-right: calc(var(--m-outer) + var(--bleed)); }
+@page :left  { margin-left: calc(var(--m-outer) + var(--bleed)); margin-right: calc(var(--m-inner) + var(--bleed)); }
+
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0; width: var(--block-w);
+  color: var(--c-ink); background: none;
+  font: var(--t-body-sans);
+  font-kerning: normal; text-rendering: geometricPrecision;
+  line-break: strict; word-break: normal; overflow-wrap: break-word;
+  text-spacing-trim: space-first; text-autospace: normal; hyphens: auto;
+  orphans: 2; widows: 2;
+}
+p { margin: 0; }
+img { display: block; }
+.page { height: var(--block-h); position: relative; break-after: page; overflow: visible; }
+.tag { font: var(--t-tag); letter-spacing: .1em; text-transform: uppercase; }
+.spark { display: inline-block; background: var(--sparkle) center / contain no-repeat; }
+.spark.blue { background-image: var(--sparkle-blue); }

@@ -1,0 +1,17 @@
+/* 1-1 在铁路口：左页满版夜景（墨 + 车灯黄双色网），右页墨底反白，车灯黄斜线穿过订口。 */
+/* ---------- 1-1 在铁路口 · 夜里的白光 ---------- */
+/* 左页：满版夜景（墨 + 车灯黄双色网），标题压在夜空里；右页：墨底反白正文，车灯黄斜线从照片里的车头穿过订口 */
+.art-night .aop { color: var(--c-paper); }
+.art-night .aop .k { color: var(--c-paper); }
+.art-night .aop .k .tags b { color: var(--c-news) !important; }
+.art-night .aop .title { position: absolute; left: -4pt; top: 52.5pt; font: 900 84pt/90pt "SHSerif", serif; letter-spacing: .06em; }
+.art-night .aop .who { position: absolute; left: 0; top: 157.5pt; font: 700 10pt/15pt "SHS", sans-serif; letter-spacing: .04em; }
+.art-night .aop .who span { font-weight: 500; color: var(--c-k45); margin-left: 8pt; }
+.art-night .aop .credit { left: 0; bottom: 0; color: var(--c-k45); }
+.art-night .text { color: var(--c-paper); }
+.art-night .pull { column-span: all; height: calc(var(--bl) * 29); position: relative; }   /* 正文压到页底，上方留给引语与光线 */
+.art-night .text .pull p {
+  position: absolute; right: 0; bottom: 30pt; width: max-content;
+  font: 600 20pt/30pt "SHSerif", serif; letter-spacing: .02em; color: var(--c-news);
+  text-indent: 0; text-align: left; font-feature-settings: "palt";
+}

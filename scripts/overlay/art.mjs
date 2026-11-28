@@ -1,0 +1,89 @@
+// 篇目跨页的底图与矢量装饰（DESIGN-TOKENS §7.8）。
+// artSheets 只产出「哪一页放什么」的 HTML 片段 + 待渲染的位图 spec；
+// renderArt 把 spec 交给 scripts/art/*.py 出 JPEG（300 dpi，不透明，文字留给矢量层）。
+// 满版的底色/照片在 merge.py 里垫到正文**下面**（build/under.json 列的那些页）。
+import fs from 'node:fs';
+import { B, at } from '../lib/path.mjs';
+import { runPy } from '../lib/run.mjs';
+import { ART, ART_PHOTO, RGB, NIGHT_BEAM } from '../config/photos.mjs';
+
+/**
+ * @param {object} map  pagemap（dests 是「锚点 → 真实页序」）
+ * @param {object} pos  只能在排版后量到的位置（如 pos.fog = [页, 行顶距页面上缘 pt]）
+ * @returns {{out: Record<number,{html,dark?,noRh?,swiss?}>, specs: [string, object][]}}
+ */
+export function artSheets(map, pos) {
+  const out = {};
+  const specs = [];
+  const pagesOf = id => {
+    const p0 = map.dests[`a-${id}`];
+    const nexts = Object.values(map.dests).filter(p => p > p0);
+    const p1 = (nexts.length ? Math.min(...nexts) : map.pages + 1) - 1;
+    return Array.from({ length: p1 - p0 + 1 }, (_, i) => p0 + i);
+  };
+  const img = (name, spec) => { specs.push([name, spec]); return name; };
+  const imgTag = (name, r) => `<img class="artimg" src="art/${name}.jpg" style="left:${r[0]}mm;top:${r[1]}mm;width:${r[2]}mm;height:${r[3]}mm" alt="">`;
+  const full = [0, 0, 216, 303];
+  for (const id of Object.keys(ART)) {
+    if (!map.dests[`a-${id}`]) continue;
+    const pages = pagesOf(id);
+    const photo = at(ART_PHOTO[id].src);
+    if (id === '1-1') {
+      const [p0, ...rest] = pages;
+      // 墨 + 车灯黄双色网：暖色版取「warm」通道（车灯），暗版做骨架
+      const n = img('1-1-photo', { seed: 21, photos: [{ photo, focus: [0.6, 0.5], rect: full, mode: 'inks', exposure: 1.5, contrast: 1.2, lpi: 38, absorb: 0.3, density: 1,
+        inks: [{ rgb: RGB.news, src: 'warm', gain: 1.6, angle: 15, shift: [2, -1] }, { rgb: RGB.ink, src: 'dark', gain: 1.08, gamma: 0.75, angle: 45 }] }] });
+      const beam = off => `<svg class="beam" viewBox="${off} 0 216 303"><line x1="${NIGHT_BEAM[0][0]}" y1="${NIGHT_BEAM[0][1]}" x2="${NIGHT_BEAM[1][0]}" y2="${NIGHT_BEAM[1][1]}"/></svg>`;
+      out[p0] = { html: imgTag(n, full) + beam(0), dark: true };
+      rest.forEach((p, i) => { out[p] = { html: `<div class="night"></div>` + (i === 0 ? beam(210) : ''), dark: true, noRh: i === 0 }; });
+    }
+    if (id === '1-2') {
+      const r = [0, 0, 216, 166];        // 到开篇区底（版心第 405 pt）
+      const n = img('1-2-photo', { seed: 22, paper: RGB.tint, texture: false, out_rect: r, photos: [{ photo, focus: [0.5, 0.42], rect: r, mode: 'inks', contrast: 1.35, lift: 0.02, lpi: 42,
+        inks: [{ rgb: RGB.blue, src: 'dark', gain: 1.0, gamma: 1.15, angle: 45 }] }] });
+      // 雾蓝底色：从开篇一直铺到反转那一行之前（pos.fog = [页, 该行字顶距页面上缘 pt]），之后回到白纸
+      const [fp, fy] = pos.fog || [pages[pages.length - 1] + 1, 0];
+      for (const p of pages) {
+        let fog = '';
+        if (p < fp) fog = `<div class="fog" style="height:303mm"></div>`;
+        else if (p === fp) fog = `<div class="fog" style="height:calc(${fy}pt - 11pt)"></div>`;
+        out[p] = { html: fog + (p === pages[0] ? imgTag(n, r) : '') };
+      }
+    }
+    if (id === '1-3') {
+      const [p0, ...rest] = pages;
+      // 墨 + 灯火橙双色网；上端网点渐稀化进纸色成雾；水面叠一层细网
+      const n = img('1-3-photo', { seed: 23, photos: [{ photo, focus: [0.5, 0.6], rect: full, mode: 'inks', exposure: 1.15, contrast: 1.15, lpi: 40, fade: [45, 165], absorb: 0.6,
+        inks: [{ rgb: RGB.orange, src: 'warm', gain: 1.2, gamma: 1.7, angle: 15, shift: [2, -2] }, { rgb: RGB.ink, src: 'dark', gain: 1.0, gamma: 0.8, angle: 45 }] }],
+        net: { rect: [0, 205, 216, 98], pitch: 4.2, rgb: [238, 233, 222], fade: [210, 290], width: 0.09, strength: 0.6 } });
+      out[p0] = { html: imgTag(n, full), dark: true };
+      // 正文页：同一张暖白纸（只有纸纹，150 dpi 足够）
+      rest.forEach((p, i) => { out[p] = { html: imgTag(img(`1-3-paper-${i + 1}`, { seed: 30 + i, dpi: 150, quality: 82 }), full) }; });
+    }
+    if (id === '1-6') {
+      const [p0, ...rest] = pages;
+      // 银盐黑白：暗底延伸、压黑、暗角、颗粒，画框 154 × 212 mm 居中于成品页
+      const n = img('1-6-photo', {
+        kind: 'swiss-photo', photo,
+        out_w_mm: 154, out_h_mm: 212,
+        fit: 'contain_dark', anchor_y: 0.94, pad_x: 0.0,
+        dpi: 300, lum_weights: [0.58, 0.34, 0.08],
+        shadow_crush: 0.05, contrast: 1.52, gamma: 0.76,
+        black_floor: 0.10, white_ceil: 0.95, vignette: 0.16, grain: 0.032, seed: 16,
+      });
+      out[p0] = { html: `<div class="swiss-bg"></div>` + imgTag(n, [31, 39, 154, 212]), swiss: true };
+      rest.forEach(p => { out[p] = { html: `<div class="swiss-bg"></div>`, noRh: true, swiss: true }; });
+    }
+  }
+  return { out, specs };
+}
+
+const SCRIPT_OF = { 'swiss-photo': 'art/swiss-photo.py', orb: 'art/orb-art.py' };
+
+export function renderArt(specs) {
+  fs.mkdirSync(B('art'), { recursive: true });
+  for (const [name, spec] of specs) {
+    fs.writeFileSync(B(`art/${name}.json`), JSON.stringify(spec));
+    runPy(SCRIPT_OF[spec.kind] || 'art/chapter-art.py', B(`art/${name}.json`), B(`art/${name}.jpg`));
+  }
+}

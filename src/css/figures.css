@@ -1,0 +1,97 @@
+/* 图、图注、图号引用、2-8 的公式卡、破折号接合。图片尺寸多由行内 style 决定，这里只兜住上限。 */
+/* figures —— 按原稿宽度出图，不拉满栏宽（低分辨率截图放大会糊，且容易把整块图挤到下一页） */
+figure { margin: var(--bl-half) 0 var(--bl); break-inside: avoid; }
+figure :is(img, svg.dfig) { max-width: 100%; height: auto; margin: 0 auto; }
+/* 重绘插图（scripts/figures/ 生成的内联 SVG）：尺寸由行内 style 决定，
+   宽度超出容器时按比例收缩，图内文字与线条保持矢量 */
+svg.dfig { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+figure.small :is(img, svg.dfig) { margin: 0 auto; }
+/* 单图：随图宽收缩并居中，图注仍贴图左缘 */
+figure.col { width: fit-content; max-width: 100%; margin: var(--bl-half) auto; }
+/* 单栏篇目的小图改为图文绕排：正文绕到图侧，不再整行居中出现两侧空白 */
+figure.float { float: right; clear: right; width: fit-content; max-width: 44%; margin: 3pt 0 9pt 12pt; }
+figure.float :is(img, svg.dfig) { width: auto; height: auto; max-width: 100%; max-height: 64mm; }
+/* 重绘 SVG 的行内 height 是按原始宽度算的；宽度被 max-width 缩小后必须让它按比例回落，
+   否则会纵向压扁 */
+figure.float svg.dfig { height: auto !important; }
+/* 大图绕排（重绘的矢量图）：64 mm 高会把图压到原尺寸的 80%，图内刻度随之变小；
+   这类图在 markup 里带 data-fw，宽度上限由 src/js/figures.js 按 data-fw 写到行内 */
+figure.float svg.dfig[data-fw] { max-height: 84mm; }
+/* 比一栏还宽的图：通栏居中，避免塞进栏里被缩得过小 */
+figure.wide { column-span: all; display: flex; flex-direction: column; align-items: center; }
+figure.wide :is(img, svg.dfig) { width: auto; }
+figure.row { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); column-gap: 8pt; align-items: end; }
+figure.row .cell :is(img, svg.dfig) { width: 100%; height: 60pt; object-fit: contain; }
+figure.row .cell figcaption { text-align: center; }
+figure.row.wide { column-span: all; }
+figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
+/* 表格里的分形四联：四张图的原比例差异很大（谢尔宾斯基近方、科赫宽扁）。
+   用 grid 把单元格切成「74pt 图区 + 图注行」：图在各自的图区里垂直居中
+   （不再顶着单元格上沿），图注落在同一条基线上 */
+tr:has(svg.dfig) td figure {
+  height: 92pt; margin: 0; display: grid;
+  grid-template-rows: 74pt auto; justify-items: center; align-content: center;
+}
+tr:has(svg.dfig) td figure :is(img, svg.dfig) { align-self: center; margin: 0; max-height: 74pt; max-width: 100%; height: auto !important; }
+tr:has(svg.dfig) td figure figcaption { margin-top: 2pt; }
+figcaption { font: var(--t-caption); color: var(--c-k70); margin-top: 3.75pt; text-indent: 0; }
+figcaption b { font: 700 7.5pt/11.25pt var(--ff-ui); color: var(--c-blue); margin-right: 4pt; }
+
+/* 正文里的图号引用（[[fig:…]] → 「图 3」）：与图注编号同色，蓝色强调；
+   数字与汉字之间留一点气口，避免「图 3中」粘在一起 */
+.figref {
+  font-family: var(--ff-ui); font-weight: 700; color: var(--c-blue);
+  margin: 0 .12em; white-space: nowrap;
+}
+
+/* 2-8 三角恒等变换：手写笔记重排为公式卡（HTML + KaTeX，不再是 SVG 里的伪分式）。
+   序号 ①–④ 做小标题、右侧接一条引线；推导用 aligned 按等号对齐，缩进交给 KaTeX */
+.text figure.trigcard {
+  margin: 0 0 var(--bl); padding: 7pt 9pt 8pt;
+  background: #F5F8FE; border-top: 1.1pt solid var(--c-blue-deep);
+  font: 400 6.8pt/1.45 var(--ff-sans); text-indent: 0;
+}
+.text figure.trigcard .tc-head {
+  display: flex; align-items: baseline; gap: 5pt;
+  padding-bottom: 3pt; margin-bottom: 4.5pt;
+  border-bottom: .5pt solid var(--c-gridline);
+}
+.text figure.trigcard .tc-head b { font: 700 7.8pt/1 var(--ff-sans); color: var(--c-blue-deep); }
+.text figure.trigcard .tc-head i {
+  font: 500 3.9pt/1 var(--ff-ui); font-style: normal;
+  letter-spacing: .16em; color: var(--c-k45);
+}
+.text figure.trigcard .tc-head em {
+  margin-left: auto; font: 700 6.6pt/1 var(--ff-sans);
+  font-style: normal; color: var(--c-blue);
+}
+/* src/js/structure.js 会把 h4 统一改名为 h3，所以按类名 .tc-h 覆盖正文小标题的样式
+   （否则会继承 h3 的 10.5pt 字号和标题前的蓝色短杠） */
+.text figure.trigcard .tc-h {
+  display: flex; align-items: center; gap: 3.5pt; margin: 6.5pt 0 2pt;
+  font: 700 6.4pt/1.2 var(--ff-sans); color: var(--c-blue-deep);
+  text-indent: 0; letter-spacing: 0; break-after: auto;
+}
+.text figure.trigcard .tc-h::before { content: none; }
+.text figure.trigcard .tc-h:first-of-type { margin-top: 0; }
+.text figure.trigcard .tc-h span { font-size: 7.8pt; line-height: 1; color: var(--c-blue); }
+.text figure.trigcard .tc-h::after {
+  content: ""; flex: 1; height: .5pt; margin-left: 5pt; background: var(--c-gridline);
+}
+.text figure.trigcard p.eq {
+  margin: 0; padding: 1pt 0 1.5pt; text-align: left; text-indent: 0;
+  line-height: 1.5; break-inside: avoid;
+}
+.text figure.trigcard p.eq .katex-display,
+.text figure.trigcard p.eq .katex-display > .katex { margin: 0; text-align: left; }
+.text figure.trigcard p:has(.katex .frac-line) { line-height: 1.5; }
+.text figure.trigcard p.tc-note {
+  margin: 2pt 0 0 13pt; text-indent: 0;
+  font: 400 5.7pt/1.4 var(--ff-sans); color: var(--c-orange);
+}
+.text figure.trigcard p.tc-note .katex { font-size: 1em; }
+
+/* 破折号：思源黑体 U+2014 字身 0.894 em，两个并排中间会露白口；
+   连字（ccmp）在 Chrome 的汉字 run 里不生效，改用负边距把两段墨迹接成一条线 */
+.em { white-space: nowrap; }
+.em.nj > i { font-style: normal; margin-left: -.32em; }

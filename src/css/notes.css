@@ -1,0 +1,17 @@
+/* 注释块，以及诗体（verse）的栏宽与注释放置。 */
+/* notes */
+.notes { margin-top: var(--bl); padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-blue); break-inside: avoid-column; }
+.notes p { font: var(--t-note); text-indent: 0; text-align: left; margin-bottom: 3.75pt; color: var(--c-k70); }
+.notes-label { font: 700 7.5pt/11.25pt var(--ff-ui) !important; letter-spacing: .14em; color: var(--c-blue) !important; margin-bottom: 5pt; }
+.notes .note-item { position: relative; padding-left: 12pt; text-align: justify; }
+.notes .note-item .n { position: absolute; left: 0; top: 0; font: 700 7.5pt/11.25pt var(--ff-ui); color: var(--c-blue); font-variant-numeric: tabular-nums; }
+.notes .note-cont { padding-left: 12pt; text-align: justify; }
+
+/* verse */
+.article.verse .text { column-count: 1; margin-left: calc((var(--grid-col) + var(--grid-gap)) * 3); width: calc(var(--col-w) + var(--grid-col) * 2 + var(--grid-gap) * 2); }
+.article.verse .text p { font: var(--t-poem); text-indent: 0; text-align: left; }
+.article.verse .text h3.num { margin-top: calc(var(--bl) * 1.5); }
+/* endnotes of a poem: set at the body margin, in body columns — not in the verse column */
+.article.verse > .notes { margin-top: calc(var(--bl) * 2); column-count: 2; column-gap: var(--col-gap); break-inside: auto; }
+.article.verse > .notes p { font: var(--t-note); text-indent: 0; text-align: left; color: var(--c-k70); margin-bottom: 5pt; }
+.article.verse > .notes .notes-label { font: 700 7.5pt/11.25pt var(--ff-ui); letter-spacing: .14em; color: var(--c-blue); text-align: left; }

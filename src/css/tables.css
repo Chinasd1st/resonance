@@ -1,0 +1,36 @@
+/* 三线表、生僻字格与 ruby 注音。 */
+/* tables */
+.tbl { margin: var(--bl-half) 0 var(--bl); break-inside: avoid; }
+.tbl.wide { column-span: all; }
+.text table { width: 100%; border-collapse: collapse; font: var(--t-table); border-top: var(--rule-mid) solid var(--c-blue); border-bottom: var(--rule-mid) solid var(--c-blue); }
+.text td, .text th { padding: 3.75pt 4pt; border-bottom: var(--rule-hair) solid var(--c-k15); vertical-align: middle; text-align: left; text-indent: 0; }
+.text tr:first-child td { font-weight: 700; color: var(--c-blue-deep); background: var(--c-tint); border-bottom: var(--rule-thin) solid var(--c-blue); }
+.text td p { text-indent: 0; text-align: left; }
+
+/* rare glyphs set as live text (vector), not bitmaps */
+.rare {
+  display: inline-block; margin: 1pt auto 2pt; text-align: center;
+  font-family: "SimSun-ExtG", "SimSun-ExtB", "MingLiU-ExtB", "SimSun", serif;
+  font-size: 34pt; line-height: 1.1; font-weight: 400; color: var(--c-ink);
+}
+
+/* 读音注释：字在下、拼音在上（ruby）。拼音一律思源黑体，比正文小、字距略开，
+   使声调符号不与相邻字母粘连 */
+ruby { ruby-position: over; ruby-align: center; }
+ruby rt { font: 500 .62em/1 var(--ff-ui); color: var(--c-blue-deep); letter-spacing: .04em; }
+/* 生僻字是 34pt 的大字，rt 若按 .62em 会长到 21pt，故单独定死 7.2pt */
+ruby:has(.rare) rt { font-size: 7.2pt; letter-spacing: .02em; }
+ruby:has(.rare) .rare { margin: 0; }
+/* 注音字/字格在表格里居中 */
+.text td p:has(ruby) { text-align: center; }
+/* 生僻字格：拼音在上、字形居中、Unicode 码位另起一行居中。
+   码位是查字用的注记，不是内容，故用灰蓝小字、等宽数字，不与上方蓝色拼音争注意力 */
+.text td p.glyph-cell {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  gap: 3pt; text-align: center;
+}
+.text td p.glyph-cell .glyph-note {
+  font: 400 6.8pt/1 var(--ff-ui); color: var(--c-k70);
+  font-variant-numeric: tabular-nums; letter-spacing: .02em; white-space: nowrap;
+  margin-bottom: 2pt;   /* 括号下沿离表格线太近，抬一点，别像压线 */
+}

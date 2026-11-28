@@ -1,0 +1,63 @@
+/* 序言页 i–v：半扉、宣言、正扉页、版权页、目录。目录页码由 build.mjs 第二遍打印前回填。 */
+/* ======================= FRONT MATTER ======================= */
+/* i · half-title (white) */
+.fm-half .mark { position: absolute; left: 0; top: calc(var(--bl) * 20); color: var(--c-blue); }
+.fm-half .mark .w { font: var(--t-halfmark); letter-spacing: -.02em; }
+.fm-half .mark .w sup { font: 700 16pt/15pt var(--ff-display); vertical-align: 18pt; margin-left: 3pt; letter-spacing: 0; }
+.fm-half .mark .cn { font: 700 11pt/22.5pt "SHS", sans-serif; letter-spacing: .1em; margin-top: 7.5pt; }
+.fm-half .mark .spark { width: 22pt; height: 22pt; position: absolute; left: 77pt; top: 7pt; }
+
+/* ii · tinted manifesto page */
+.fm-bars .quote { position: absolute; left: 0; top: calc(var(--bl) * 6); width: 380pt; color: var(--c-blue); }
+.fm-bars .quote .en { font: var(--t-quote); letter-spacing: -.02em; }
+.fm-bars .quote .cn { font: 700 14pt/30pt "SHS", sans-serif; margin-top: var(--bl); letter-spacing: .05em; }
+.fm-bars .quote .spark { width: 34pt; height: 34pt; margin-left: 4pt; vertical-align: -2pt; }
+.fm-bars .legend { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(6, 1fr); column-gap: var(--grid-gap); }
+.fm-bars .legend div { font: 500 8pt/15pt "SHS", sans-serif; color: var(--c-blue-deep); }
+.fm-bars .legend i { display: block; width: 10pt; height: 10pt; border-radius: 50%; margin-bottom: 7.5pt; }
+.fm-bars .legend b { display: block; font: var(--t-tag); letter-spacing: .1em; }
+
+/* iii · 正扉页：颗粒渐变光球（overlay 底图，scripts/art/orb-art.py）上排纸白字，参照宽字距断词海报
+   字标 RE— / SON / —ANCE 逐字落格（GS W 400，只动字重轴），O 用信号橙，代替原字标里的星芒 */
+.fm-title { --wm-step: 58pt; --wm-row: 66pt; color: var(--c-paper); }
+.fm-title .wm i { position: absolute; width: var(--wm-step); text-align: center; font: 400 56pt/66pt "GS W", sans-serif; font-style: normal; }
+.fm-title .wm i.o { color: var(--c-orange); }
+.fm-title .cn { position: absolute; left: var(--wm-step); top: calc(var(--wm-row) * 3 + 22.5pt); font: 300 36pt/45pt "SHS", sans-serif; letter-spacing: .5em; }
+.fm-title .tl { position: absolute; left: var(--wm-step); top: calc(var(--wm-row) * 3 + 75pt); font: 400 10pt/15pt "GS W", sans-serif; letter-spacing: .24em; }
+.fm-title .issue { position: absolute; right: 0; top: 4pt; display: flex; flex-direction: column; align-items: flex-end; color: var(--c-blue); }
+.fm-title .issue b { font: 400 30pt/36pt "GS W", sans-serif; letter-spacing: .24em; margin-right: -.24em; }
+.fm-title .issue i { display: block; width: 92pt; height: var(--rule-mid); background: var(--c-blue); margin: 7.5pt 0 9pt; }
+.fm-title .issue span { font: 400 17pt/27pt "GS W", sans-serif; letter-spacing: .3em; margin-right: -.3em; }
+.fm-title .vr { position: absolute; right: 0; top: 255pt; writing-mode: vertical-rl; font: 400 9pt/15pt "SHS", sans-serif; letter-spacing: .28em; }
+.fm-title .vl { position: absolute; left: 0; bottom: 60pt; writing-mode: sideways-lr; font: 400 8.5pt/15pt "GS W", "SHS", sans-serif; letter-spacing: .24em; }
+.fm-title .clubs { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; list-style: none; display: flex; justify-content: center; font: 500 8pt/15pt "SHS", sans-serif; letter-spacing: .12em; }
+.fm-title .clubs li + li::before { content: "×"; margin: 0 10pt; font: 400 8pt/15pt "GS W", sans-serif; }
+
+/* iv · colophon (white) */
+.fm-colophon .block { position: absolute; left: 0; bottom: 0; width: var(--col-w); font: var(--t-caption); }
+.fm-colophon .block h4 { font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue); margin: 0 0 7.5pt; }
+.fm-colophon dl { display: grid; grid-template-columns: 56pt 1fr; margin: 0; }
+.fm-colophon dt { color: var(--c-k70); }
+.fm-colophon dd { margin: 0; }
+.fm-colophon .tbd { color: var(--c-orange); }
+
+/* v · TOC（单页容纳两章，行距按 720pt 版心整体压缩；同时是最后一页前置页，分页交给章首页的 break-before） */
+.fm-toc { height: auto; break-after: auto; }
+.toc-head { height: calc(var(--bl) * 3.6); position: relative; color: var(--c-blue); }
+.toc-head h2 { margin: 0; position: absolute; bottom: 0; font: 700 56pt/54pt var(--ff-display); letter-spacing: -.035em; }
+.toc-head .cn { position: absolute; right: 0; bottom: 4pt; font: 700 12pt/15pt "SHS", sans-serif; letter-spacing: .4em; }
+.toc-head .spark { position: absolute; left: 300pt; top: 10pt; width: 26pt; height: 26pt; }
+.toc-chapter { margin-top: calc(var(--bl) * 1.2); }
+.toc-chapter .ch { display: flex; align-items: baseline; gap: 10pt; padding-bottom: 4pt; border-bottom: var(--rule-mid) solid var(--c-blue); color: var(--c-blue); text-decoration: none; }
+.toc-chapter .ch .n { font: 700 21pt/26pt var(--ff-display); letter-spacing: -.02em; }
+.toc-chapter .ch .nm { font: 700 12pt/15pt "SHS", sans-serif; }
+.toc-chapter .ch .nm span { font: 500 9pt/15pt var(--ff-ui); margin-left: 8pt; letter-spacing: .06em; color: var(--c-blue-deep); }
+.toc-item { display: grid; grid-template-columns: 52pt 1fr 40pt 36pt; align-items: center; padding: 8.5pt 0; break-inside: avoid; border-bottom: var(--rule-hair) solid var(--c-k15); color: var(--c-ink); text-decoration: none; }
+/* 四列全部垂直居中：序号、标题块（含作者名）、圆点、页码各自在整行内居中 */
+.toc-item .n { font: 700 16pt/1 var(--ff-display); color: var(--c-blue); letter-spacing: -.02em; font-feature-settings: "tnum" 1, "pnum" 0; }
+.toc-item .t { font: 500 10pt/15pt "SHS", sans-serif; font-feature-settings: "palt"; }
+.toc-item .t small { display: block; font: var(--t-byline); color: var(--c-k70); }
+/* 圆点与页码随 align-items:center 一起在行内居中，不再做基线偏移 */
+.toc-item .c { display: flex; gap: 3pt; align-items: center; }
+.toc-item .c i { width: 6pt; height: 6pt; border-radius: 50%; display: block; }
+.toc-item .pn { text-align: right; font: 700 10pt/15pt var(--ff-ui); font-feature-settings: "tnum" 1, "pnum" 0; color: var(--c-blue); }

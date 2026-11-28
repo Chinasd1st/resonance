@@ -10,7 +10,9 @@
     "build": "node scripts/build.mjs",
     "demo": "node scripts/build-demo.mjs",
     "cmyk": "node scripts/build-cmyk.mjs",
-    "all": "node scripts/build.mjs && node scripts/build-demo.mjs --no-open && node scripts/build-cmyk.mjs"
+    "all": "node scripts/build.mjs && node scripts/build-demo.mjs --no-open && node scripts/build-cmyk.mjs",
+    "figs": "node scripts/tools/figpreview.mjs",
+    "diff": "python scripts/tools/pdfdiff.py"
   },
   "keywords": [],
   "author": "",

@@ -7,21 +7,14 @@
 //   node scripts/build-cmyk.mjs --icc=icc/xxx.icc   指定目标 ICC
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { ROOT, DIST, GS } from './lib/path.mjs';
+import { py } from './lib/run.mjs';
+import { flag, opt } from './lib/cli.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const args = process.argv.slice(2);
-const flag = s => args.includes(s);
-const opt = (name, dflt) => {
-  const hit = args.find(a => a.startsWith(`--${name}=`));
-  return hit ? hit.slice(name.length + 3) : dflt;
-};
-
-const SRC = path.join(ROOT, 'dist', 'resonance-print-rgb.pdf');
-const OUT = path.join(ROOT, 'dist', 'resonance-print-cmyk.pdf');
+const SRC = DIST('resonance-print-rgb.pdf');
+const OUT = DIST('resonance-print-cmyk.pdf');
 const ICC = path.resolve(ROOT, opt('icc', 'icc/gs_default_cmyk.icc'));
-const GS = process.env.GS || 'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c.exe';
 
 if (!fs.existsSync(SRC)) {
   console.error(`缺少 ${path.relative(ROOT, SRC)}：先运行 node scripts/build.mjs`);
@@ -50,25 +43,7 @@ execFileSync(GS, [
   SRC.replace(/\\/g, '/'),
 ], { cwd: ROOT, stdio: 'inherit' });
 
-// ---------- 2. 挂 OutputIntent（嵌入同一份 ICC） ----------
-const pyTry = ['python', 'py'];
-const PY_ALT = [
-  path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Python', 'Python312', 'python.exe'),
-  path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Python', 'Python313', 'python.exe'),
-];
-function py(code, argv = []) {
-  const cands = [...pyTry, ...PY_ALT.filter(p => p && fs.existsSync(p))];
-  for (const c of cands) {
-    try {
-      return execFileSync(c, ['-c', code, ...argv], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 });
-    } catch (e) {
-      if (e.code === 'ENOENT') continue;
-      throw e;
-    }
-  }
-  throw new Error('找不到 python（需要 pypdf）');
-}
-
+// ---------- 2. 挂 OutputIntent（嵌入同一份 ICC）----------
 const ATTACH = `
 import sys
 from pypdf import PdfReader, PdfWriter
@@ -111,9 +86,9 @@ print(len(w.pages))
 `;
 
 const condName = path.basename(ICC, '.icc').replace(/_/g, ' ');
-const pages = py(ATTACH, [OUT, ICC, OUT, condName]).trim();
+const pages = py(['-c', ATTACH, OUT, ICC, OUT, condName]).trim();
 console.log(`写好 ${path.relative(ROOT, OUT)}（${pages} 页，${(fs.statSync(OUT).size / 1048576).toFixed(1)} MB，ICC=${path.relative(ROOT, ICC)}）`);
 
-if (flag('--open')) {
+if (flag('open')) {
   try { execFileSync('cmd', ['/c', 'start', '', OUT], { cwd: ROOT }); } catch { /* ignore */ }
 }

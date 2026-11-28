@@ -1,0 +1,25 @@
+/* 篇目跨页的共用部分：两层（正文层 / overlay 层）都要吃的规则。
+   只用实色，不用透明度、渐变；网点与雾化都在位图里（scripts/art/chapter-art.py）。 */
+/* ============ 篇目跨页 · DESIGN-TOKENS §7.6 ============
+   第一章前三篇各自一套「气候」。同一个文件给两层用：
+   - 正文层（book.html）：.article.art 的开篇与文字结构，正文字号 / 行距 / 栏宽一律不动
+   - overlay 层（overlay.html）：满版底色、网点照片、斜线，在 merge.py 里垫到正文下面
+   只用实色，不用透明度、渐变；照片里的网点、雾化都在位图里（scripts/art/chapter-art.py）。 */
+
+/* ---------- overlay 层 ---------- */
+.artimg { position: absolute; display: block; }
+.night { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; background: var(--c-ink); }
+.fog { position: absolute; left: 0; top: 0; width: 216mm; background: var(--c-tint); }
+.beam { position: absolute; left: 0; top: 0; width: 216mm; height: 303mm; overflow: hidden; }
+.beam line { stroke: var(--c-news); stroke-width: .35; }           /* 0.35 mm ≈ 1 pt，全书最粗线 */
+.folio.inv, .rh.inv { color: var(--c-paper); }
+.folio.inv i { background: var(--c-k70); }
+
+/* ---------- 正文层：共用 ---------- */
+.article.art .opener.aop { height: var(--opener-h); position: relative; display: block; }
+.article.art.full .opener.aop { height: var(--block-h); }          /* 开篇独占照片页，正文从下一页起 */
+.aop .k { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: space-between; font: var(--t-tag); letter-spacing: .1em; }
+.aop .k .tags { display: flex; gap: 10pt; }
+.aop .k .tags b { font: var(--t-tag); letter-spacing: .1em; }
+.aop .credit { position: absolute; font: 400 6.5pt/7.5pt "GS W", "SHS", sans-serif; letter-spacing: .02em; }
+.aop .title { margin: 0; font-feature-settings: "palt"; }

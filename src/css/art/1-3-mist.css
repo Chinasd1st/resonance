@@ -1,0 +1,11 @@
+/* 1-3 半片水，半城雾：乌镇夜河（墨 + 灯火橙双色网），上端网点渐稀成雾，竖排大标题。 */
+/* ---------- 1-3 半片水，半城雾 · 雾里的第一盏灯 ---------- */
+/* 左页：乌镇夜河（墨 + 灯火橙双色网），上端网点渐稀化进纸色成雾，竖排大标题压在雾里；水面叠一层细网 */
+.art-mist .aop .title { position: absolute; right: -2pt; top: 0; writing-mode: vertical-rl; font: 900 54pt/66pt "SHSerif", serif; letter-spacing: .1em; color: var(--c-ink); }
+.art-mist .aop .title span { display: block; }
+.art-mist .aop .title span + span { margin-top: 108pt; }                /* 第二列错落下沉两字 */
+.art-mist .aop .k { left: auto; right: 146pt; top: 4pt; writing-mode: vertical-rl; display: block; color: var(--c-k70); }
+.art-mist .aop .credit { left: 0; bottom: 0; color: var(--c-paper); }
+.art-mist .coda { margin-top: 22.5pt; padding-top: 15pt; border-top: var(--rule-hair) solid var(--c-k45); display: flex; justify-content: flex-end; }
+.art-mist .coda p { writing-mode: vertical-rl; height: 255pt; margin: 0; font: 500 10.5pt/22.5pt "SHSerif", serif; letter-spacing: .12em; text-align: justify; font-feature-settings: "vpal"; }
+.art-mist .aop .k b { margin-inline-start: .8em; }

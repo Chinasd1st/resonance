@@ -1,0 +1,36 @@
+/* 独立公式、推导链的对齐与分页约束、KaTeX 分数线（用渐变画线，避免被打印吸附成 1px）。 */
+/* 公式 */
+.text p.eq { text-align: center; margin: var(--bl-half) 0; padding-top: 3pt; break-inside: avoid; }
+/* 引出公式的一段不要和公式分处两页（Chrome 对 break-after: avoid 的支持比 break-before 可靠） */
+/* 引出句（正文）不许与它下面那条公式分页；但公式与公式之间可以断
+   ——否则一长串 lim 推导链被粘成一块，页底会空出半页 */
+.text p:not(.eq):not(.led):has(+ p.eq), .text p:not(.eq):not(.led):has(+ p.led) { break-after: avoid; }
+.text p.eq.wide { column-span: all; }
+/* 公式行：公式 + 一句短说明同行居中（「当且仅当…时取等，其中…」） */
+.text p.eq.fline { line-height: 2.1; }
+/* 2-3 补回被 pandoc 吞掉的一段后，全文比三页多出 1.6 mm：公式上下的空档收 1 pt，
+   正好把结尾两行拉回上一页，避免只剩两行的孤页 */
+[data-id="2-3"] .text p.eq { margin: 5pt 0; }
+[data-id="2-3"] .tbl { margin-bottom: 2pt; }
+/* 四联图是表格单元格里的图，按原图尺寸会撑到 42mm；限高 32mm 把结尾三行收回本页 */
+[data-id="2-3"] .text td, [data-id="2-3"] .text th { padding: 2.2pt 4pt; }
+/* 2-2 的正文补齐句末句号后多出几行，「第五章：收束」被挤到第四页、只剩五行；
+   行距收 0.8 pt（15 → 14.2），把这一节拉回第三页 */
+section.article[data-id="2-2"] .text { line-height: 14.2pt; }
+/* 2-5 的推导块：行距略收，让整段推导落在一页之内；
+   逻辑用语（∵ ∴ 即 分子： 分母： ∴式子：）与全刊共用 .lead 的样式 */
+[data-id="2-5"] .text p.led { margin: 3.5pt 0; }
+[data-id="2-5"] .text p.led:not(:has(.math)) .lead { margin-right: 0; }
+.katex { font-size: 1.05em; }
+.katex-display { margin: 0; }
+td .katex { font-size: 1em; }
+/* 分数线：KaTeX 给 .frac-line 设了 min-height:1px，线是 border-bottom。
+   Chrome 打印会把任何小于 1 CSS px 的 border 吸附成整像素，实测 .01em 与 .032em
+   的成品厚度完全一样（都是 0.81pt ≈ 0.29mm），所以「收细一档」根本不起作用。
+   改用 background 渐变：渐变在 PDF 里是 shading，不吸附，实测 0.31pt，回到细线。 */
+.katex .mfrac .frac-line,
+.katex .katex-overline .overline-line,
+.katex .katex-underline .underline-line {
+  border-bottom: 0 !important;
+  background-image: linear-gradient(to top, currentColor 0 45%, transparent 45% 100%);
+}

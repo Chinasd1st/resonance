@@ -1,0 +1,94 @@
+/* 章扉页锚点、篇首开篇、正文栏与标题层级、条目小标题、推导块、强调与引文。 */
+/* ======================= CHAPTER OPENER (tinted, full page) ======================= */
+/* 章首页必须自己 break-before：前一页可能是 .article（无 break-after）。但目录页是最后一页前置页，
+   若它同时 break-after 就会和这里的 break-before 叠成空白页，故 .fm-toc 改为 break-after:auto */
+.chapter-opener { break-before: page; }   /* 内容在 overlay 层，见 src/css/chapter.css */
+
+/* ======================= ARTICLE ======================= */
+/* .article 不带 .page（高度随内容），分页靠自带的 break-before；.page 类元素只用 break-after，避免双强制分页多吐空白页 */
+.article { break-before: page; }
+.opener {
+  height: var(--opener-h); position: relative; color: var(--c-blue);
+  display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--grid-gap);
+  grid-template-rows: var(--bl) 1fr auto;
+}
+.opener .meta-top { grid-column: 1 / 7; grid-row: 1; display: flex; gap: 8pt; align-items: center; font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue-deep); }
+.opener .meta-top i { width: 6pt; height: 6pt; border-radius: 50%; display: block; }
+.opener .tags { grid-column: 7 / 13; grid-row: 1; display: flex; justify-content: flex-end; gap: 10pt; }
+.opener .tags b { font: var(--t-tag); letter-spacing: .1em; color: var(--c-blue-deep); }
+.opener .mega {
+  grid-column: 1 / 6; grid-row: 2; align-self: end; position: relative;
+  font: var(--t-mega); letter-spacing: -.05em; font-variant-numeric: tabular-nums;
+  margin-left: -6pt; margin-bottom: -8pt;
+}
+.opener .head { grid-column: 6 / 13; grid-row: 2; align-self: end; padding-bottom: 2pt; }
+.opener .title { margin: 0; font: var(--t-title); letter-spacing: -.01em; font-feature-settings: "palt"; }
+.opener .title.long { font: var(--t-title-long); }
+.opener .subtitle { font: var(--t-subtitle); color: var(--c-blue-deep); margin-top: 3.75pt; font-feature-settings: "palt"; }
+.opener .byline { grid-column: 1 / 13; grid-row: 3; display: flex; justify-content: space-between; align-items: baseline; padding-top: 11pt; height: calc(var(--bl) * 2.5); }
+.opener .byline .who { font: 700 9pt/15pt var(--ff-ui); letter-spacing: .01em; }
+.opener .byline .who span { font-weight: 500; color: var(--c-blue-deep); margin-left: 6pt; }
+.opener .byline .tl { font: 700 8pt/15pt var(--ff-display); color: var(--c-blue-deep); }
+
+/* running text */
+.text { column-count: 2; column-gap: var(--col-gap); column-fill: balance; }
+/* 公式密集的篇目单栏排：独立公式不再通栏切断双栏正文 */
+.article.single .text { column-count: 1; }
+.article.serif .text { font: var(--t-body-serif); }
+.article.sans  .text { font: var(--t-body-sans); }
+.text p { text-indent: 2em; text-align: justify; }
+.text p.noindent, .text p.eq, .text p.led { text-indent: 0; }
+.text h2 { font: var(--t-h2); color: var(--c-blue); margin: calc(var(--bl) * 1.15) 0 var(--bl-half); break-after: avoid; font-feature-settings: "palt"; }
+.text h2::before { content: ""; display: inline-block; width: 9pt; height: 9pt; margin-right: 5pt; vertical-align: -.5pt; background: var(--sparkle) center / contain no-repeat; }
+.text h2:first-child, .text h3:first-child { margin-top: 0; }
+.text h3 { font: var(--t-h3); color: var(--c-blue-deep); margin: calc(var(--bl) * .8) 0 3.75pt; break-after: avoid; font-feature-settings: "palt"; letter-spacing: .01em; }
+.text h3::before { content: ""; display: inline-block; width: 11pt; height: 2.4pt; background: var(--c-blue); margin-right: 6pt; vertical-align: .28em; }
+.text h3.num { font: var(--t-h3num); color: var(--c-blue); letter-spacing: -.02em; margin-top: var(--bl); }
+.text h3.num::before { display: none; }
+/* 分段标题「PART 1 · 怪物与精灵之争」 */
+.text h2.part .pn { font: 700 8pt/11pt var(--ff-ui); letter-spacing: .14em; color: var(--c-orange); margin-right: 10pt; vertical-align: .22em; }
+.text h2.part .pt { font: inherit; color: inherit; }
+/* ①—⑩ 步骤行 / 有序列表：悬挂缩进，与正文同字号同字距 */
+.text p.item { text-indent: -1.34em; padding-left: 1.34em; }
+/* 步骤序号：全刊唯一的蓝，加半个字的空隙，不再和正文粘在一起 */
+.text p.item .num { color: var(--c-blue-deep); font-weight: 700; margin-right: .28em; }
+.text p.li-p { text-indent: -1.4em; padding-left: 1.4em; }
+.text p.li-c { text-indent: 2em; }
+.text .li-n { font-weight: 700; color: var(--c-blue-deep); font-variant-numeric: tabular-nums; margin-right: .28em; }
+/* 「1. 韦伯——费希纳对数定律」这类条目小标题（函数名、法则名）：
+   编号是蓝色等宽数字、占一列；标题黑体 700，比正文高半级，墨色不抢 h3 的蓝。
+   上方 8pt 与引出句断开，下方只留 2pt 贴住紧随其后的公式；标题折行时与标题首字对齐 */
+.text p.fn-h {
+  margin: 8pt 0 1pt; padding-left: 1.6em; text-indent: -1.6em;
+  font: 700 9.8pt/13pt var(--ff-ui); color: var(--c-ink);
+  letter-spacing: .01em; break-after: avoid;
+}
+/* 2-2 里「定义式」与「常数式」是同一组（S 与 k），贴紧些：
+   既符合「同一法则的两条式子不该像两段话那样隔开」，也让这一组能和标题同页 */
+[data-id="2-2"] .text p.fn-h + p.eq { margin-top: 6pt; padding-top: 0; }
+[data-id="2-2"] .text p.eq + p.eq { margin-top: 2pt; padding-top: 0; }
+.text p.fn-h .li-n {
+  display: inline-block; width: 1.28em; margin-right: .32em;
+  color: var(--c-blue-deep); font-size: 9.8pt; letter-spacing: 0;
+  text-indent: 0;   /* inline-block 会新开块容器，继承来的负缩进会把「1.」推出框外 */
+}
+/* 推导行：「∴」「即」「分子：」紧贴公式左侧，两者作为一个整体居中。
+   公式是 inline-block（宽度=自身内容），所以每条推导的中轴都是版心正中，
+   不会出现「有的居中、有的左对齐」，标签也不会被甩到栏边 */
+.text p.led { text-align: center; margin: var(--bl-half) 0; }
+.text p.led .lead {
+  display: inline-block; vertical-align: middle; margin-right: 9pt; white-space: nowrap;
+  font: 700 8pt/1.2 var(--ff-ui); color: var(--c-blue); letter-spacing: .02em;
+}
+.text p.led > .math { display: inline-block; vertical-align: middle; }
+.text p.led:not(:has(.math)) { text-align: left; }
+/* 段首的逻辑用语（∵ / ∴）：与推导块的标签同一套颜色，读起来是一串推理 */
+.text p .conn { color: var(--c-blue); font-weight: 700; margin-right: .08em; }
+/* 行内分式比行高更高，行距放宽一点，避免上下两行相撞 */
+.text p:has(.katex .frac-line) { line-height: 23pt; }
+.text strong, .text b { font-weight: 700; }
+.text em { font-style: normal; font-weight: 500; }
+.article.serif .text em { font-family: "SHS", sans-serif; font-size: .95em; }
+.text del { text-decoration: line-through; color: var(--c-k70); }
+.text blockquote { margin: 0 0 var(--bl); padding: 7.5pt 1em; background: var(--c-tint); color: var(--c-blue-deep); }
+.text blockquote p { text-indent: 0; }
