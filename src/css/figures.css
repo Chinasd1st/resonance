@@ -25,6 +25,22 @@ figure.row .cell :is(img, svg.dfig) { width: 100%; height: 60pt; object-fit: con
 figure.row .cell figcaption { text-align: center; }
 figure.row.wide { column-span: all; }
 figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
+
+/* 图源行：原稿里「图片来源：网络 / 程序生成 / 实拍」是加粗正文，会被当成小标题。
+   它是图下的一行署名，右对齐、6.6 pt、k70 —— 比图注轻一档，但仍在同一基线体系里。
+   选择器带 .text p 才压得住 article.css 的 `.text p { text-indent: 2em }` */
+.text p.figsrc { font: 400 6.6pt/9.9pt var(--ff-ui); letter-spacing: .02em; color: var(--c-k70);
+  text-indent: 0; text-align: right; margin: -4pt 0 10pt; }
+/* 「反应前／反应后」这类两组图的栏头：居中一行小字，不参与标题层级 */
+.text p.figlabel { font: 600 6.6pt/9.9pt var(--ff-ui); letter-spacing: .14em; color: var(--c-k70);
+  text-indent: 0; text-align: center; margin: 7pt 0 2pt; }
+/* 并列词串（2-10 的八个自然分形例子）：一行排开，靠字距分组，不用顿号。
+   word-break: keep-all —— 中文默认可在任意字间断行，这行词串必须整词换行 */
+.text p.kwline { font: 500 7.4pt/12pt var(--ff-ui); letter-spacing: .04em; color: var(--c-blue-deep);
+  text-indent: 0; text-align: left; word-break: keep-all; margin: 2pt 0 7pt; }
+/* 图下长注（「注：分析软件为 Python……」）：按注释字号排，不占正文行距 */
+.text p.pnote { font: var(--t-note); color: var(--c-k70); text-indent: 0; text-align: left;
+  margin: 0 0 7.5pt; }
 /* 表格里的分形四联：四张图的原比例差异很大（谢尔宾斯基近方、科赫宽扁）。
    用 grid 把单元格切成「74pt 图区 + 图注行」：图在各自的图区里垂直居中
    （不再顶着单元格上沿），图注落在同一条基线上 */

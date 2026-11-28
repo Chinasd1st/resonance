@@ -18,6 +18,10 @@
     const tops = [...text.querySelectorAll(':scope > p')];
     const at = tops.findIndex(p => /^注\s*释?\s*[:：]/.test(p.textContent.trim()));
     if (at < 0) return;
+    // 只在篇末成块：注块后面最多 8 段，且不在前半篇。
+    // 否则正文中间那一句「注：分析软件为 Python……」会把后面整篇都收进 7.5 pt 小字
+    // （2-11 就踩过，两整页被当成注释排掉）
+    if (at < tops.length / 2 || tops.length - at > 8) return;
     const head = tops[at];
     const raw = head.textContent.trim();
     const label = /^注\s*释/.test(raw) ? '注释' : '注';

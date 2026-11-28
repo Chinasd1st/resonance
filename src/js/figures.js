@@ -19,6 +19,10 @@
     if (/^[a-z]+$/i.test(a)) return '';   // romanised file names like "biang"
     // 图片网站的抓取名（查询串 / 长十六进制哈希）没有中文时一律不作图注
     if (!/[\u4e00-\u9fff]/.test(a) && /[=&]|[0-9a-f]{16,}/i.test(a)) return '';
+    // 「随机相切圆.填充.主颜色亮度渲染.嵌套.(50,2,0.3,…)」这类 alt 是程序调用栈，
+    // 不是给读者看的图注；Windows 路径（C:/…/图片1.png图片1）同理。
+    // 圆括号是半角、且与点号同时出现，才算程序名/路径——「珊瑚分形.（0,54）」用的是全角括号，保留
+    if (a.includes('(') && a.includes('.')) return '';
     return a;
   }
 
