@@ -3,6 +3,7 @@
 import { CHAPTERS, CLUBS, ISSUE, COPY, clubVar } from '../config/issue.mjs';
 import { TITLE_GRID } from '../config/geometry.mjs';
 import { ART_PHOTO, CH_PHOTO } from '../config/photos.mjs';
+import { ccMarks } from './cc.mjs';
 import { esc, pad } from '../lib/html.mjs';
 
 const CLUB_LIST = ['music', 'chem', 'philo', 'news', 'math'];
@@ -47,7 +48,7 @@ export function frontMatter(articles) {
   <div class="page fm fm-colophon" id="fm-4">
     <div class="block">
       <h4>COLOPHON / 版权信息</h4>
-      <dl>
+      <dl class="meta">
         <dt>刊名</dt><dd>共鸣（RESONANCE）</dd>
         <dt>期号</dt><dd>${ISSUE.cn} <span class="tbd">〔待确认〕</span></dd>
         <dt>出品</dt><dd>浙江省桐乡市高级中学<br>音乐社 × 化学社 × 哲学社 × 新闻社 × 数学社</dd>
@@ -58,9 +59,26 @@ export function frontMatter(articles) {
         <dt>排版</dt><dd>赵奕辉</dd>
         <dt>印务</dt><dd>章茹涵</dd>
         <dt>开本</dt><dd>A4（210 × 297 mm）</dd>
-        <dt>篇目配图</dt><dd>${Object.keys(ART_PHOTO).map(id => `${id}　${esc(ART_PHOTO[id].credit)}`).join('<br>')}<br>均来自 Wikimedia Commons / Openverse</dd>
-        <dt>章扉页照片</dt><dd>${Object.keys(CH_PHOTO).map(ch => `${pad(ch)}　${esc(CH_PHOTO[ch].credit)}`).join('<br>')}</dd>
       </dl>
+
+      <div class="credits">
+        <h5>图片来源 <span>IMAGE CREDITS</span></h5>
+        <div class="cr-col"><em>篇目配图</em>${Object.keys(ART_PHOTO).map(id =>
+          `<p><b>${id}</b>${esc(ART_PHOTO[id].credit)}</p>`).join('')}</div>
+        <div class="cr-col"><em>章扉页照片</em>${Object.keys(CH_PHOTO).map(ch =>
+          `<p><b>${pad(ch)}</b>${esc(CH_PHOTO[ch].credit)}</p>`).join('')}</div>
+        <p class="cr-src">均来自 Wikimedia Commons / Openverse / 美国国家公园管理局</p>
+      </div>
+
+      <div class="lic">
+        <div class="lic-marks">${ccMarks()}</div>
+        <div class="lic-text">
+          <b>本刊文字与版式以 CC BY-NC-SA 4.0 授权</b>
+          <span>署名—非商业性使用—相同方式共享 4.0 国际</span>
+          <span class="lic-url">creativecommons.org/licenses/by-nc-sa/4.0</span>
+        </div>
+      </div>
+      <p class="lic-note">篇目配图与章扉页照片按各自原始许可单独授权，不受本条约束。</p>
     </div>
   </div>
   <div class="page fm fm-toc" id="fm-5">
