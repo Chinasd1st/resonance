@@ -23,8 +23,10 @@
 .art-years .aop .foot .who span { font-weight: 500; color: var(--c-k70); margin-left: 6pt; }
 .art-years .aop .foot .en { font: var(--t-tag); letter-spacing: .12em; color: var(--c-orange); }
 
+/* 取消 column-count: 1 以让 Chrome 正常执行 .night-turn 的 break-before: page */
+.art-years.verse .text { column-count: auto; }
 /* 从「也挽留不住月光」切换至夜页（p22），之后诗行转入反白纸色 */
-.art-years .text p.night-turn { break-before: page; }
+.art-years .text p.night-turn { break-before: page; page-break-before: always; }
 .art-years .text p.night-turn,
 .art-years .text p.night-turn ~ p { color: var(--c-paper); }
 .art-years .text p.coda-line { font-weight: 600; color: var(--c-tint); }
