@@ -10,6 +10,7 @@ export const C = {
   blue: '#458CEE',
   blueDeep: '#2F6FD6',
   orange: '#ED7207',
+  chem: '#1FA67A',
   tint: '#E6F1FF',
   grid: '#C2DEF7',
   paper: '#FFFFFF',
