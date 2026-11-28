@@ -13,13 +13,6 @@
   position: absolute; left: 0; top: calc(var(--bl) * 7.5);
   font: 700 26pt/34pt "SHSerif", serif; letter-spacing: .04em; color: var(--c-ink);
 }
-.art-shaft .aop .foot {
-  position: absolute; left: 0; right: 0; bottom: var(--bl);
-  padding-top: var(--bl-half); border-top: var(--rule-thin) solid var(--c-blue);
-  display: flex; justify-content: space-between; align-items: baseline;
-  font: var(--t-tag); letter-spacing: .12em; color: var(--c-blue-deep);
-}
-.art-shaft .aop .foot .log { color: var(--c-k70); }
 
 .art-shaft.verse .text h3.num {
   font: 700 15pt/22.5pt var(--ff-display); color: var(--c-blue-deep);

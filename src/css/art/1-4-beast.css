@@ -24,7 +24,6 @@
   font: var(--t-byline); color: var(--c-ink);
 }
 .art-beast .aop .foot .who { font-weight: 700; }
-.art-beast .aop .foot .en { font: var(--t-tag); letter-spacing: .12em; color: var(--c-k70); text-transform: uppercase; }
 
 .art-beast .coda {
   margin-top: var(--bl); padding-top: var(--bl-half);
