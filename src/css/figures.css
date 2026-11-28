@@ -40,8 +40,10 @@ figure.row.wide .cell :is(img, svg.dfig) { height: auto; object-fit: fill; }
 [data-id="2-10"] figure.row .cell svg.dfig { max-height: 175pt; }
 /* 2-11 只有图 3 是单幅（颜色分析的散点图），其余都成对出现。单幅也收到 155 pt：
    一来和成对的两张同高，二来省下的 20 mm 让「颜色分析 + 图 6/7」整块装进 p60 页底，
-   p60、p61 不再各留 1/4 页的空白（页末留白由 62 mm + 38 mm 变为 0 + 0） */
-[data-id="2-11"] figure.col img { max-height: 155pt; width: auto; }
+   p60、p61 不再各留 1/4 页的空白（页末留白由 62 mm + 38 mm 变为 0 + 0）。
+   width 必须带 !important：单图的行内宽度（238.8 pt）压得过 max-height，
+   只限高会把 1.197 的画幅拉成 1.54，图 3 就成了横向压扁的图 */
+[data-id="2-11"] figure.col img { width: auto !important; height: auto !important; max-height: 155pt; }
 /* 2-10「自然模拟」四联图版：四图统一高度齐平 */
 [data-id="2-10"] figure.row[style*="--n: 4"] .cell img { height: 108pt; object-fit: cover; }
 /* 连绵群山那一组是横幅夹竖幅（image29 1.26、image30 1.08、image28 0.71）：
