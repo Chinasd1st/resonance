@@ -7,12 +7,9 @@
 .art-fog .aop .k .tags b { color: var(--c-blue-deep) !important; }
 .art-fog .aop .title { position: absolute; left: -2pt; top: 90pt; font: 500 66pt/75pt "SHSerif", serif; letter-spacing: .14em; color: var(--c-paper); }
 .art-fog .aop .who { position: absolute; left: 0; top: 195pt; font: 700 10pt/15pt "SHS", sans-serif; letter-spacing: .08em; }
-.art-fog .aop .credit { right: 0; top: 408pt; color: var(--c-blue-deep); }   /* 照片下沿与正文之间的雾蓝空隙里 */
+/* 图源行整行落在照片下沿之外（照片到 154 mm、正文首行 164 mm，这一行在 159–161 mm）：
+   压在网点上会与图片边缘交叉、也读不清，所以放在两条边缘之间的雾蓝带上 */
+.art-fog .aop .credit { right: 0; top: 408pt; color: var(--c-blue-deep); }
 .art-fog .fogline { column-span: all; height: var(--bl); }
 .art-fog .text p.bigline { column-span: all; text-indent: 0; text-align: center; margin: 15pt 0; font: 600 30pt/45pt "SHSerif", serif; letter-spacing: .3em; color: var(--c-blue-deep); }
-.art-fog .record { margin: 7.5pt 0; padding: 6pt 8pt 7.5pt; border: var(--rule-thin) solid var(--c-blue-deep); break-inside: avoid; }
-.art-fog .record .rh { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 3.75pt; margin-bottom: 3.75pt; border-bottom: var(--rule-hair) solid var(--c-blue-deep); color: var(--c-blue-deep); }
-.art-fog .record .rh b { font: 700 8pt/11.25pt "SHS", sans-serif; letter-spacing: .2em; }
-.art-fog .record .rh span { font: 500 7pt/11.25pt "SHS", sans-serif; letter-spacing: .06em; }
-.art-fog .text .record p { text-indent: 0; font: 400 8.75pt/15pt "SHS", sans-serif; }
 .art-fog .text p.addendum { text-indent: 0; text-align: right; font: 600 9.6pt/15pt "SHSerif", serif; color: var(--c-blue-deep); }

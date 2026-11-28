@@ -38,7 +38,9 @@ export function artSheets(map, pos) {
       rest.forEach((p, i) => { out[p] = { html: `<div class="night"></div>` + (i === 0 ? beam(210) : ''), dark: true, noRh: i === 0 }; });
     }
     if (id === '1-2') {
-      const r = [0, 0, 216, 166];        // 到开篇区底（版心第 405 pt）
+      // 照片收到 154 mm：正文首行在 164 mm，图源行(159–161 mm)必须整行落在照片下沿之外，
+      // 否则蓝底网点会穿过这一行字（原来 166 mm 时正好压在图边）
+      const r = [0, 0, 216, 154];
       const n = img('1-2-photo', { seed: 22, paper: RGB.tint, texture: false, out_rect: r, photos: [{ photo, focus: [0.5, 0.42], rect: r, mode: 'inks', contrast: 1.35, lift: 0.02, lpi: 42,
         inks: [{ rgb: RGB.blue, src: 'dark', gain: 1.0, gamma: 1.15, angle: 45 }] }] });
       // 雾蓝底色：从开篇一直铺到反转那一行之前（pos.fog = [页, 该行字顶距页面上缘 pt]），之后回到白纸

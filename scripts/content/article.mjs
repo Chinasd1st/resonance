@@ -72,9 +72,7 @@ function artFrag(a, frag) {
     if (!frag.includes(t)) console.warn('ART miss 1-2 fog');
     frag = frag.replace(t, `<div class="fogline"></div>\n${t}`);
     frag = frag.replace('<p>“明天见。”</p>', '<p class="bigline">“明天见。”</p>');
-    // 护士交班记录排成一张记录单；末句是护士补的一笔
-    frag = frag.replace(/<p>“今日观察：([\s\S]*?)”<\/p>/, (m, s) =>
-      `<div class="record"><div class="rh"><b>交班记录</b><span>五路康复环线　第二天</span></div><p>“今日观察：${s}”</p></div>`);
+    // 交班记录按普通正文排（不再做成带框的记录单）；末句是护士补的一笔
     frag = frag.replace('<p>“他们看上去，都很高兴。”</p>', '<p class="addendum">“他们看上去，都很高兴。”</p>');
   }
   if (a.id === '1-6') {
